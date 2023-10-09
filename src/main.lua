@@ -1,3 +1,7 @@
+--os.execute("git clone https://github.com/glfw/glfw")
+--os.execute("cd glfw")
+--
+
 local ffi = require("ffi")
 ffi.cdef = [[
   bool chkey {
