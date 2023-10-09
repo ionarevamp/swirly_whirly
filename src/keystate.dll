@@ -1,6 +1,0 @@
-#include <Windows.h>
-
-extern "C" __declspec(dllexport) bool IsKeyPressed(int virtualKeyCode)
-{
-    return (GetAsyncKeyState(virtualKeyCode) & 0x8000) != 0;
-}

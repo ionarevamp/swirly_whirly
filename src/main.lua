@@ -1,10 +1,13 @@
-chkey = package.loadlib("src/keystate.dll", "IsKeyPressed")
-if chkey then
-    msg1=("DLL loaded successfully")
-else
-   msg1=("Error loading DLL")
-end
+local ffi = require("ffi")
+ffi.cdef = [[
+  bool chkey {
+    
+  }
+]]
+-- handle key input ^^
 
+chkey = ffi.C.chkey
+  map = dofile("src/lib/keymap.lua")
 math.randomseed(os.time())
 bc={ [true]=1, [false]=0 } -- allows bool-to-num
 
@@ -101,7 +104,12 @@ function splash_intro(height, width, noise, delay)
   -- NOISE: too much noise is bad, no noise is worse when using randchar()
   
   for j = 1, height do
+    local exit = false
     for i = 1, width do
+      if chkey(map["esc"]) then
+          exit = true
+          break
+      end
       local ratio = height/width
       local rando = (math.random()-0.5)*noise
       if j == math.floor(ratio*i+(rando*(height-j*2))) or j == math.floor(height- (ratio*i+(rando*(height-j*2)))) then
@@ -110,6 +118,7 @@ function splash_intro(height, width, noise, delay)
         mcr()
       end
     end
+    if exit then break end
     io.write("\n");io.flush();
     slp(delay)
   end
@@ -124,24 +133,6 @@ function main()
   local HEIGHT = math.floor(((io.popen('tput lines'):read() or 24) - 1) * ((mobile_scale/ (mobile_irl+1)) or 1))
   local WIDTH = io.popen('tput cols'):read() or 80
   local CENTER = { math.ceil(HEIGHT / 2), math.ceil(WIDTH / 2) }
-  
-  local caps = {}
-  local smalls = {}
-  for letter=65, 90 do
-    table.insert(caps, string.char(letter))
-    table.insert(smalls, string.char(letter + 32))
-  end
-  local kc_esc = "0x01B" -- equivalent to 
-  local kc_alpha = {}
-  local hex_digits = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"}
-  local tens = 5
-  local ones = 2
-  for alpha=1,26 do -- basically an inline decimal-to-hex convertor
-    kc_alpha[alpha] = conc("0x",hex_digits[tens],hex_digits[ones])
-    local overflow = bc[ones >= 16]
-    tens = (tens+(1*overflow))-(16*bc[tens >= 16])
-    ones = (ones+1)-(16*overflow)
-  end
 
   clr();
   print(conc("h: ",HEIGHT,", w: ",WIDTH))
@@ -150,31 +141,29 @@ function main()
   splash_intro(HEIGHT,WIDTH,0.30,0,0.02) -- Good noise value, but may be shifted by an amount < 0.1
   slp(0.005)
   totop()
-  splash_intro(HEIGHT,WIDTH,0.30,0.18)
+  splash_intro(HEIGHT,WIDTH,0.30,0.08)
   slp(0.6)
 
   -- TRANSITION
-  local transition_text = {"~~~~~~~~~~~~~~~~~~~~",
-                            "~\\~~~~~~~~~~~~~~~~~~~~/~",
-                            "~\\~\\~~~~~~~~~~~~~~~~~~~~/~/~"}
-
+  mcr(CENTER[2])
   for r = 1,3 do
-    --c_print(transition_text[r],CENTER[2])
-    c_align(transition_text[r],CENTER[2])
-    for ri = 1,#transition_text[r] do
+    local limit = 18+(r*2)
+    for ri = 1,limit do
       local dir = (ri-1) % 2
-      local distance = (ri)+dir
-      local position = math.floor((#transition_text[r]/2)+distance+(-1*dir*distance*2))
-      io.write(string.sub(transition_text[r],position,position));io.flush();slp(0.6)
+      local distance = (ri+dir-bc[(ri>1)])-1
+      io.write("~");io.flush();slp(0.02)
       if dir == 0 then
-        mcl(distance)
+        mcl(distance+bc[(ri>1)])
       else 
-        mcr(distance)
+        mcr(distance-2)
       end
-
     end
     io.flush()
-    slp(3.6-r)
+    print()
+    mcr(CENTER[2]+1)
+    io.flush()
+    mcl()
+    slp((3+r)/(r*3))
   end
 
 
