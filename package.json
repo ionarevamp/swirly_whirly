@@ -1,0 +1,22 @@
+{
+  "name": "swirly_whirly",
+  "version": "0.0.1",
+  "description": "2D Text RPG",
+  "main": "app.js",
+  "scripts": {
+    "test": "app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ionarevamp/swirly_whirly.git"
+  },
+  "author": "Sayel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ionarevamp/swirly_whirly/issues"
+  },
+  "homepage": "https://github.com/ionarevamp/swirly_whirly#readme",
+  "dependencies": {
+    
+  }
+}
