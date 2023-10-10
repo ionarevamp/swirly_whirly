@@ -2,84 +2,19 @@
 --os.execute("cd glfw")
 --
 
+--[[ < just delete this line to uncomment
 local ffi = require("ffi")
 ffi.cdef = [[
-  bool chkey {
+  bool chkey(const char *keycode) {
     
   }
 ]]
 -- handle key input ^^
 
-chkey = ffi.C.chkey
-  map = dofile("src/lib/keymap.lua")
-math.randomseed(os.time())
+require("src/lib/buffer")
+local map = dofile("src/lib/keymap.lua")
+math.randomseed((1.8*10^308)-os.time())
 bc={ [true]=1, [false]=0 } -- allows bool-to-num
-
-function slp(duration)
-  os.execute("sleep "..duration)
-end
-
-function conc(...)
-  local args = {...}
-  return table.concat(args)
-end
-
--- CURSOR MOVEMENT
-function mvcursor(x,y) -- Non-relative cursor position starting at 1,1
-  io.write(conc("\027[",x,";",y,"H"))
-end
-function mcr(distance) -- M.ove C.ursor. R.ight
-  distance = distance or 1
-  io.write(conc("\027[",distance,"C"))
-end
-function mcl(distance) -- left
-  distance = distance or 1
-  io.write(conc("\027[",distance,"D"))
-end
-function mcu(distance) -- up
-  distance = distance or 1
-  io.write(conc("\027[",distance,"A"))
-end
-function mcd(distance) -- down
-  distance = distance or 1
-  io.write(conc("\027[",distance,"B"))
-end
-function totop(distance)
-  mvcursor(1,1)
-end
-function clr()
-  io.write("\027[2J\027[1;1H")
-end
-function clrline()
-  io.write("\027[2K\027[1G")
-end
-
--- RANDOMNESS
-function randchar()
-  local randnum = math.random()
-  return string.char(math.floor(32.3 + (randnum * 94)))
-end
-function prc()
-  io.write(randchar())
-end
-function prcln()
-  print(randchar())
-end
-
--- ALIGN TEXT
-function c_align(string,center)
-  for blank = 0,math.ceil(center-(#string/2)) do
-    io.write(" ")
-  end
-end
-function c_write(string,center)
-  c_align(string,center)
-  io.write(string)
-end
-function c_print(string,center)
-  c_write(conc(string,"\n"),center)
-end
-
   
 
 function draw_x(size, location, angle, height, noise)
@@ -110,10 +45,11 @@ function splash_intro(height, width, noise, delay)
   for j = 1, height do
     local exit = false
     for i = 1, width do
+      --[[
       if chkey(map["esc"]) then
           exit = true
           break
-      end
+      end ]]
       local ratio = height/width
       local rando = (math.random()-0.5)*noise
       if j == math.floor(ratio*i+(rando*(height-j*2))) or j == math.floor(height- (ratio*i+(rando*(height-j*2)))) then
