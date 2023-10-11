@@ -1,21 +1,27 @@
---os.execute("git clone https://github.com/glfw/glfw")
---os.execute("cd glfw")
---
-
---[[ < just delete this line to uncomment
 local ffi = require("ffi")
 ffi.cdef = [[
-  bool chkey(const char *keycode) {
-    
-  }
+  
+    while(c = getchar()){
+      if(c == '\n') break;
+      if(c == '1') Add();
+      if(c == '2') getInput()
+    }
 ]]
 -- handle key input ^^
 
-require("src/lib/buffer")
+local modules = {"buffer","strings","menu"}
+for i=1,#modules do
+  require("src/lib/"..modules[i])
+end
+
 local map = dofile("src/lib/keymap.lua")
 math.randomseed((1.8*10^308)-os.time())
 bc={ [true]=1, [false]=0 } -- allows bool-to-num
-  
+
+flags = {"icanon","-tostop"}
+reverse_flags = table.concat(swapflags(flags)," ");
+flags = table.concat(flags," ")
+os.execute("stty "..flags) -- put TTY in raw mode
 
 function draw_x(size, location, angle, height, noise)
   -- NOISE: too much noise is bad, no noise is worse when using randchar()
@@ -45,11 +51,6 @@ function splash_intro(height, width, noise, delay)
   for j = 1, height do
     local exit = false
     for i = 1, width do
-      --[[
-      if chkey(map["esc"]) then
-          exit = true
-          break
-      end ]]
       local ratio = height/width
       local rando = (math.random()-0.5)*noise
       if j == math.floor(ratio*i+(rando*(height-j*2))) or j == math.floor(height- (ratio*i+(rando*(height-j*2)))) then
@@ -87,7 +88,7 @@ function main()
   -- TRANSITION
   mcr(CENTER[2])
   for r = 1,3 do
-    local limit = 18+(r*2)
+    local limit = 18+(r*4)
     for ri = 1,limit do
       local dir = (ri-1) % 2
       local distance = (ri+dir-bc[(ri>1)])-1
@@ -103,7 +104,7 @@ function main()
     mcr(CENTER[2]+1)
     io.flush()
     mcl()
-    slp((3+r)/(r*3))
+    slp((2+r)/(r*3))
   end
 
 
@@ -119,6 +120,7 @@ function main()
   
   print()
   c_print("Press Enter key to start",CENTER[2])
+  mcr(CENTER[2]);io.flush();  
   io.read()
   io.write(conc("\027[2J\027[1;1H","Debug msg: Preparing...\n"))
   slp(1)
@@ -146,5 +148,6 @@ function main()
 end
 
 main()
-print("Reached end");
+print("Reached end. Reverse flag table: "..reverse_flags);
+os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
 os.exit();
