@@ -4,6 +4,6 @@ gitclone() {
     echo entering directory \'$2\'
     cd $2
 }
-alias cmake="$HOME/workspace/cmake/usr/local/bin/cmake"
+alias cmake="$HOME/workspace/.gitignore/cmake/usr/local/bin/cmake"
 alias goband="$aliases[luajit] src/main.lua"
 alias rm="rm -v"
