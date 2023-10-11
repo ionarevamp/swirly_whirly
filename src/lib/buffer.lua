@@ -1,3 +1,4 @@
+require("src/lib/strings")
 --TODO:put code for keeping track of what to print where
 -- (and when)
 function slp(duration)

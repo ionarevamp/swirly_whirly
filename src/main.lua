@@ -9,7 +9,7 @@ ffi.cdef = [[
 ]]
 -- handle key input ^^
 
-local modules = {"buffer","strings","menu"}
+local modules = {"buffer","strings","stats","menu"}
 for i=1,#modules do
   require("src/lib/"..modules[i])
 end
@@ -127,7 +127,14 @@ function main()
   
   local input_buf = {}
   local quit = true
-  
+
+  -- START MENU
+  startmenu:open()
+  while startmenu.state ~= 0 do
+      print("Start menu reached.")
+      slp(0.5);startmenu:close()
+  end
+
   -- MAIN LOOP --  --  -- MAIN LOOP --
   while not quit do
     clr()
@@ -149,5 +156,6 @@ end
 
 main()
 print("Reached end. Reverse flag table: "..reverse_flags);
+print(conc(startmenu.state,charskills.state,itemui.state))
 os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
 os.exit();

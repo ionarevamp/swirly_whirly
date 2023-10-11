@@ -1,3 +1,4 @@
+require("src/lib/stats")
 function charin(string, index)
     return string.sub(string,index,index)
 end
@@ -12,4 +13,18 @@ function swapflags(flagtable)
         end
     end
     return swaptable
+end
+function destring(skillname) --converts skill name into variable name
+    for i=1,#skillname do
+        if charin(skillname,i) == " " then
+            return conc(string.lower(string.sub(skillname,1,i-1)),
+            "_",
+            string.lower(string.sub(skillname,i+1,#skillname)));
+        end
+    end
+
+end
+function load_monster() --needs creature::new()
+    
+    
 end
