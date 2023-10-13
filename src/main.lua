@@ -1,18 +1,11 @@
-local ffi = require("ffi")
-ffi.cdef = [[
-  
-    while(c = getchar()){
-      if(c == '\n') break;
-      if(c == '1') Add();
-      if(c == '2') getInput()
-    }
-]]
--- handle key input ^^
+
 
 local modules = {"buffer","strings","stats","menu"}
 for i=1,#modules do
   require("src/lib/"..modules[i])
 end
+
+
 
 local map = dofile("src/lib/keymap.lua")
 math.randomseed((1.8*10^308)-os.time())
