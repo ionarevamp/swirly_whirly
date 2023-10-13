@@ -1,0 +1,171 @@
+NOTES: {Technically the characters will seldom call any of
+                these by their names, opting for colloquialisms
+                like "fire", "ice", "wind", "lightning", etc.}
+
+
+ETHERIC PROPERTIES OF MAGIC:
+    {dev note: these are just the "commonly understood" forms of magic,
+        so the ones seen here may be not all-encompassing}
+    - Primary (basic) forms of magic:
+        - heat : produce some kind of energy from mana, such as fire
+            (simplest and most intuitive form of magic)
+        - null : nullification of energy, like ice or darkness,
+            using more mana depending on amount nullified.
+            (HOWEVER, this energy does not disappear. It converts
+            ambient mana via the nullification)
+        - space : ability to adjust physical space and forms,
+            as in teleportation or pocket dimensions
+            (easiest, best usage is redirection while more skilled
+            users might use gates or warps)
+        - motion : ability to move things with a maximum amount
+            of weight/inertia with consistent mana consumption
+            (most intuitive usage is wind magic)
+        - force : a more instant version of motion, i.e. application
+            of a lot of force at once at the cost of a lot of mana
+            (most intuitive usage is force push and earth-shaping)
+        
+
+    - Secondary magics:
+        - heat null : absorb own mana. Useful for meditation/rest
+            - max effect depends on lower of 2 affinities
+        - heat space : more precise expulsion of energy
+            - heat controls intensity, space controls accuracy
+        - heat motion : swifter expulsion of energy
+            - motion controls rapidity
+        - heat force : explosive energy release of some sort
+            - each aspect contributes to its own damage type
+        - null space : pockets of negative energy
+            - null controls intensity, space controls area size
+        - null motion : allows for swift absorption of physical momentum
+            - null controls max effect, motion controls speed of effect
+        - null force : allows for brief translocation of energy from source
+            - null controls max energy, force controls strength of effect
+        - space motion : move arbitrary space as if it were an object
+            - space control size of space, motion controls max distance
+        - space force : allows for contraction and expansion of a space
+            - space controls size of space, force controls speed
+        - motion force : use force magic across greater distances
+            - damage = force/distance(motion)
+    - Tertiary magics:
+        - heat null space : Remote access of energies
+            - effectsize = (lesser of heat, null) - distance
+        - heat null motion : Move energies across a space
+            - effectsize = (lesser of heat, null)+motion
+        - heat null force : Force energy towards a direction or point
+            - effectsize = (lesser of heat, null)+force
+        - heat space motion : Highly swift and precise expulsion of energy
+            - heat controls intensity, space controls max range,
+                motion controls max speed
+        - heat space force : Converge energy on one point or area quickly
+            - heat controls intensity, space controls area size,
+                force controls max compression (endsize = (startsize+energy)-force)
+        - heat motion force : Quickly expel energy to larger area
+            - Like heat+force, but has trajectory
+        - null space motion : Larger, more precise, moving pockets of
+            negative energy
+            - null controls max negativity, space controls area size,
+                motion controls movement speed
+        - null space force : allows for instant translocation of energy
+           between two spaces
+            - null controls max energy, space controls max area, force
+                controls speed of translocation
+        - null motion force : allows for fast absorption of momentum
+            within a moveable space
+            - null is negativity, motion is speed of motion, force
+                is speed of absorption
+        - space motion force : Precise application of large amount of
+            force to an area
+            - space controls max energy density/area for a given shape,
+                motion controls speed of effect, force is max energy
+    - Quaternary magics:
+        - heat null space motion : remote control and access of energies
+            at great distance
+            - (lesser of heat, null) controls max energy shift,
+                space controls max range, motion controls max rate
+        - heat null space force : remote, brief direction of energy from one
+            location to another
+            - (lesser of heat, null) controls max energy shift, space
+                controls range, force controls speed (higher magnitude than motion)
+        - heat null motion force : Move an amplified energy across a space
+            near-instantly
+            - (lesser of heat, null) controls max energy shift,
+            motion reduces randomness, force controls baseline energy
+        - heat space motion force : quickly condenses energy to a small, 
+            moveable point, then releases energy towards target
+                - heat is intensity, space is both phase 1 & 2 range,
+                    motion is move/aim speed, force is maximum energy
+        - null space motion force : Everything inside a specified,
+                moveable space quickly gains negative energy and
+                momentum
+                - null controls negativity, space controls area size,
+                motion controls speed of area movement, force amplifies
+                speed and and intensity of effect
+    - Pentultimate (NOT "Penultimate," as that would be quaternary)
+        - Also called Mythic Magic, or Divine Charms by laymen
+        - ALL basic magics in one: HEAT+NULL+SPACE+MOTION+FORCE
+            - This magic does not technically exist for most, rather
+                the manifestation of this "magic" that is life,
+                especially that of mundane creatures.
+            - For example, one creature's pentultimate ability
+                may be breathing fire at will while another's
+                might be visualizing magical flows intrinsically
+            - There are exceptions where intelligent/highly skilled
+                creatures can combine each temper of magic to restore
+                objects, others, or themselves
+            - Theoretically, one with a grasp on using all types
+                of magic at once could create any number of effects
+                not yet dreamt
+            - Though much history is lost, it is thought that many
+                unexplained artifacts and charms are pentultimate magic
+                manifest
+
+SPELLS, CHARMS, AND HOW THEY RELATE TO MAGIC:
+    - SPELLS AND RITUALS:
+        - First off, spells themselves do not cause magic to happen.
+            One may recite a spell all day long but if the incantor
+            is not moving their mana, nothing will happen outside of
+            the sounds and movements being made (depending on the 
+            spell, of course.)
+        - Rituals are similar to spells, in that is simply a physical
+            series of actions which are associated with some effect.
+            However, rituals are considered to be more complicated
+            and to have more stringent requirements for success, such
+            as needing multiple people or particular, rare ingredients.
+        - Assuming all requirements are met, one can string together
+            various etheric reactions to produce emergent (and potentially
+            spectacular!) effects. A simple, popular example is the
+            fireball, a skillfull application of creating 'heat' from
+            mana, and applying 'motion'.
+        - Strictly speaking, incantations are never necessary for
+            producing magical effects. One may move their mana in the
+            correct way if they know exactly how to create an effect.
+            However, spells can be seen as a shortcut to magic that 
+            simplify the process of learning and remembering the
+            movement of mana, also known as 'circulation'.
+    - CIRCULATION:
+        - To circulate mana, one must be in touch with it. To be in
+            touch, one must sense it. To sense it, one must accept
+            the flow of possibilities within you. That is, if one
+            were to 'meditate' on their existence they might
+            eventually gain access to their own mana.
+    - CHARMS:
+        - Charms can be thought of as a physical representation of
+            a spell. It may not be clear which magics were used to
+            create a particular charm to the user, but it is
+            generally accepted that enchanters cannot accomplish the
+            impossible and use magic that does not exist.
+        - The materials required to create a charm are as follows:
+            - An anchor, preferably one appropriate to the type
+                of magic.
+            - An accurate idea or visualization of the intended
+                spell to take effect.
+            - Any materials to enhance the symbolism of the charm
+                and therefore some part of the magical effect.
+            - The knowledge and mana required to cast the intended
+                spell, plus the mana required to bind the spell.
+            - Finally, the method of binding magic to the given
+                object which differs across situations.
+    - FINAL NOTES: 
+        - Mana capacity and affinity changes between creatures and
+            individuals, and may change based on one's experiences.
+        - If 

@@ -1,3 +1,4 @@
+require("src/lib/magic") -- outlines technicalities of magic
 bc={ [true]=1, [false]=0 }
 
 default = 5000; --default value of genetic stats b4 mods
@@ -29,6 +30,13 @@ creature = {
         strength = 1,
         leverage = 1,
         flex = 1,
+        affinity = {
+            heat = 1, -- "fire"
+            null = 1, -- "ice"
+            space = 1, -- "warp"
+            motion = 1, -- "wind"
+            force = 1, -- "earth" or "solid"
+        }
         -- NO INTEL GENE
     }
     stats = {
@@ -43,7 +51,7 @@ creature = {
         strength = default,
         leverage = (default/size)*default,
         mana = (((iq/2))^2)*((touch/strength)^2),
-        intel = ((iq/default)*((sight+(smell/20)+(hearing/2)+(taste/2)+(touch*0.7)+math.floor(iq/2000)+math.floor(intel)+(mana/10))/default)), --Knowledge is situational
+        intel = ((iq/default)*((sight+(smell/20)+(hearing/2)+(taste/2)+(touch*0.7)+math.floor(iq/2000)+(mana/10))/default)), --Knowledge is situational
         esp = math.floor(iq/2000)+math.floor(intel),
         flex = default --needs to be a fairly wide-ranging stat
     },
