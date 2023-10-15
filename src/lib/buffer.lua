@@ -1,8 +1,16 @@
+debug = 1
+mobile_irl = 0 -- `bc[device == smartphone]` ?
+mobile_scale = (0.8*(bc[not mobile_irl==0]))+1*bc[mobile_irl==0] --placeholder estimate
+HEIGHT = math.floor(((io.popen('tput lines'):read() or 24) - 1) * ((mobile_scale/ (mobile_irl+1)) or 1))
+WIDTH = io.popen('tput cols'):read() or 80
+CENTER = { math.ceil(HEIGHT / 2), math.ceil(WIDTH / 2) }
+
+
 require("src/lib/strings")
 --TODO:put code for keeping track of what to print where
 -- (and when)
 function slp(duration)
-  os.execute("sleep "..duration)
+  os.execute(conc("sleep ",duration))
 end
 
 function conc(...)
@@ -53,15 +61,19 @@ function prcln()
 end
 
 -- ALIGN TEXT
-function c_align(string,center)
-  for blank = 0,math.ceil(center-(#string/2)) do
-    io.write(" ")
-  end
+function c_align(string)
+  string = string or ""
+  mcr(math.ceil(CENTER[2]-(#string/2)))
 end
-function c_write(string,center)
-  c_align(string,center)
+function c_write(string)
+  string = string or ""
+  c_align(string)
   io.write(string)
 end
-function c_print(string,center)
-  c_write(conc(string,"\n"),center)
+function c_print(string)
+  string = string or ""
+  c_write(conc(string,"\n"))
 end
+
+
+-- OUTPUT BUFFER CALCULATIONS

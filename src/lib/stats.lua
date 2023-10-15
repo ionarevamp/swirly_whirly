@@ -15,6 +15,29 @@ creature = {
     x = 1,
     y = 1,
     age = 1,
+    stats = {
+        power = 1, --all life is born with power = 1 * powermod
+        iq = default,
+        sight = default,
+        smell = default,
+        taste = default,
+        hearing = default,
+        touch = default,
+        flex = default,
+        size = default,
+        strength = default,
+        leverage = default,
+        mana = default,
+        intel = default,
+        esp = default,
+        affinity = {
+            heat = default,
+            null = default,
+            space = default,
+            motion = default,
+            force = default,
+        }
+    },
     genes = {
         powermod = 1,
         iq = 1,
@@ -26,34 +49,18 @@ creature = {
         esp = 1,
         magical = 1,
         mana = 1,
+        flex = 1,
         size = 1,
         strength = 1,
         leverage = 1,
-        flex = 1,
         affinity = {
-            heat = 1, -- "fire"
-            null = 1, -- "ice"
-            space = 1, -- "warp"
-            motion = 1, -- "wind"
-            force = 1, -- "earth" or "solid"
+            heat = 1,
+            null = 1,
+            space = 1,
+            motion = 1,
+            force = 1,
         }
-        -- NO INTEL GENE
-    }
-    stats = {
-        power = 1, --all life is born with power = 1 * powermod
-        iq = default,
-        sight = default,
-        smell = default,
-        taste = default,
-        hearing = default,
-        touch = default,
-        size = default,
-        strength = default,
-        leverage = (default/size)*default,
-        mana = (((iq/2))^2)*((touch/strength)^2),
-        intel = ((iq/default)*((sight+(smell/20)+(hearing/2)+(taste/2)+(touch*0.7)+math.floor(iq/2000)+(mana/10))/default)), --Knowledge is situational
-        esp = math.floor(iq/2000)+math.floor(intel),
-        flex = default --needs to be a fairly wide-ranging stat
+        -- NO INTEL GENE (knowledge is complex and situational)
     },
     skills = {}
 }
@@ -68,16 +75,18 @@ function creature:new (o)
     o.stats.smell = o.stats.smell*o.genes.smell
     o.stats.hearing = o.stats.hearing*o.genes.hearing
     o.stats.touch = o.stats.touch*o.genes.touch
-    o.stats.esp = o.stats.esp*o.genes.esp
-    o.stats.mana = o.stats.mana*o.genes.mana*(o.genes.magical)
+    o.stats.mana = (((o.stats.iq/2))^2)*((o.stats.touch/o.stats.strength)^2)*o.genes.mana*(o.genes.magical)
     o.stats.size = o.stats.size*o.genes.size
-    o.stats.leverage = o.stats.leverage*o.genes.leverage
+    o.stats.leverage = (default/o.stats.size)*o.stats.leverage*o.genes.leverage
     o.stats.flex = (o.stats.flex*o.genes.flex)-(o.stats.flex/o.stats.size)
-
+    o.stats.intel = ((o.stats.iq/default)*((o.stats.sight+(o.stats.smell/20)+(o.stats.hearing/2)+(o.stats.taste/2)+(o.stats.touch*0.7)+math.floor(o.stats.iq/2000)+(o.stats.mana/10))/default))
+    o.stats.esp = math.floor(o.stats.iq/2000)+math.floor(o.stats.intel)*o.genes.esp
+    for i=1,#o.stats.affinity do
+        o.stats.affinity = o.stats.affinity*o.genes.affinity
+    end
     return o
 
 end
-function creature:grow()
 
 Player = creature:new()
 

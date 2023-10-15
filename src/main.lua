@@ -1,15 +1,11 @@
-
-
+bc={ [true]=1, [false]=0 } -- allows bool-to-num
 local modules = {"buffer","strings","stats","menu"}
 for i=1,#modules do
   require("src/lib/"..modules[i])
 end
 
-
-
 local map = dofile("src/lib/keymap.lua")
 math.randomseed((1.8*10^308)-os.time())
-bc={ [true]=1, [false]=0 } -- allows bool-to-num
 
 flags = {"icanon","-tostop"}
 reverse_flags = table.concat(swapflags(flags)," ");
@@ -38,15 +34,15 @@ function draw_x(size, location, angle, height, noise)
   end
 end
 
-function splash_intro(height, width, noise, delay)
+function splash_intro(noise, delay)
   -- NOISE: too much noise is bad, no noise is worse when using randchar()
   
-  for j = 1, height do
+  for j = 1, HEIGHT do
     local exit = false
-    for i = 1, width do
-      local ratio = height/width
+    for i = 1, WIDTH do
+      local ratio = HEIGHT/WIDTH
       local rando = (math.random()-0.5)*noise
-      if j == math.floor(ratio*i+(rando*(height-j*2))) or j == math.floor(height- (ratio*i+(rando*(height-j*2)))) then
+      if j == math.floor(ratio*i+(rando*(HEIGHT-j*2))) or j == math.floor(HEIGHT- (ratio*i+(rando*(HEIGHT-j*2)))) then
         prc()
       else
         mcr()
@@ -59,27 +55,18 @@ function splash_intro(height, width, noise, delay)
 end
 
 function main()
-  
-  local debug = 1
-  local mobile_irl = 0 -- `bc[device == smartphone]` ?
-  local mobile_scale = (0.8*(bc[not mobile_irl==0]))+1*bc[mobile_irl==0] --placeholder estimate
-  
-  local HEIGHT = math.floor(((io.popen('tput lines'):read() or 24) - 1) * ((mobile_scale/ (mobile_irl+1)) or 1))
-  local WIDTH = io.popen('tput cols'):read() or 80
-  local CENTER = { math.ceil(HEIGHT / 2), math.ceil(WIDTH / 2) }
-
   clr();
   print(conc("h: ",HEIGHT,", w: ",WIDTH))
   
   -- INTRO SCREEN
-  splash_intro(HEIGHT,WIDTH,0.30,0,0.02) -- Good noise value, but may be shifted by an amount < 0.1
+  splash_intro(0.30,0,0.02) -- Good noise value, but may be shifted by an amount < 0.1
   slp(0.005)
   totop()
-  splash_intro(HEIGHT,WIDTH,0.30,0.08)
+  splash_intro(0.30,0.08)
   slp(0.6)
 
   -- TRANSITION
-  mcr(CENTER[2])
+  c_align();mcl();
   for r = 1,3 do
     local limit = 18+(r*4)
     for ri = 1,limit do
@@ -94,7 +81,7 @@ function main()
     end
     io.flush()
     print()
-    mcr(CENTER[2]+1)
+    c_align()
     io.flush()
     mcl()
     slp((2+r)/(r*3))

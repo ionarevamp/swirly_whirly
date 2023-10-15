@@ -30,38 +30,15 @@ charskills = {
     state = 0,
     -- Come up with more/better skill names...
     skillnames = {
-        "Punch",
-        "Kick",
-        "Roundhouse kick",
-        "Hook punch",
-        "Side kick",
-        "Back fist",
-        "Elbow strike",
-        "Knee strike",
-        "Low kick",
-        "High kick",
-        "Upper cut punch",
-        "Spinning back kick",
-        "Palm strike",
-        "Sweeping kick",
-        "Hammer fist",
-        "Front snap kick",
-        "Knife-hand strike",
-        "Front elbow strike",
-        "Reverse punch",
-        "Axe kick",
-        "Back kick",
-        "Spinning hook kick",
-        "Back elbow strike",
-        "Jumping front kick",
-        "Jumping roundhouse kick".
     },
     skills = {
-
     }
 }
-for i=1,#skillnames do --populate skill data
-    load(concat("charskills.skills[i] = {",destring(skillnames[i]),"=",skillnames[i],"}"))
+
+--populate skill data
+local skilldata = io.open("skills.list")
+for i=1,#(charskills.skillnames) do 
+    load(conc("charskills.skills[i] = {",destring(charskills.skillnames[i]),"=",charskills.skillnames[i],"}"))
 end
 --^^ should result in `skills = {{skill_name = false}, ...}` 
 function sname(skill)
