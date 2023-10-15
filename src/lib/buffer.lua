@@ -77,3 +77,7 @@ end
 
 
 -- OUTPUT BUFFER CALCULATIONS
+BUFFER = {
+  {},
+  {}
+}
