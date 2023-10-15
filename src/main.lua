@@ -1,4 +1,14 @@
-bc={ [true]=1, [false]=0 } -- allows bool-to-num
+bc={ [true]=1, [false]=0 } -- stands for 'b.ool c.heck'
+
+SPACE = "/032"
+debug = 1
+mobile_irl = 0 -- `bc[device == smartphone]` ?
+mobile_scale = (0.8*(bc[not mobile_irl==0]))+1*bc[mobile_irl==0] --placeholder estimate
+HEIGHT = math.floor(((io.popen('tput lines'):read() or 24) - 1) * ((mobile_scale/ (mobile_irl+1)) or 1))
+WIDTH = io.popen('tput cols'):read() or 80
+CENTER = { math.ceil(HEIGHT / 2), math.ceil(WIDTH / 2) }
+
+
 local modules = {"buffer","strings","stats","menu"}
 for i=1,#modules do
   require("src/lib/"..modules[i])

@@ -1,11 +1,3 @@
-debug = 1
-mobile_irl = 0 -- `bc[device == smartphone]` ?
-mobile_scale = (0.8*(bc[not mobile_irl==0]))+1*bc[mobile_irl==0] --placeholder estimate
-HEIGHT = math.floor(((io.popen('tput lines'):read() or 24) - 1) * ((mobile_scale/ (mobile_irl+1)) or 1))
-WIDTH = io.popen('tput cols'):read() or 80
-CENTER = { math.ceil(HEIGHT / 2), math.ceil(WIDTH / 2) }
-
-
 require("src/lib/strings")
 --TODO:put code for keeping track of what to print where
 -- (and when)
@@ -77,7 +69,38 @@ end
 
 
 -- OUTPUT BUFFER CALCULATIONS
-BUFFER = {
-  {},
-  {}
-}
+
+BUFFER = {}          
+for i=1,HEIGHT do
+  BUFFER[i] = {}     
+  for j=1,WIDTH do
+    BUFFER[i][j] = SPACE
+  end
+end --initializes a matrix full of blank spaces
+-- ^^ allows all changes to be made to the buffer before
+-- printing each character
+
+OVERLAY = {}          
+for i=1,HEIGHT do
+  OVERLAY[i] = {}     
+  for j=1,WIDTH do
+    OVERLAY[i][j] = SPACE
+  end
+end
+-- ^^ separate buffer specifically for preserving
+-- existing screen content during draw
+
+function update()
+  for line in BUFFER do
+    for char in line do
+      io.write(char)
+    end
+  end
+end
+function overdraw()
+  for line in OVERLAY do
+    for char in line do
+      io.write(char)
+    end
+  end
+end
