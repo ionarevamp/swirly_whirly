@@ -1,6 +1,14 @@
-bc={ [true]=1, [false]=0 } -- stands for 'b.ool c.heck'
+-- declare universal structs before require-ing
+bc={ [true]=1, [false]=0 }; -- stands for 'b.ool c.heck'
+function conc(...) --table.concat for speed(?)
+  local args = {...}
+  return table.concat(args)
+end;
+function slp(duration) -- probably breaks on Windows
+  os.execute(conc("sleep ",duration))
+end
 
-SPACE = "/032"
+SPACE = '/032'
 debug = 1
 mobile_irl = 0 -- `bc[device == smartphone]` ?
 mobile_scale = (0.8*(bc[not mobile_irl==0]))+1*bc[mobile_irl==0] --placeholder estimate
@@ -15,7 +23,10 @@ for i=1,#modules do
 end
 
 local map = dofile("src/lib/keymap.lua")
-math.randomseed((1.8*10^308)-os.time())
+maxnum = 1.8*(10^308)
+math.randomseed(maxnum-os.time()) --[[this method of
+seeding isn't necessary, but it's kinda cool because
+it progresses backwards through time]]
 
 flags = {"icanon","-tostop"}
 reverse_flags = table.concat(swapflags(flags)," ");

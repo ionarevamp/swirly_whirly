@@ -1,16 +1,80 @@
 require("src/lib/strings")
---TODO:put code for keeping track of what to print where
--- (and when)
-function slp(duration)
-  os.execute(conc("sleep ",duration))
+
+-- OUTPUT BUFFER CALCULATIONS
+
+BUFFER = {}          
+for i=1,HEIGHT do
+  BUFFER[i] = {}     
+  for j=1,WIDTH do
+    BUFFER[i][j] = SPACE
+  end
+end --initializes a matrix full of blank spaces
+-- ^^ allows changes to be made to the buffer before
+-- printing each character
+OVERLAY = {}          
+for i=1,HEIGHT do
+  OVERLAY[i] = {}     
+  for j=1,WIDTH do
+    OVERLAY[i][j] = SPACE
+  end
+end
+-- ^^ separate buffer specifically for preserving
+-- existing screen content during draw
+
+
+function buffclear()
+  for i=1,HEIGHT do
+    BUFFER[i] = {}     
+    for j=1,WIDTH do
+      BUFFER[i][j] = SPACE
+    end
+  end
+end
+function olclear()
+  for i=1,HEIGHT do
+    OVERLAY[i] = {}     
+    for j=1,WIDTH do
+      OVERLAY[i][j] = SPACE
+    end
+  end
+end
+function wipebuff()
+  buffclear()
+  olclear()
 end
 
-function conc(...)
-  local args = {...}
-  return table.concat(args)
+function buffwrite(string,row,buffer)
+  buffer = buffer or OVERLAY
+  for i = 1, #string do
+      BUFFER[row][i] = charin(string,i)
+  end
 end
+function update()
+  for line in BUFFER do
+    for char in line do
+      io.write(char)
+    end
+  end
+end
+function overdraw()
+  for line in OVERLAY do
+    for char in line do
+      io.write(char)
+    end
+  end
+end
+
 
 -- CURSOR MOVEMENT
+mvdirs = { -- mvdir.r can be used to represent a space
+           -- in the OVERLAY buffer as it does not
+           -- write over output
+  r = "\027[1C",
+  l = "\027[1D",
+  u = "\027[1A",
+  d = "\027[1B"
+}
+
 function mvcursor(x,y) -- Non-relative cursor position starting at 1,1
   io.write(conc("\027[",x,";",y,"H"))
 end
@@ -65,42 +129,4 @@ end
 function c_print(string)
   string = string or ""
   c_write(conc(string,"\n"))
-end
-
-
--- OUTPUT BUFFER CALCULATIONS
-
-BUFFER = {}          
-for i=1,HEIGHT do
-  BUFFER[i] = {}     
-  for j=1,WIDTH do
-    BUFFER[i][j] = SPACE
-  end
-end --initializes a matrix full of blank spaces
--- ^^ allows all changes to be made to the buffer before
--- printing each character
-
-OVERLAY = {}          
-for i=1,HEIGHT do
-  OVERLAY[i] = {}     
-  for j=1,WIDTH do
-    OVERLAY[i][j] = SPACE
-  end
-end
--- ^^ separate buffer specifically for preserving
--- existing screen content during draw
-
-function update()
-  for line in BUFFER do
-    for char in line do
-      io.write(char)
-    end
-  end
-end
-function overdraw()
-  for line in OVERLAY do
-    for char in line do
-      io.write(char)
-    end
-  end
 end
