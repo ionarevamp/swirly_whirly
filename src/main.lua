@@ -8,7 +8,7 @@ function slp(duration) -- probably breaks on Windows
   os.execute(conc("sleep ",duration))
 end
 
-SPACE = '/032'
+SPACE = " "
 debug = 1
 mobile_irl = 0 -- `bc[device == smartphone]` ?
 mobile_scale = (0.8*(bc[not mobile_irl==0]))+1*bc[mobile_irl==0] --placeholder estimate
@@ -28,10 +28,12 @@ math.randomseed(maxnum-os.time()) --[[this method of
 seeding isn't necessary, but it's kinda cool because
 it progresses backwards through time]]
 
+--[[
 flags = {"icanon","-tostop"}
 reverse_flags = table.concat(swapflags(flags)," ");
 flags = table.concat(flags," ")
 os.execute("stty "..flags) -- put TTY in raw mode
+]]
 
 function draw_x(size, location, angle, height, noise)
   -- NOISE: too much noise is bad, no noise is worse when using randchar()
@@ -135,6 +137,8 @@ function main()
       print("Start menu reached.")
       slp(0.5);startmenu:close()
   end
+  buffer_file("src/mons/rat.txt")
+  update()
 
   -- MAIN LOOP --  --  -- MAIN LOOP --
   while not quit do
@@ -156,7 +160,7 @@ function main()
 end
 
 main()
-print("Reached end. Reverse flag table: "..reverse_flags);
+--print("Reached end. Reverse flag table: "..reverse_flags);
 print(conc(startmenu.state,charskills.state,itemui.state))
-os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
+--os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
 os.exit();

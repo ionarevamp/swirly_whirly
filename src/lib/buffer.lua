@@ -1,5 +1,14 @@
 require("src/lib/strings")
 
+mvdirs = { -- mvdirs.r can be used to represent a space
+           -- in the OVERLAY buffer as it does not
+           -- write over output
+  r = "\027[1C",
+  l = "\027[1D",
+  u = "\027[1A",
+  d = "\027[1B"
+}
+
 -- OUTPUT BUFFER CALCULATIONS
 
 BUFFER = {}          
@@ -34,7 +43,7 @@ function olclear()
   for i=1,HEIGHT do
     OVERLAY[i] = {}     
     for j=1,WIDTH do
-      OVERLAY[i][j] = SPACE
+      OVERLAY[i][j] = mvdirs.r
     end
   end
 end
@@ -43,17 +52,49 @@ function wipebuff()
   olclear()
 end
 
-function buffwrite(string,row,buffer)
-  buffer = buffer or OVERLAY
+function loadbuffer(string,row)
+  row = row or 1
   for i = 1, #string do
       BUFFER[row][i] = charin(string,i)
   end
 end
-function update()
-  for line in BUFFER do
-    for char in line do
-      io.write(char)
+
+function buffer_file(file,start)
+  start = start or 1
+  loaded = io.open(file)
+  local block_length = loaded:read("*n")
+  local lines = {}
+  local count = 1
+  for line in loaded:lines() do
+    lines[count] = line
+    count = count + 1
+  end
+  for i=1,block_length do
+    for j=1,lines[i] do
+      local char = charin(lines[i],j)
+      BUFFER[i+(start-1)][j] = char
     end
+  end
+  loaded:close()
+end
+function overlay_file(file,start)
+  start = start or 1
+  loaded = io.open(file)
+  local block_length = loaded:read("*n")
+  for i=start,block_length do
+    local line = loaded:read("*l")
+    for j=1,#line do
+      OVERLAY[i+(start-1)][j] = charin(line,j)
+    end
+  end
+  loaded:close()
+end
+function update()
+  for i=1,#BUFFER do
+    for j=1,#BUFFER[i] do
+      io.write(BUFFER[i][j])
+    end
+    print()
   end
 end
 function overdraw()
@@ -66,14 +107,6 @@ end
 
 
 -- CURSOR MOVEMENT
-mvdirs = { -- mvdir.r can be used to represent a space
-           -- in the OVERLAY buffer as it does not
-           -- write over output
-  r = "\027[1C",
-  l = "\027[1D",
-  u = "\027[1A",
-  d = "\027[1B"
-}
 
 function mvcursor(x,y) -- Non-relative cursor position starting at 1,1
   io.write(conc("\027[",x,";",y,"H"))
