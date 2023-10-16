@@ -49,7 +49,7 @@ function draw_x(size, location, angle, height, noise)
       if j == math.floor(height/size*i+(rando)) or j == math.floor(height- ((height/size)*i+(rando))) then
         prc()
       else
-        io.write(" ")
+        io.write(SPACE)
       end
     end
     io.write("\n")
@@ -137,7 +137,8 @@ function main()
       print("Start menu reached.")
       slp(0.5);startmenu:close()
   end
-  buffer_file("src/mons/rat.txt")
+  local monsterload = "block"
+  buffer_file(conc("src/mons/",monsterload,".txt"))
   update()
 
   -- MAIN LOOP --  --  -- MAIN LOOP --

@@ -69,15 +69,15 @@ function buffer_file(file,start)
     lines[count] = line
     count = count + 1
   end
-  for i=1,block_length do
-    for j=1,#lines[i] do
+  for i=2,block_length do
+    io.write(#lines[i].." ")
+    for j=1,tonumber(#lines[i]) do
       local char = charin(lines[i],j)
-      BUFFER[i+(start-1)][j] = char
+      BUFFER[i][j] = char
     end
   end
   loaded:close()
 end
-
 function overlay_file(file,start)
   start = start or 1
   loaded = io.open(file)
