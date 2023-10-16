@@ -95,7 +95,7 @@ function main()
     for ri = 1,limit do
       local dir = (ri-1) % 2
       local distance = (ri+dir-bc[(ri>1)])-1
-      io.write("~");io.flush();slp(1/limit)
+      io.write("~");io.flush();slp(0.5/limit);
       if dir == 0 then
         mcl(distance+bc[(ri>1)])
       else 
