@@ -5,5 +5,5 @@ gitclone() {
     cd $2
 }
 alias cmake="$HOME/workspace/cmake/usr/local/bin/cmake"
-alias goband="$aliases[luajit] src/main.lua $*"
+alias goband="$aliases[luajit] src/main.lua"
 alias rm="rm -v"
