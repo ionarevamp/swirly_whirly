@@ -16,7 +16,6 @@ HEIGHT = math.floor(((io.popen('tput lines'):read() or 24) - 1) * ((mobile_scale
 WIDTH = io.popen('tput cols'):read() or 80
 CENTER = { math.ceil(HEIGHT / 2), math.ceil(WIDTH / 2) }
 
-
 local modules = {"buffer","strings","stats","menu"}
 for i=1,#modules do
   require("src/lib/"..modules[i])
@@ -90,12 +89,13 @@ function main()
 
   -- TRANSITION
   c_align();mcl();
+  local squiggleportion = 2*math.floor(WIDTH/5)
   for r = 1,3 do
-    local limit = 18+(r*4)
+    local limit = squiggleportion+(r*4)
     for ri = 1,limit do
       local dir = (ri-1) % 2
       local distance = (ri+dir-bc[(ri>1)])-1
-      io.write("~");io.flush();slp(0.02)
+      io.write("~");io.flush();slp(1/limit)
       if dir == 0 then
         mcl(distance+bc[(ri>1)])
       else 
