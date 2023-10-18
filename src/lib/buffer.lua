@@ -78,7 +78,7 @@ function buffer_file(file,start,buffer)
     count = count + 1
   end
 
-  for i=startline,block_length+1 do
+  for i=start,block_length+1 do
     local limit = math.floor(#lines[i]*1)-1
     io.write(conc(#lines,",",limit," "))
     for j=1,limit do
@@ -87,8 +87,9 @@ function buffer_file(file,start,buffer)
     end
   end
   loaded:close()
+end
 -- Monster loading
-function loadmon(name,)
+function loadmon(name,x,y)
 
 end
 function overlay_file(file,start)

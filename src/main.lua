@@ -1,16 +1,23 @@
--- declare universal structs before require-ing
+-- declare universal structs before mass require-ing
 bc={ [true]=1, [false]=0 }; -- stands for 'b.ool c.heck'
 function conc(...) --table.concat for speed(?)
   local args = {...}
   return table.concat(args)
 end;
-function slp(duration) -- probably breaks on Windows
-  os.execute(conc("sleep ",duration))
+local ffi=require("ffi")
+ffi.cdef[[
+  void sleep_s(float duration)
+]]
+local dll = ffi.load("src/lib/sleep.dll")
+function slp(duration)
+  --os.execute(conc("tcc -run src/lib/sleep.c ","\"",duration,"\""))
+  dll.sleep_s(duration) --blazing fast c call!
+	--(os.execute can have significant overhead)
 end
 
 SPACE = " "
 debug = 1
-mobile_irl = 0 -- `bc[device == smartphone]` ?
+mobile_irl = 0 -- really should just get rid of this...
 mobile_scale = (0.8*(bc[not mobile_irl==0]))+1*bc[mobile_irl==0] --placeholder estimate
 HEIGHT = math.floor(((io.popen('tput lines'):read() or 24) - 1) * ((mobile_scale/ (mobile_irl+1)) or 1))
 WIDTH = io.popen('tput cols'):read() or 80
@@ -32,7 +39,7 @@ flags = {"icanon","-tostop"}
 reverse_flags = table.concat(swapflags(flags)," ");
 flags = table.concat(flags," ")
 os.execute("stty "..flags) -- put TTY in raw mode
-]]
+]] -- legacy. not sure if it will really even be needed.
 
 function draw_x(size, location, angle, height, noise)
   -- NOISE: too much noise is bad, no noise is worse when using randchar()
