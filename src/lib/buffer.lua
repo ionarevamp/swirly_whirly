@@ -20,6 +20,13 @@ for i=1,HEIGHT do
 end --initializes a matrix full of blank spaces
 -- ^^ allows changes to be made to the buffer before
 -- printing each character
+ALTBUFFER = {}          
+for i=1,HEIGHT do
+  ALTBUFFER[i] = {}     
+  for j=1,WIDTH do
+    ALTBUFFER[i][j] = SPACE
+  end
+end
 OVERLAY = {}          
 for i=1,HEIGHT do
   OVERLAY[i] = {}     
@@ -59,7 +66,8 @@ function loadbuffer(string,row)
   end
 end
 
-function buffer_file(file,start)
+function buffer_file(file,start,buffer)
+  buffer = buffer or BUFFER
   start = start or 1
   loaded = io.open(file)
   local block_length = loaded:read("*n")
@@ -69,14 +77,19 @@ function buffer_file(file,start)
     lines[count] = line
     count = count + 1
   end
-  for i=2,block_length do
-    io.write(#lines[i].." ")
-    for j=1,tonumber(#lines[i]) do
+
+  for i=startline,block_length+1 do
+    local limit = math.floor(#lines[i]*1)-1
+    io.write(conc(#lines,",",limit," "))
+    for j=1,limit do
       local char = charin(lines[i],j)
-      BUFFER[i][j] = char
+      buffer[i][j] = char
     end
   end
   loaded:close()
+-- Monster loading
+function loadmon(name,)
+
 end
 function overlay_file(file,start)
   start = start or 1

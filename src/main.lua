@@ -137,7 +137,7 @@ function main()
       print("Start menu reached.")
       slp(0.5);startmenu:close()
   end
-  local monsterload = "block"
+  local monsterload = "rat"
   buffer_file(conc("src/mons/",monsterload,".txt"))
   update()
 
