@@ -1,18 +1,24 @@
 -- declare universal structs before mass require-ing
 bc={ [true]=1, [false]=0 }; -- stands for 'b.ool c.heck'
+
 function conc(...) --table.concat for speed(?)
   local args = {...}
   return table.concat(args)
 end;
+dofile("src/build.spec") -- COMPILE/BUILD
 local ffi=require("ffi")
 ffi.cdef[[
-  void sleep_s(float duration)
+  void sleep_s(float duration);
+  void rgbwr(const char* string,int r,int g,int b);
 ]]
-local dll = ffi.load("src/lib/sleep.dll")
+local dll = ffi.load("src/lib/bypass.dll")
 function slp(duration)
   --os.execute(conc("tcc -run src/lib/sleep.c ","\"",duration,"\""))
-  dll.sleep_s(duration) --blazing fast c call!
-	--(os.execute can have significant overhead)
+  dll.sleep_s(duration)
+  --(os.execute can have significant overhead)
+end
+function rgbwr(string,r,g,b)
+  dll.rgbwr(string,r,g,b)
 end
 
 SPACE = " "
@@ -23,16 +29,13 @@ HEIGHT = math.floor(((io.popen('tput lines'):read() or 24) - 1) * ((mobile_scale
 WIDTH = io.popen('tput cols'):read() or 80
 CENTER = { math.ceil(HEIGHT / 2), math.ceil(WIDTH / 2) }
 
-local modules = {"buffer","strings","stats","menu"}
+local modules = {"buffer","strings","stats","menu","commands"}
 for i=1,#modules do
   require("src/lib/"..modules[i])
 end
-
 local map = dofile("src/lib/keymap.lua")
-maxnum = 1.8*(10^308)
-math.randomseed(maxnum-os.time()) --[[this method of
-seeding isn't necessary, but it's kinda cool because
-it progresses backwards through time]]
+maxnum = 5*(10^10)
+math.randomseed(maxnum-os.time())
 
 --[[
 flags = {"icanon","-tostop"}
@@ -63,16 +66,19 @@ function draw_x(size, location, angle, height, noise)
   end
 end
 
-function splash_intro(noise, delay)
+function splash_intro(noise, delay,mode)
   -- NOISE: too much noise is bad, no noise is worse when using randchar()
-  
+  local HEIGHT = HEIGHT-10
   for j = 1, HEIGHT do
     local exit = false
     for i = 1, WIDTH do
       local ratio = HEIGHT/WIDTH
+      local center = HEIGHT/2
       local rando = (math.random()-0.5)*noise
-      if j == math.floor(ratio*i+(rando*(HEIGHT-j*2))) or j == math.floor(HEIGHT- (ratio*i+(rando*(HEIGHT-j*2)))) then
-        prc()
+      local colordiff = (bc[j<center]*(52*mode)*(j/center))+(
+                         bc[j>center]*(52*mode)*(center/j))
+      if j == math.floor(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or j == math.floor(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
+        rgbwr(randchar(),101+(25*mode)+colordiff,colordiff,colordiff)
       else
         mcr()
       end
@@ -86,12 +92,11 @@ end
 function main()
   clr();
   print(conc("h: ",HEIGHT,", w: ",WIDTH))
-  
   -- INTRO SCREEN
-  splash_intro(0.30,0,0.02) -- Good noise value, but may be shifted by an amount < 0.1
+  splash_intro(0.40,0,0.02,1.2) -- Good noise value, but may be shifted by an amount < 0.1
   slp(0.005)
-  totop()
-  splash_intro(0.30,0.08)
+  mvcursor(2,3)
+  splash_intro(0.30,0.08,2)
   slp(0.6)
 
   -- TRANSITION
@@ -114,7 +119,7 @@ function main()
     c_align()
     io.flush()
     mcl()
-    slp((2+r)/(r*3))
+    slp(0.3/r)
   end
 
 
@@ -131,44 +136,38 @@ function main()
   print()
   c_print("Press Enter key to start",CENTER[2])
   mcr(CENTER[2]);io.flush();  
-  io.read()
+  local foo = io.read()
   io.write(conc("\027[2J\027[1;1H","Debug msg: Preparing...\n"))
   slp(1)
   
-  local input_buf = {}
-  local quit = true
-
   -- START MENU
   startmenu:open()
   while startmenu.state ~= 0 do
       print("Start menu reached.")
+      for i=1,5000 do
+        rgbwr("X",i*(255/5000),i*(255/5000)/2,(30/i*2))
+        io.flush()
+      end
+      slp(5)
       slp(0.5);startmenu:close()
   end
   local monsterload = "rat"
-  buffer_file(conc("src/mons/",monsterload,".txt"))
-  update()
+  -- buffer_file(conc("src/mons/",monsterload,".txt"))
+  -- update()
 
   -- MAIN LOOP --  --  -- MAIN LOOP --
-  while not quit do
-    clr()
-    for db=0,5 do
-      prc();
-    end
-    local input_str = "";
-    for idx=1, #input_buf do
-      local char = input_buf[idx]
-      if char ~= "\n" and char ~= "\r" then
-        input_str = input_str .. char
-      end
-    end
-    quit = input_str == "quit"
-    os.execute("sleep 0.1")
+  local input_buf = {}
+  local quit = 0
+  clr()
+  while (quit < 1) do
+    -- handle displaying stuff
+    rgbwr("What would you like to do? \n",200,180,180)
+    local command = string.lower(io.read())
+    load(CMDS[command])()
   end
-  return 0
 end
 
 main()
 --print("Reached end. Reverse flag table: "..reverse_flags);
 print(conc(startmenu.state,charskills.state,itemui.state))
 --os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
-os.exit();
