@@ -16,12 +16,11 @@ function slp(duration)
   --os.execute(conc("tcc -run src/lib/sleep.c ","\"",duration,"\""))
   dll.sleep_s(duration)
   --(os.execute can have significant overhead)
-<<<<<<< HEAD
-=======
+ 
 end
 function rgbwr(string,r,g,b)
   dll.rgbwr(string,r,g,b)
->>>>>>> refs/remotes/origin/master
+ 
 end
 function rgbwr(string,r,g,b)
   dll.rgbwr(string,r,g,b)
@@ -74,7 +73,6 @@ function draw_x(size, location, angle, height, noise)
   end
 end
 
-<<<<<<< HEAD
 function splash_intro(noise,duration,mode)
   -- NOISE: too much noise is bad, no noise is worse when using randchar()
   local HEIGHT = HEIGHT-10
@@ -83,18 +81,10 @@ function splash_intro(noise,duration,mode)
   local ratio = HEIGHT/WIDTH
   local exit = false
 
-=======
-function splash_intro(noise, delay,mode)
-  -- NOISE: too much noise is bad, no noise is worse when using randchar()
-  local HEIGHT = HEIGHT-10
->>>>>>> refs/remotes/origin/master
   for j = 1, HEIGHT do
     for i = 1, WIDTH do
-<<<<<<< HEAD
-=======
       local ratio = HEIGHT/WIDTH
       local center = HEIGHT/2
->>>>>>> refs/remotes/origin/master
       local rando = (math.random()-0.5)*noise
       local colordiff = (bc[j<center]*(52*mode)*(j/center))+(
                          bc[j>center]*(52*mode)*(center/j))
@@ -114,17 +104,10 @@ function main()
   clr();
   print(conc("h: ",HEIGHT,", w: ",WIDTH))
   -- INTRO SCREEN
-<<<<<<< HEAD
   splash_intro(0.40,10,1.2) -- Good noise value, but may be shifted by < 0.1
   slp(0.005)
   mvcursor(2,3)
-  splash_intro(0.30,30,2)
-=======
-  splash_intro(0.40,0,0.02,1.2) -- Good noise value, but may be shifted by an amount < 0.1
-  slp(0.005)
-  mvcursor(2,3)
-  splash_intro(0.30,0.08,2)
->>>>>>> refs/remotes/origin/master
+  splash_intro(0.30,30,2) 
   slp(0.6)
 
   -- TRANSITION
