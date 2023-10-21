@@ -1,3 +1,11 @@
 .codesandbox/
 .watchmanconfig
 source.list
+package-lock.json
+package.json
+source.list
+SW.mf
+yarn.lock
+src/lib/bypass.dll
+src/lib/bypass.o
+src/build.spec
