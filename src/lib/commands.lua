@@ -1,5 +1,5 @@
 CMDS = {
-    [" "] = "print(\"(please enter a valid command\")",
+    [" "] = "print(\"(please enter a valid command)\")",
     ["quit"] = "quit = true",
     ["menu"] = "startmenu:open()",
     ["showcmd"] = "print(\"Showing commands\");local cmds = CMDS;"..

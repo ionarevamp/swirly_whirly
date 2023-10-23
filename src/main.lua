@@ -6,6 +6,11 @@ cur_input = ""
 cmd = {}
 bc={[true]=1,[false]=0 }; -- stands for 'b.ool c.heck'
 function flr(...) return math.floor(...) end
+function flrall(arr)
+	local tmp = arr
+  for i=1,#tmp do tmp[i] = flr(tmp[i]) end
+  return tmp
+end
 function gmch(...) return string.gmatch(...) end
 function conc(...) --table.concat for speed(?)
   local args = {...}
@@ -26,11 +31,11 @@ function slp(duration)
   --(os.execute can have significant overhead)
  
 end
-function rgbwr(string,r,g,b)
-  r= 1.0*r;g= 1.0*g;b= 1.0*b;
+function rgbwr(string,rgb)
+  local r,g,b = unpack(rgb)
   dll.rgbwr(string,r,g,b)
 end
-rgbwr("FUNCTIONS LOADED\n",unpack({140,120,100}))
+rgbwr("FUNCTIONS LOADED\n",{140,120,100})
 --Reminder: use unpack on rgb table call from color list
 
 SPACE = " "
@@ -47,7 +52,7 @@ for i=1,#modules do
   require("src/lib/"..modules[i])
 end
 local map = dofile("src/lib/keymap.lua")
-maxnum = 5*(10^10)
+maxnum = 2^(53)-(2^8)
 math.randomseed(maxnum-os.time())
 
 --[[
@@ -95,7 +100,7 @@ function splash_intro(noise,duration,mode)
       local colordiff = (bc[j<center]*(12*mode)*(j/center))+(
                          bc[j>center]*(12*mode)*(center/j))
       if j == flr(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or j == flr(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
-        rgbwr(randchar(),101+(25*mode)+colordiff,colordiff,colordiff)
+        rgbwr(randchar(),{101+(25*mode)+colordiff,colordiff,colordiff})
       else
         mcr()
       end
@@ -116,42 +121,21 @@ function main()
   slp(0.6)
 
   -- TRANSITION
-  for i=1,WIDTH do
-    i = tostring(i)
-    io.write(charin(i,#i))
-  end
-  print()
-  c_align()
-  local squiggleportion = 2*flr(WIDTH/5)
-  local introcolors = {CLR.gray0,CLR.gray1,CLR.silver}
-  for r = 1,3 do
-    local limit = squiggleportion+(r*4)
-    for ri = 1,limit do
-      local dir = (ri-1) % 2
-      local distance = (ri+dir-bc[(ri>1)])-1
-      rgbwr("~",unpack(introcolors[r]))
-      io.flush();slp(0.7/limit);
-      if dir == 0 then
-        mcl(distance+bc[(ri>1)])
-      else 
-        mcr(distance-2)
-      end
-    end
-    io.flush()
-    print()
-    c_align()
-    io.flush()
-    slp(0.3/r)
-  end
+  dofile("src/transition.lua")
 
 
   -- TITLE CARD
   local splash_text = "BANDING"
-  for rr = 1,#splash_text do
-    local substr = string.sub(splash_text,1,rr)
+  for i = 1,#splash_text do
+    local position = string.sub(splash_text,1,flr(#splash_text/2))
+    local substr = string.sub(splash_text,1,i)
     clrline();
-    c_align(substr,CENTER[2])
-    io.write(substr)
+    c_align(position);mcl();
+    for j = 1,#substr do
+      rgbwr(charin(substr,j),gradientratio(
+        CLR.goldmetal,CLR.gold,j,#substr
+      ))
+    end
     io.flush()
     slp(0.17)
   end

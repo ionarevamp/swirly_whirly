@@ -15,8 +15,8 @@ void rgbwr(const char* text,float r,float g,float b) {
   b = (255*(b>255))+(b*(b<256));
   printf("\33[38;2;%d;%d;%dm%s\33[0m",(int)r,(int)g,(int)b,text);
 }
-char* input_buf() {
+char input_buf() {
   char buffer[1024];
   fgets(buffer, sizeof(buffer), stdin);
-  return &buffer;
+  return *buffer;
 }

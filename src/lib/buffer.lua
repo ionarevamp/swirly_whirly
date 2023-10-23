@@ -10,10 +10,14 @@ mvdirs = { -- mvdirs.r can be used to represent a space
 }
 -- DEBUG
 function showtable(t)
+  local lines = {}
   for key,val in pairs(t) do
+    for val in gmch(vals, "[^;]+") do
+      table.insert(lines,val)
+    end
     for i=1,#val do
-      if i==1 then print(key,val[i]) else
-	print(" ",val[i])
+      if i==1 then print(key,lines[i]) else
+        print(" ",lines[i])
       end
     end
   end
@@ -175,7 +179,7 @@ function mcv() -- M.ove C.ursor V.ertical
   local direction = determine_vertical[distance>0]
   io.write(conc("\027[",distance,direction))
 end
-function totop(distance)
+function totop()
   mvcursor(1,1)
 end
 function clr()
@@ -186,9 +190,13 @@ function clrline()
 end
 
 -- RANDOMNESS
+charidarr = {}
+for i=1,95 do
+  table.insert(charidarr,i+31)
+end
 function randchar()
-  local randnum = math.random()
-  return string.char(flr(32.3 + (randnum * 94)))
+  local range = flr((math.random()*#charidarr))
+  return tostring(string.char(charidarr[range] or 126))
 end
 function prc()
   io.write(randchar())
@@ -200,7 +208,7 @@ end
 -- ALIGN TEXT
 function c_align(string)
   string = string or ""
-  mcr(flr(CENTER[2]-(#string/2)))
+  mcr(flr(CENTER[2]-(#string/2)-1))
 end
 function c_write(string)
   string = string or ""

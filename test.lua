@@ -1,12 +1,20 @@
-print("Hello WORLD");
-bc = {[false]=0,[true]=1}
-function max255(r,g,b)
-	r = (255*bc[r>255])+(r*bc[r<255]);
-	g = (255*bc[g>255])+(g*bc[g<255]);
-	b = (255*bc[b>255])+(b*bc[b<255]);
-	return {r,g,b}
+function flrall(t)
+	local flr = math.floor
+	local tmp = t
+    for i=1,#tmp do
+        tmp[i] = flr(tmp[i])
+    end
+    return tmp
 end
-for i=1,260 do
-	print(unpack(max255(i,i,i)))
+numtable = {}
+for i=1,25 do
+	numtable[i] = (i*1.3)
 end
-
+for i=1,#numtable do
+	io.write(numtable[i]);io.write(" ")
+end
+print()
+local newnums = flrall(numtable)
+for i=1,#newnums do
+	io.write(table.concat({tostring(newnums[i])," "}))
+end
