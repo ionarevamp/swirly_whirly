@@ -1,15 +1,37 @@
 CMDS = {
-    ["quit"] = load("quit = true"),
-    ["menu"] = load("startmenu:open()"),
-    ["addcommand"] = load(conc(
+    [" "] = "print(\"(please enter a valid command\")",
+    ["quit"] = "quit = true",
+    ["menu"] = "startmenu:open()",
+    ["showcmd"] = "print(\"Showing commands\");local cmds = CMDS;"..
+	"showtable(CMDS)",
+    ["addcmd"] = conc(
         "local args = cmd;",
         "table.remove(args,1);",
-        "addcommand(args[1],args[2])"
-    ))
+	"local commandname = table.remove(args,1);",
+	"print(conc(\"MAKING ARGLESS FUNCTION \",commandname,\"() , code:\"));",
+        "addcommand(commandname,table.concat(args,\" \"));"
+    ),
+    ["func"] = conc(
+	"local args = cmd;",
+        "table.remove(args,1);",
+        "local commandname = table.remove(args,1);",
+        "print(conc(\"MAKING FUNCTION \",commandname,\" , code:\"));",
+        "for line in gmch(table.concat(args, \"[^;]+\" do ",
+          "print(line);",
+        "end;",
+        "addcommand(commandname,table.concat(args,\" \"))"
+    ),
+    ["alias"] = conc(
+	"local args = cmd;",
+	"table.remove(args,1);",
+	"local alias = table.remove(args,1);",
+	"addalias(alias,unpack(args))"
+    )
 }
+
 function addcommand(commandstring,codestring)
-    CMDS[commandstring] = load(codestring)
+    CMDS[commandstring] = loadstring(codestring)
 end
-function exec_command(commandstring)
-    pcall(CMDS[commandstring])
+function addalias(alias,target)
+    CMDS[alias] = CMDS[target]
 end

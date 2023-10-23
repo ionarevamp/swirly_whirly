@@ -6,5 +6,6 @@ extern "C" __declspec(dllexport)
 
 EXPORT_DLL sleep_s();
 EXPORT_DLL rgbwr();
+EXPORT_DLL input_buf();
 
 #endif

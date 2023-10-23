@@ -1,5 +1,5 @@
 -- make sure dll is 'fresh'
-os.execute("rm src/lib/bypass.dll")
+os.execute("if test -f /src/lib/bypass.dll; then rm src/lib/bypass.dll; fi")
 -- declare universal structs before mass require-ing
 quit = 0
 cur_input = ""
@@ -16,6 +16,7 @@ local ffi=require("ffi")
 ffi.cdef[[
   void sleep_s(float duration);
   void rgbwr(const char* string,float r,float g,float b);
+  char* input_buf();
 ]]
 local dll = ffi.load("src/lib/bypass.dll")
 
@@ -26,10 +27,7 @@ function slp(duration)
  
 end
 function rgbwr(string,r,g,b)
-  dll.rgbwr(string,r,g,b)
- 
-end
-function rgbwr(string,r,g,b)
+  r= 1.0*r;g= 1.0*g;b= 1.0*b;
   dll.rgbwr(string,r,g,b)
 end
 rgbwr("FUNCTIONS LOADED\n",unpack({140,120,100}))
@@ -41,7 +39,7 @@ mobile_irl = 0 -- really should just get rid of this...
 mobile_scale = (0.8*(bc[not mobile_irl==0]))+1*bc[mobile_irl==0] --placeholder estimate
 HEIGHT = (io.popen('tput lines'):read() or 24) - 1
 WIDTH = io.popen('tput cols'):read() or 80
-CENTER = {math.ceil(HEIGHT/2),math.ceil(WIDTH/2)}
+CENTER = {flr(HEIGHT/2),flr(WIDTH/2)}
 
 local modules = {"buffer","strings","stats",
                  "colors","menu","commands"}
@@ -118,7 +116,12 @@ function main()
   slp(0.6)
 
   -- TRANSITION
-  c_align();mcl();
+  for i=1,WIDTH do
+    i = tostring(i)
+    io.write(charin(i,#i))
+  end
+  print()
+  c_align()
   local squiggleportion = 2*flr(WIDTH/5)
   local introcolors = {CLR.gray0,CLR.gray1,CLR.silver}
   for r = 1,3 do
@@ -138,7 +141,6 @@ function main()
     print()
     c_align()
     io.flush()
-    mcl()
     slp(0.3/r)
   end
 
@@ -185,10 +187,9 @@ function main()
     for word in gmch(cur_input,"%S+") do
       table.insert(cmd,word)
     end
-    exec_command(string.lower(cmd[1])) -- refers to CMDS table, commands.lua
-    for i=1,#cmd do
-      table.remove(cmd,1)
-    end
+    cmd[1] = cmd[1] or " "
+    pcall(load(CMDS[string.lower(cmd[1])])) -- refers to CMDS table, commands.lua
+    cmd = {}
   end
 end
 

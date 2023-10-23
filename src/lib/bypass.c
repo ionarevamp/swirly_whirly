@@ -7,11 +7,16 @@
 
 // sleep for x milliseconds
 void sleep_s(float x) {
-  usleep((int)(x * 1000 * 1000));
+  usleep((int)(x * 1000 * 1000 * 0.96));
 }
 void rgbwr(const char* text,float r,float g,float b) {
   r = (255*(r>255))+(r*(r<256));
   g = (255*(g>255))+(g*(g<256));
   b = (255*(b>255))+(b*(b<256));
   printf("\33[38;2;%d;%d;%dm%s\33[0m",(int)r,(int)g,(int)b,text);
+}
+char* input_buf() {
+  char buffer[1024];
+  fgets(buffer, sizeof(buffer), stdin);
+  return &buffer;
 }

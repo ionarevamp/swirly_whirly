@@ -8,6 +8,17 @@ mvdirs = { -- mvdirs.r can be used to represent a space
   u = "\027[1A",
   d = "\027[1B"
 }
+-- DEBUG
+function showtable(t)
+  for key,val in pairs(t) do
+    for i=1,#val do
+      if i==1 then print(key,val[i]) else
+	print(" ",val[i])
+      end
+    end
+  end
+end
+
 
 -- OUTPUT BUFFER CALCULATIONS
 
@@ -189,7 +200,7 @@ end
 -- ALIGN TEXT
 function c_align(string)
   string = string or ""
-  mcr(math.ceil(CENTER[2]-(#string/2)))
+  mcr(flr(CENTER[2]-(#string/2)))
 end
 function c_write(string)
   string = string or ""
