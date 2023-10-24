@@ -10,7 +10,7 @@ for j = 1, HEIGHT do
     for i = 1, WIDTH do
         local ratio = HEIGHT/WIDTH
         local rando = (math.random()-0.5)*noise
-        local colordiff = (bc[j<center]*(12*mode)*(j/center))+(
+        local colordiff = (bc[j<center]*(12*mode)*(j/center))+(--
                            bc[j>center]*(12*mode)*(center/j))
         if j == flr(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or
            j == flr(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
@@ -31,7 +31,6 @@ splash_intro(0.40,0.3,1.2) -- Good noise value, but may be shifted by < 0.1
 mvcursor(2,4)
 splash_intro(0.30,1.8,2)
 slp(0.6)
-
   -- TRANSITION
 print()
 c_align()
@@ -56,3 +55,18 @@ c_align()
 io.flush()
 slp(0.3/r)
 end
+-- TITLE CARD
+local splash_text = "BANDING"
+for i = 1,#splash_text do
+local position = string.sub(splash_text,1,flr(#splash_text/2))
+local substr = string.sub(splash_text,1,i)
+clrline();
+c_align(position);mcl();
+for j = 1,#substr do
+    rgbwr(charat(substr,j),gradientratio(--
+    CLR.goldmetal,CLR.gold,j,#substr))
+end
+io.flush()
+slp(0.17)
+end
+print()

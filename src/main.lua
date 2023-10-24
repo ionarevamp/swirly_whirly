@@ -88,25 +88,7 @@ end
 function main()
 
   dofile("src/intro.lua")
-
-
-  -- TITLE CARD
-  local splash_text = "BANDING"
-  for i = 1,#splash_text do
-    local position = string.sub(splash_text,1,flr(#splash_text/2))
-    local substr = string.sub(splash_text,1,i)
-    clrline();
-    c_align(position);mcl();
-    for j = 1,#substr do
-      rgbwr(charat(substr,j),gradientratio(
-        CLR.goldmetal,CLR.gold,j,#substr
-      ))
-    end
-    io.flush()
-    slp(0.17)
-  end
   
-  print()
   c_print("Press Enter key to start",CENTER[2])
   mcr(CENTER[2]);io.flush();  
   local foo = io.read()
