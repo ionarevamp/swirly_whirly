@@ -136,47 +136,42 @@ function overdraw()
 end
 
 
--- CURSOR MOVEMENT
+-- CURSOR CONTROL
 
 --uses table indexing to avoid (slow) branching
-local determine_break = {[true]="return;",[false]="io.write('');"}
+local determine_break = {[true]="",[false]="io.write('');"}
 local determine_horizontal = {[true]="C",[false]="D"}
 local determine_vertical = {[true]="B",[false]="A"}
 function mvcursor(x,y) -- Non-relative, starts at 1,1
   io.write(conc("\027[",x,";",y,"H"))
 end
 function mcr(distance) -- M.ove C.ursor. R.ight
-  distance = distance or 1
-  distance = flr(distance)
+  distance = flr(distance or 1)
   io.write(conc("\027[",distance,"C"))
 end
 function mcl(distance) -- left
-  distance = distance or 1
-  distance = flr(distance)
+  distance = flr(distance or 1)
   io.write(conc("\027[",distance,"D"))
 end
 function mcu(distance) -- up
-  distance = distance or 1
-  distance = flr(distance)
+  distance = flr(distance or 1)
   io.write(conc("\027[",distance,"A"))
 end
 function mcd(distance) -- down
-  distance = distance or 1
-  distance = flr(distance)
+  distance = flr(distance or 1)
   io.write(conc("\027[",distance,"B"))
 end
-function mch(distance) -- M.ove C.ursor H.orizontal
-  distance = distance or 1
-  distance = flr(distance)
-  load(determine_break[flr(distance)==0])
-  local direction = determine_horizontal[distance>0]
-  io.write(conc("\027[",distance,direction))
+function mch(distance, dir) -- M.ove C.ursor H.orizontal
+  local mmax = math.max
+  local direction = "D"
+  if dir > 0 then direction = "C" end
+  distance = flr(math.abs(distance))
+  io.write(distance,direction," ")
+  io.write(conc("\027[",tostring(distance),direction))
 end
-function mcv() -- M.ove C.ursor V.ertical
-  distance = distance or 1
-  distance = flr(distance)
-  load(determine_break[flr(distance)==0])
+function mcv(distance) -- M.ove C.ursor V.ertical
   local direction = determine_vertical[distance>0]
+  distance = flr(distance or 1)
   io.write(conc("\027[",distance,direction))
 end
 function totop()

@@ -39,11 +39,12 @@ rgbwr("FUNCTIONS LOADED\n",{140,120,100})
 --Reminder: use unpack on rgb table call from color list
 
 SPACE = " "
+BLOCK = {"▄","▀","█"} --alt codes 220,223,219 resp.
 debug = 1
 mobile_irl = 0 -- really should just get rid of this...
 mobile_scale = (0.8*(bc[not mobile_irl==0]))+1*bc[mobile_irl==0] --placeholder estimate
 HEIGHT = (io.popen('tput lines'):read() or 24) - 1
-WIDTH = io.popen('tput cols'):read() or 80
+WIDTH = tonumber(io.popen('tput cols'):read() or 80)
 CENTER = {flr(HEIGHT/2),flr(WIDTH/2)}
 
 local modules = {"buffer","strings","stats",
@@ -88,7 +89,7 @@ end
 function main()
 
   dofile("src/intro.lua")
-  
+
   c_print("Press Enter key to start",CENTER[2])
   mcr(CENTER[2]);io.flush();  
   local foo = io.read()
@@ -114,7 +115,7 @@ function main()
   clr()
   while (quit == 0) do
     -- handle displaying stuff
-    rgbwr("What would you like to do? \n",200,180,180)
+    rgbwr("What would you like to do? \n",{200,180,180})
     cur_input = io.read()
     for word in gmch(cur_input,"%S+") do
       table.insert(cmd,word)
@@ -124,7 +125,6 @@ function main()
     cmd = {}
   end
 end
-
 main()
 --print("Reached end. Reverse flag table: "..reverse_flags);
 print(conc(startmenu.state,charskills.state,itemui.state))
