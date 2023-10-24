@@ -1,4 +1,14 @@
 
+
+clr();
+  print(conc("h: ",HEIGHT,", w: ",WIDTH))
+  -- INTRO SCREEN
+  splash_intro(0.40,0.3,1.2) -- Good noise value, but may be shifted by < 0.1
+  mvcursor(2,4)
+  splash_intro(0.30,1.8,2)
+  slp(0.6)
+
+  -- TRANSITION
 print()
 c_align()
 local squiggleportion = 2*flr(WIDTH/5)

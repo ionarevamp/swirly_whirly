@@ -64,7 +64,8 @@ os.execute("stty "..flags) -- put TTY in raw mode
 
 function draw_x(size, location, angle, height, noise)
   -- NOISE: too much noise is bad, no noise is worse when using randchar()
-  --TODO: fix this function to all parameters properly
+  --TODO: fix this function to use all parameters properly
+
   
   local startX = location[1] - flr(size / 2)
   local startY = location[2] - flr(height / 2)
@@ -99,7 +100,8 @@ function splash_intro(noise,duration,mode)
       local rando = (math.random()-0.5)*noise
       local colordiff = (bc[j<center]*(12*mode)*(j/center))+(
                          bc[j>center]*(12*mode)*(center/j))
-      if j == flr(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or j == flr(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
+      if j == flr(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or
+	 j == flr(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
         rgbwr(randchar(),{101+(25*mode)+colordiff,colordiff,colordiff})
       else
         mcr()
@@ -112,16 +114,8 @@ function splash_intro(noise,duration,mode)
 end
 
 function main()
-  clr();
-  print(conc("h: ",HEIGHT,", w: ",WIDTH))
-  -- INTRO SCREEN
-  splash_intro(0.40,0.3,1.2) -- Good noise value, but may be shifted by < 0.1
-  mvcursor(2,4)
-  splash_intro(0.30,1.8,2) 
-  slp(0.6)
 
-  -- TRANSITION
-  dofile("src/transition.lua")
+  dofile("src/intro.lua")
 
 
   -- TITLE CARD
@@ -132,7 +126,7 @@ function main()
     clrline();
     c_align(position);mcl();
     for j = 1,#substr do
-      rgbwr(charin(substr,j),gradientratio(
+      rgbwr(charat(substr,j),gradientratio(
         CLR.goldmetal,CLR.gold,j,#substr
       ))
     end
@@ -152,7 +146,7 @@ function main()
   while startmenu.state ~= 0 do
       print("Start menu reached.")
       for i=1,1000 do
-        rgbwr("X",i*(255/1000),0,0)
+        rgbwr("X",{i*(255/1000),0,0})
         io.flush()
       end
       slp(0.5);startmenu:close()
@@ -181,3 +175,4 @@ main()
 --print("Reached end. Reverse flag table: "..reverse_flags);
 print(conc(startmenu.state,charskills.state,itemui.state))
 --os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
+

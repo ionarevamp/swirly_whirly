@@ -1,6 +1,6 @@
 require("src/lib/stats")
 
-function charin(string, index)
+function charat(string, index)
     return string.sub(string,index,index)
 end
 function swapflags(flagtable)

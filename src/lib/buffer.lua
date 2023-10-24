@@ -77,7 +77,7 @@ end
 function loadbuffer(string,row)
   row = row or 1
   for i = 1, #string do
-      BUFFER[row][i] = charin(string,i)
+      BUFFER[row][i] = charat(string,i)
   end
 end
 
@@ -97,7 +97,7 @@ function buffer_file(file,start,buffer)
     local limit = flr(#lines[i]*1)-1
     io.write(conc(#lines,",",limit," "))
     for j=1,limit do
-      local char = charin(lines[i],j)
+      local char = charat(lines[i],j)
       buffer[i][j] = char
     end
   end
@@ -114,7 +114,7 @@ function overlay_file(file,start)
   for i=start,block_length do
     local line = loaded:read("*l")
     for j=1,#line do
-      OVERLAY[i+(start-1)][j] = charin(line,j)
+      OVERLAY[i+(start-1)][j] = charat(line,j)
     end
   end
   loaded:close()

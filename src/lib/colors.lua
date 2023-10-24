@@ -54,7 +54,7 @@ CLR = {
     thistle = {216, 191, 216},
     turquoise = {64, 224, 208}
 }
-CLRV = {} -- for each CLR, create RGB vector via:
+CLRV = {} -- TODO:for each CLR, create RGB vector via:
     -- value * 100 / 255 = percentage
 function gradient(rgb,rgb2,percent) 
     -- MUST accept non-empty table
