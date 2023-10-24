@@ -14,7 +14,7 @@ function splash_intro(noise,duration,mode)
                             bc[j>center]*(12*mode)*(center/j))
             if j == flr(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or
             j == flr(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
-            rgbwr(randchar(),{101+(25*mode)+colordiff,colordiff,colordiff})
+                rgbwr(randchar(),{101+(25*mode)+colordiff,colordiff,colordiff})
             else
                 mcr()
             end
