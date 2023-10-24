@@ -85,34 +85,6 @@ function draw_x(size, location, angle, height, noise)
   end
 end
 
-function splash_intro(noise,duration,mode)
-  -- NOISE: too much noise is bad, no noise is worse when using randchar()
-  local HEIGHT = HEIGHT-10
-  local delay = duration/HEIGHT
-  local center = HEIGHT/2
-  local ratio = HEIGHT/WIDTH
-  local exit = false
-
-  for j = 1, HEIGHT do
-    for i = 1, WIDTH do
-      local ratio = HEIGHT/WIDTH
-      local center = HEIGHT/2
-      local rando = (math.random()-0.5)*noise
-      local colordiff = (bc[j<center]*(12*mode)*(j/center))+(
-                         bc[j>center]*(12*mode)*(center/j))
-      if j == flr(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or
-	 j == flr(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
-        rgbwr(randchar(),{101+(25*mode)+colordiff,colordiff,colordiff})
-      else
-        mcr()
-      end
-    end
-    if exit then break end
-    io.write("\n");io.flush();
-    slp(delay)
-  end
-end
-
 function main()
 
   dofile("src/intro.lua")
