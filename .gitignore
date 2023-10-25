@@ -10,3 +10,4 @@ yarn.lock
 src/lib/bypass.dll
 src/lib/bypass.o
 src/build.spec
+LUAJIT/

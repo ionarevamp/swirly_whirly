@@ -35,3 +35,8 @@ end
 function addalias(alias,target)
     CMDS[alias] = CMDS[target]
 end
+function checkcmd(command)
+    local check_valid = {[true]=command,[false]=" "}
+    local cmdexists = false
+    return check_valid[CMDS[command] ~= nil]
+end

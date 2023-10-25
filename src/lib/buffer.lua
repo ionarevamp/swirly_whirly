@@ -179,6 +179,7 @@ function totop()
 end
 function clr()
   io.write("\027[2J\027[1;1H")
+  --rgbreset()
 end
 function clrline()
   io.write("\027[2K\027[1G")

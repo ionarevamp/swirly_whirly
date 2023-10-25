@@ -12,7 +12,7 @@ lss(){
 }
 alias cmake="$HOME/workspace/cmake/usr/local/bin/cmake"
 alias rm="rm -v"
-alias goband="$aliases[luajit] src/main.lua"
+alias goband="nice --10 $aliases[luajit] src/main.lua"
 alias gocomp="pushd . && cd $HOME/workspace/src/lib && gcc -c bypass.c && gcc -shared -o bypass.dll bypass.o && popd"
 truecolor-test() {
     awk -v term_cols="${width:-$(tput cols || echo 80)}" 'BEGIN{

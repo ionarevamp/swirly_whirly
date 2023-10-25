@@ -14,7 +14,7 @@ function splash_intro(noise,duration,mode)
                             bc[j>center]*(12*mode)*(center/j))
             if j == flr(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or
             j == flr(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
-                rgbwr(randchar(),{101+(25*mode)+colordiff,colordiff,colordiff})
+                rgbwr("X",{101+(25*mode)+colordiff,colordiff,colordiff})
             else
                 mcr()
             end
@@ -32,7 +32,7 @@ mvcursor(2,4)
 splash_intro(0.30,1.8,2)
 slp(0.6)
   -- TRANSITION
-print()
+print();rgbreset();
 
 local decidedir = {";","mcl(2)"}
 local squiggleportion = 2*flr(WIDTH/5)
@@ -65,6 +65,7 @@ for j = 1,#splash_text do
     rgbwr(charat(splash_text,j),gradientratio(--
         CLR.goldmetal,CLR.gold,j,#splash_text))
     io.flush()
-    slp(0.17)
+    slp(1.21/j)
 end
+rgbreset()
 print()

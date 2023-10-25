@@ -6,26 +6,25 @@
 #include <stdio.h>
 
 // sleep for x milliseconds
-
 void sleep_s(float x) {
   usleep((int)(x * 1000 * 1000 * 0.96));
 }
-void rgbwr(const char* text,float r,float g,float b) {
-  // keep input bounded
-  r = (int)(255*(r>255))+(r*(r<256));
-  g = (int)(255*(g>255))+(g*(g<256));
-  b = (int)(255*(b>255))+(b*(b<256));
-  printf("\33[38;2;%d;%d;%dm%s",r,g,b,text);
-}
 void rgbbg(float r,float g,float b) {
   // keep input bounded
-  r = (int)(255*(r>255))+(r*(r<256));
-  g = (int)(255*(g>255))+(g*(g<256));
-  b = (int)(255*(b>255))+(b*(b<256));
-  printf("\33[48;2;%d;%d;%dm",r,g,b)
+  r = (255*(r>255))+(r*(r<256));
+  g = (255*(g>255))+(g*(g<256));
+  b = (255*(b>255))+(b*(b<256));
+  printf("\33[48;2;%d;%d;%dm",(int)r,(int)g,(int)b);
 }
-void rbgreset() {
-  printf("\33[0m")
+void rgbwr(const char* text,float r,float g,float b) {
+  // keep input bounded
+  r = (255*(r>255))+(r*(r<256));
+  g = (255*(g>255))+(g*(g<256));
+  b = (255*(b>255))+(b*(b<256));
+  printf("\33[38;2;%d;%d;%dm%s",(int)r,(int)g,(int)b,text);
+}
+void rgbreset() {
+  printf("\33[0m");
 }
 char input_buf() {
   char buffer[1024];

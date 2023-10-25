@@ -21,21 +21,27 @@ local ffi=require("ffi")
 ffi.cdef[[
   void sleep_s(float duration);
   void rgbwr(const char* string,float r,float g,float b);
+  void rgbbg(float r,float g,float b);
+  void rgbreset();
   char* input_buf();
 ]]
 local dll = ffi.load("src/lib/bypass.dll")
 
 function slp(duration)
   --os.execute(conc("tcc -run src/lib/sleep.c ","\"",duration,"\""))
-  dll.sleep_s(1.0*duration) -- 1 POINT zero (float)
+  dll.sleep_s(duration) -- 1 POINT zero (float)
   --(os.execute can have significant overhead)
- 
 end
 function rgbwr(string,rgb)
   local r,g,b = unpack(rgb)
   --^^cannot simply pass a list to C
   dll.rgbwr(string,r,g,b)
 end
+function rgbbg(rgb)
+  local r,g,b = unpack(rgb)
+  dll.rgbbg(r,g,b)
+end
+function rgbreset() dll.rgbreset() end
 rgbwr("FUNCTIONS LOADED\n",{140,120,100})
 --Reminder: use unpack on rgb table call from color list
 
@@ -87,9 +93,11 @@ function draw_x(size, location, angle, height, noise)
   end
 end
 
+print(collectgarbage("count"));slp(0.5)
 function main()
-
-  dofile("src/intro.lua")
+  
+  --dofile("src/intro.lua")
+  print(collectgarbage("count"))
 
   c_print("Press Enter key to start",CENTER[2])
   mcr(CENTER[2]);io.flush();  
@@ -113,20 +121,23 @@ function main()
 
   -- MAIN LOOP --  --  -- MAIN LOOP --
   local input_buf = {}
-  clr()
+  clr();collectgarbage("collect");
   while (quit == 0) do
     -- handle displaying stuff
+    print(collectgarbage("count"));slp(0.3)
     rgbwr("What would you like to do? \n",{200,180,180})
+    rgbreset()
     cur_input = io.read()
     for word in gmch(cur_input,"%S+") do
       table.insert(cmd,word)
     end
-    cmd[1] = cmd[1] or " "
-    pcall(load(CMDS[string.lower(cmd[1])])) -- refers to CMDS table, commands.lua
+    cmd[1] = checkcmd(cmd[1])
+    pcall(load(CMDS[cmd[1]])) -- refers to CMDS table, commands.lua
     cmd = {}
   end
 end
 main()
+print(collectgarbage("count"));slp(1)
 --print("Reached end. Reverse flag table: "..reverse_flags);
 print(conc(startmenu.state,charskills.state,itemui.state))
 --os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
