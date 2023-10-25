@@ -9,13 +9,24 @@ mvdirs = { -- mvdirs.r can be used to represent a space
   d = "\027[1B"
 }
 -- DEBUG
+function showcmd(t)
+  local lines = {}
+  for val in gmch(CMDS[t], "[^;]+") do
+    table.insert(lines,val)
+  end
+  for i=1,#lines do
+    if i==1 then print(t,lines[i]) else
+      print(" ",lines[i])
+    end
+  end
+end
 function showtable(t)
   local lines = {}
   for key,val in pairs(t) do
     for val in gmch(vals, "[^;]+") do
       table.insert(lines,val)
     end
-    for i=1,#val do
+    for i=1,#lines do
       if i==1 then print(key,lines[i]) else
         print(" ",lines[i])
       end

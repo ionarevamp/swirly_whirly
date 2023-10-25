@@ -29,6 +29,7 @@ local dll = ffi.load("src/lib/bypass.dll")
 
 function slp(duration)
   --os.execute(conc("tcc -run src/lib/sleep.c ","\"",duration,"\""))
+  duration = duration or 0.5
   dll.sleep_s(duration) -- 1 POINT zero (float)
   --(os.execute can have significant overhead)
 end
@@ -121,9 +122,10 @@ function main()
 
   -- MAIN LOOP --  --  -- MAIN LOOP --
   local input_buf = {}
-  clr();collectgarbage("collect");
+  clr()
   while (quit == 0) do
     -- handle displaying stuff
+    collectgarbage("collect")
     print(collectgarbage("count"));slp(0.3)
     rgbwr("What would you like to do? \n",{200,180,180})
     rgbreset()
@@ -137,8 +139,8 @@ function main()
   end
 end
 main()
-print(collectgarbage("count"));slp(1)
+print(collectgarbage("count"))
 --print("Reached end. Reverse flag table: "..reverse_flags);
-print(conc(startmenu.state,charskills.state,itemui.state))
+--print(conc(startmenu.state,charskills.state,itemui.state))
 --os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
 
