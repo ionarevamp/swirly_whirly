@@ -5,6 +5,11 @@ gitclone() {
     cd $2
 }
 alias ls="ls -a"
+lss(){
+    ls
+    echo "dir src/:" && ls src/
+    echo "dir src/lib:" && ls src/lib
+}
 alias cmake="$HOME/workspace/cmake/usr/local/bin/cmake"
 alias rm="rm -v"
 alias goband="$aliases[luajit] src/main.lua"

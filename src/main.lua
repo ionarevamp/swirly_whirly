@@ -4,7 +4,7 @@ os.execute("if test -f /src/lib/bypass.dll; then rm src/lib/bypass.dll; fi")
 quit = 0
 cur_input = ""
 cmd = {}
-bc={[true]=1,[false]=0 }; -- stands for 'b.ool c.heck'
+bc={[true]=1,[false]=0}; -- stands for 'b.ool c.heck'
 function flr(...) return math.floor(...) end
 function flrall(arr)
 	local tmp = arr

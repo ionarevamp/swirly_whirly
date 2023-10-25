@@ -5,6 +5,7 @@ package-lock.json
 package.json
 source.list
 SW.mf
+.zshrc
 yarn.lock
 src/lib/bypass.dll
 src/lib/bypass.o
