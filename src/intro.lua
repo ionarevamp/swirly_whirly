@@ -20,7 +20,7 @@ function splash_intro(noise,duration,mode)
             end
         end
         if exit then break end
-        io.write("\n");io.flush();
+        io.flush();io.write("\n");
         slp(delay)
     end
 end
@@ -36,7 +36,7 @@ print()
 
 local decidedir = {";","mcl(2)"}
 local squiggleportion = 2*flr(WIDTH/5)
-local introcolors = {CLR.gray,CLR.brightsilver}
+local introcolors = {CLR.slategray,CLR.brightsilver}
 local stamp = {{" "," "},{BLOCK[1],BLOCK[2]}}
 for r = 1,3 do
     if r==2 then mcr(WIDTH) end
@@ -54,10 +54,9 @@ for r = 1,3 do
         pcall(load(decidedir[dir+1]))
         io.flush();slp(1/WIDTH);
     end
-io.flush()
-print()
-io.flush()
-slp(0.3/r)
+    print()
+    io.flush()
+    slp(0.3/r)
 end
 -- TITLE CARD
 local splash_text = "BANDING"

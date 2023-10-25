@@ -33,6 +33,7 @@ function slp(duration)
 end
 function rgbwr(string,rgb)
   local r,g,b = unpack(rgb)
+  --^^cannot simply pass a list to C
   dll.rgbwr(string,r,g,b)
 end
 rgbwr("FUNCTIONS LOADED\n",{140,120,100})
