@@ -16,7 +16,8 @@ function conc(...) --table.concat for speed(?)
   local args = {...}
   return table.concat(args)
 end;
-dofile("src/build.spec") -- COMPILE/BUILD
+-- COMPILE/BUILD
+dofile("src/build.spec")
 local ffi=require("ffi")
 ffi.cdef[[
   void sleep_s(float duration);
@@ -30,9 +31,10 @@ local dll = ffi.load("src/lib/bypass.dll")
 function slp(duration)
   --os.execute(conc("tcc -run src/lib/sleep.c ","\"",duration,"\""))
   duration = duration or 0.5
-  dll.sleep_s(duration) -- 1 POINT zero (float)
+  dll.sleep_s(duration)
   --(os.execute can have significant overhead)
 end
+function rgbreset() dll.rgbreset() end
 function rgbwr(string,rgb)
   local r,g,b = unpack(rgb)
   --^^cannot simply pass a list to C
@@ -42,7 +44,7 @@ function rgbbg(rgb)
   local r,g,b = unpack(rgb)
   dll.rgbbg(r,g,b)
 end
-function rgbreset() dll.rgbreset() end
+function rgbprint(string,rgbfg,rgbbg)
 rgbwr("FUNCTIONS LOADED\n",{140,120,100})
 --Reminder: use unpack on rgb table call from color list
 
@@ -96,7 +98,8 @@ end
 
 print(collectgarbage("count"));slp(0.5)
 function main()
-  
+  for i=0,HEIGHT do io.write() end
+  clr()  
   --dofile("src/intro.lua")
   print(collectgarbage("count"))
 
@@ -123,9 +126,10 @@ function main()
   -- MAIN LOOP --  --  -- MAIN LOOP --
   local input_buf = {}
   clr()
+  rgbreset()
+  collectgarbage("collect")
   while (quit == 0) do
     -- handle displaying stuff
-    collectgarbage("collect")
     print(collectgarbage("count"));slp(0.3)
     rgbwr("What would you like to do? \n",{200,180,180})
     rgbreset()
