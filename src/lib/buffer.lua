@@ -84,14 +84,12 @@ function wipebuff()
   buffclear()
   olclear()
 end
-
-function loadbuffer(string,row)
+function loadbuff(string,row)
   row = row or 1
   for i = 1, #string do
       BUFFER[row][i] = charat(string,i)
   end
 end
-
 function buffer_file(file,start,buffer)
   buffer = buffer or BUFFER
   start = start or 1
@@ -154,7 +152,13 @@ local determine_break = {[true]="",[false]="io.write('');"}
 local determine_horizontal = {[true]="C",[false]="D"}
 local determine_vertical = {[true]="B",[false]="A"}
 function mvcursor(x,y) -- Non-relative, starts at 1,1
-  io.write(conc("\027[",x,";",y,"H"))
+  x = flr(x)
+  y = flr(y)
+  io.write(conc("\027[",y,";",x,"H"))
+  -- LINE, then COLUMN
+end
+function mvalign(string,ypos)
+  mvcursor(CENTER[2]-(#string/2),ypos)
 end
 function mcr(distance) -- M.ove C.ursor. R.ight
   distance = flr(distance or 1)

@@ -16,15 +16,17 @@ startmenu = {
     begin = "'Begin' game",
     load = "'Load' save",
     options = "'Options' and settings",
-    exit = "'Quit'"
+    exit = "'Quit'",
+    optioncount = 4
 }
+
 function startmenu:open()
     self.state = 1
+    dofile("src/startmenu.lua")
 end
 function startmenu:close()
     self.state = 0
 end
-
 
 charskills = {
     state = 0,

@@ -1,10 +1,14 @@
+--[[
+flags = {"icanon","-tostop"}
+reverse_flags = table.concat(swapflags(flags)," ");
+flags = table.concat(flags," ")
+os.execute("stty "..flags) -- put TTY in raw mode
+]] -- legacy. not sure if it will really even be needed.
+
 -- make sure dll is 'fresh'
 os.execute("if test -f /src/lib/bypass.dll; then rm src/lib/bypass.dll; fi")
 -- declare universal structs before mass require-ing
-quit = 0
-cur_input = ""
-cmd = {}
-bc={[true]=1,[false]=0}; -- stands for 'b.ool c.heck'
+
 function flr(...) return math.floor(...) end
 function flrall(arr)
 	local tmp = arr
@@ -40,14 +44,44 @@ function rgbwr(string,rgb)
   --^^cannot simply pass a list to C
   dll.rgbwr(string,r,g,b)
 end
+function rgbset(rgb) rgbwr("",rgb) end
 function rgbbg(rgb)
   local r,g,b = unpack(rgb)
   dll.rgbbg(r,g,b)
 end
-function rgbprint(string,rgbfg,rgbbg)
-rgbwr("FUNCTIONS LOADED\n",{140,120,100})
---Reminder: use unpack on rgb table call from color list
+function rgbprint(string,bgrgb,fgrgb)
+  rgbbg(bgrgb) -- set background
+  rgbwr(string,fgrgb) -- set foreground
+  rgbreset() -- reset terminal color
+  print()
+  io.flush()
+end
+function rgbline(string,bgrgb,fgrgb)
+  rgbbg(bgrgb)
+  rgbwr(string,fgrgb)
+  for i=1,WIDTH-#string do
+    io.write(" ") --fill bg before newline
+  end
+  rgbreset()
+  print()
+  io.flush()
+end
+function gameprompt(string,bgrgb,fgrgb)
+  rgbline(string,bgrgb,fgrgb)
+  for i=1,WIDTH-#string do
+    io.write(" ")
+  end
+  clrline()
+  rgbreset()
+  io.flush()
+end
 
+maxnum = 2^(53)-(2^8)
+math.randomseed(maxnum-os.time())
+bc={[true]=1,[false]=0}; -- stands for 'b.ool c.heck'
+gc={[true]=load([[collectgarbage("collect");
+    collectgarbage("collect")]]),
+      [false]=load("return ;")} -- stands for 'g.arbage c.ollect'
 SPACE = " "
 BLOCK = {"▄","▀","█"} --alt codes 220,223,219 resp.
 debug = 1
@@ -56,28 +90,33 @@ mobile_scale = (0.8*(bc[not mobile_irl==0]))+1*bc[mobile_irl==0] --placeholder e
 HEIGHT = (io.popen('tput lines'):read() or 24) - 1
 WIDTH = tonumber(io.popen('tput cols'):read() or 80)
 CENTER = {flr(HEIGHT/2),flr(WIDTH/2)}
+MEMLIMIT = (262144*0.9) - tonumber(
+  string.match(io.popen('grep MemTotal /proc/meminfo'):read(),
+  "%d+"))
+quit = 0
+cur_input = ""
+cmd = {}
 
 local modules = {"buffer","strings","stats",
-                 "colors","menu","commands"}
+                 "colors","gfx","menu",
+                 "commands"}
 for i=1,#modules do
   require("src/lib/"..modules[i])
 end
 local map = dofile("src/lib/keymap.lua")
-maxnum = 2^(53)-(2^8)
-math.randomseed(maxnum-os.time())
 
---[[
-flags = {"icanon","-tostop"}
-reverse_flags = table.concat(swapflags(flags)," ");
-flags = table.concat(flags," ")
-os.execute("stty "..flags) -- put TTY in raw mode
-]] -- legacy. not sure if it will really even be needed.
-
+function memcount() 
+  local kbmem = string.match(collectgarbage("count"),"%d+%.?%d*")
+  local dbgmsg = "KB in RAM: "
+  local screensize = conc("h: ",HEIGHT," w: ",WIDTH," ")
+  mcu();mcr(WIDTH-(#screensize+#dbgmsg+#kbmem))
+  io.write(conc(screensize,dbgmsg,kbmem))
+  print()
+end
 function draw_x(size, location, angle, height, noise)
   -- NOISE: too much noise is bad, no noise is worse when using randchar()
   --TODO: fix this function to use all parameters properly
 
-  
   local startX = location[1] - flr(size / 2)
   local startY = location[2] - flr(height / 2)
 
@@ -96,30 +135,32 @@ function draw_x(size, location, angle, height, noise)
   end
 end
 
-print(collectgarbage("count"));slp(0.5)
+rgbwr("FUNCTIONS LOADED\n",{140,120,100})
+--Reminder: use unpack on rgb table call from color list
+
+memcount();slp(0.5)
 function main()
   for i=0,HEIGHT do io.write() end
   clr()  
   --dofile("src/intro.lua")
-  print(collectgarbage("count"))
-
   c_print("Press Enter key to start",CENTER[2])
+  memcount()
   mcr(CENTER[2]);io.flush();  
   local foo = io.read()
   io.write(conc("\027[2J\027[1;1H","Debug msg: Preparing...\n"))
-  slp(1)
+  slp()
   
   -- START MENU
-  startmenu:open()
-  while startmenu.state ~= 0 do
-      print("Start menu reached.")
-      for i=1,1000 do
-        rgbwr("X",{i*(255/1000),0,0})
-        io.flush()
-      end
-      slp(0.5);startmenu:close()
-  end
-  local monsterload = "rat"
+  -- startmenu:open()
+  -- while startmenu.state ~= 0 do
+  --     print("Start menu reached.")
+  --     for i=1,1000 do
+  --       rgbwr("X",{i*(255/1000),0,0})
+  --       io.flush()
+  --     end
+  --     slp();startmenu:close()
+  -- end
+  -- local monsterload = "rat"
   -- buffer_file(conc("src/mons/",monsterload,".txt"))
   -- update()
 
@@ -127,12 +168,15 @@ function main()
   local input_buf = {}
   clr()
   rgbreset()
-  collectgarbage("collect")
+  
   while (quit == 0) do
+    pcall(gc[collectgarbage("count") > MEMLIMIT])
     -- handle displaying stuff
-    print(collectgarbage("count"));slp(0.3)
-    rgbwr("What would you like to do? \n",{200,180,180})
     rgbreset()
+    gameprompt("What would you like to do?",
+      CLR.darkgray,
+      {200,180,180})
+    memcount()
     cur_input = io.read()
     for word in gmch(cur_input,"%S+") do
       table.insert(cmd,word)
@@ -143,7 +187,7 @@ function main()
   end
 end
 main()
-print(collectgarbage("count"))
+memcount()
 --print("Reached end. Reverse flag table: "..reverse_flags);
 --print(conc(startmenu.state,charskills.state,itemui.state))
 --os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode

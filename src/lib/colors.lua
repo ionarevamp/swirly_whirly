@@ -7,9 +7,11 @@ CLR = {
     yellow = {255, 255, 0},
     cyan = {0, 255, 255},
     magenta = {255, 0, 255},
-    gray0 = {180,180,180},
-    gray1 = {185,185,185},
-    gray2 = {190,190,190},
+    darkgray = {25, 25, 25},
+    palegray = {80, 80, 80},
+    gray0 = {180, 180, 180},
+    gray1 = {185, 185, 185},
+    gray2 = {190, 190, 190},
     silver = {192, 192, 192},
     brightsilver = {217, 218, 219},
     gray = {128, 128, 128},
@@ -80,4 +82,29 @@ function gradient(rgb,rgb2,percent)
 end
 function gradientratio(rgb1,rgb2,iter,limit)
     return gradient(rgb1,rgb2,(iter*(1/limit)))
+end
+function hilitesep(string,sep,rgb,layer)
+    layer = layer or 3
+    if (layer ~= 3) and (layer ~= 4) then return ; end
+    local r,g,b = unpack(rgb)
+    local arr = {}
+    for token in gmch(string,sep) do
+        table.insert(arr,conc(token,sep))
+    end
+    for i=1,(#arr/2) do
+        arr[i*2]=conc(
+            "\27[",layer,"8;2;",r,";",g,";",b,"m",
+            arr[i*2],"\27[0m")
+    end
+    return conc(arr)
+end
+function hilite(string,match,rgb,layer)
+    local gsub = string.gsub
+    layer = layer or 3
+    if (layer ~= 3) and (layer ~= 4) then return ; end
+    local r,g,b = unpack(rgb)
+    local changed = gsub(string,conc("()",match,"()"),
+            conc("\27[",layer,"8;2;",r,";",g,";",b,"m",
+            "%1\27[0m"))
+    return changed
 end
