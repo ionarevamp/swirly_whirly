@@ -55,3 +55,6 @@ function checkcmd(command)
     local check_valid = {[true] = command, [false] = " "};
     return check_valid[CMDS[command] ~= nil];
 end
+function cmderror(text) 
+    rgbprint(text,{102,102,51},{150,20,20})
+end

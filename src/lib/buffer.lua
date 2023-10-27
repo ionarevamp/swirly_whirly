@@ -158,7 +158,7 @@ function mvcursor(x,y) -- Non-relative, starts at 1,1
   -- LINE, then COLUMN
 end
 function mvalign(string,ypos)
-  mvcursor(CENTER[2]-(#string/2),ypos)
+  mvcursor((CENTER[2]-(#string/2)),ypos)
 end
 function mcr(distance) -- M.ove C.ursor. R.ight
   distance = flr(distance or 1)

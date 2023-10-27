@@ -10,6 +10,7 @@ function drawline(x1,y1,x2,y2,char)
         for i=1,run do
             io.write(char)
         end
+        io.flush()
         return ;
     end
     if (flr(x1)==flr(x2)) then
@@ -19,6 +20,7 @@ function drawline(x1,y1,x2,y2,char)
             mcl()
             mcd()
         end
+        io.flush()
         return ;
     end
     local slope = rise/run

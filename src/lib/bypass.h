@@ -9,5 +9,6 @@ EXPORT_DLL rgbwr();
 EXPORT_DLL rgbbg();
 EXPORT_DLL rgbreset();
 EXPORT_DLL input_buf();
+EXPORT_DLL Cwrite();
 
 #endif

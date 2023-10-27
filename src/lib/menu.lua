@@ -16,7 +16,7 @@ startmenu = {
     begin = "'Begin' game",
     load = "'Load' save",
     options = "'Options' and settings",
-    exit = "'Quit'",
+    exit = "'Quit' / exit",
     optioncount = 4
 }
 

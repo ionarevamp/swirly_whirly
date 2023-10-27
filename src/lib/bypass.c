@@ -7,7 +7,7 @@
 
 // sleep for x milliseconds
 void sleep_s(float x) {
-  usleep((int)(x * 1000 * 1000 * 0.96));
+  usleep((int)(x * 1000 * 960));
 }
 void rgbbg(float r,float g,float b) {
   // keep input bounded
@@ -22,12 +22,23 @@ void rgbwr(const char* text,float r,float g,float b) {
   g = (255*(g>255))+(g*(g<256));
   b = (255*(b>255))+(b*(b<256));
   printf("\33[38;2;%d;%d;%dm%s",(int)r,(int)g,(int)b,text);
+  
 }
-void rgbreset() {
-  printf("\33[0m");
+void rgbreset(float Rr,float Rg,float Rb,float Br,float Bg,float Bb) {
+  Rr = (255*(Rr>255))+(Rr*(Rr<256));
+  Rg = (255*(Rg>255))+(Rg*(Rg<256));
+  Rb = (255*(Rb>255))+(Rb*(Rb<256));
+  Br = (255*(Br>255))+(Br*(Br<256));
+  Bg = (255*(Bg>255))+(Bg*(Bg<256));
+  Bb = (255*(Bb>255))+(Bb*(Bb<256));
+  printf("\33[48;2;%d;%d;%dm",(int)Br,(int)Bg,(int)Bb);
+  printf("\33[38;2;%d;%d;%dm",(int)Rr,(int)Rg,(int)Rb);
 }
 char input_buf() {
   char buffer[1024];
   fgets(buffer, sizeof(buffer), stdin);
   return *buffer;
+}
+void Cwrite(const char* text) {
+  printf(text);
 }

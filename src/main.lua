@@ -25,41 +25,56 @@ dofile("src/build.spec")
 local ffi=require("ffi")
 ffi.cdef[[
   void sleep_s(float duration);
-  void rgbwr(const char* string,float r,float g,float b);
+  void rgbwr(const char* text,float r,float g,float b);
   void rgbbg(float r,float g,float b);
-  void rgbreset();
+  void rgbreset(float Rr,float Rg,float Rb,float Br,float Bg,float Bb);
   char* input_buf();
+  void Cwrite(const char* text);
 ]]
 local dll = ffi.load("src/lib/bypass.dll")
 
+FGCOLOR = {255,255,255}
+BGCOLOR = {0,0,0}
 function slp(duration)
   --os.execute(conc("tcc -run src/lib/sleep.c ","\"",duration,"\""))
   duration = duration or 0.5
   dll.sleep_s(duration)
   --(os.execute can have significant overhead)
 end
-function rgbreset() dll.rgbreset() end
-function rgbwr(string,rgb)
+function printf(text) return dll.Cwrite(text) end
+function input_buf() return dll.input_buf() end
+function rgbreset()
+  Rr,Rg,Rb = unpack(FGCOLOR)
+  Br,Bg,Bb = unpack(BGCOLOR)
+  dll.rgbreset(Rr,Rg,Rb,Br,Bg,Bb);
+  io.flush()
+end
+function rgbwr(text,rgb)
   local r,g,b = unpack(rgb)
   --^^cannot simply pass a list to C
-  dll.rgbwr(string,r,g,b)
+  -- (scalar-ize data?)
+  dll.rgbwr(text,r,g,b)
 end
-function rgbset(rgb) rgbwr("",rgb) end
+function rgbset(rgb)
+  FGCOLOR = rgb
+  rgbwr("",FGCOLOR)
+end
 function rgbbg(rgb)
+  BGCOLOR = rgb
   local r,g,b = unpack(rgb)
   dll.rgbbg(r,g,b)
 end
-function rgbprint(string,bgrgb,fgrgb)
+function rgbprint(text,bgrgb,fgrgb)
   rgbbg(bgrgb) -- set background
-  rgbwr(string,fgrgb) -- set foreground
+  rgbwr(text,fgrgb) -- set foreground
   rgbreset() -- reset terminal color
   print()
   io.flush()
 end
-function rgbline(string,bgrgb,fgrgb)
+function rgbline(text,bgrgb,fgrgb)
   rgbbg(bgrgb)
-  rgbwr(string,fgrgb)
-  for i=1,WIDTH-#string do
+  rgbwr(text,fgrgb)
+  for i=1,WIDTH-#text do
     io.write(" ") --fill bg before newline
   end
   rgbreset()
@@ -96,6 +111,7 @@ MEMLIMIT = (262144*0.9) - tonumber(
 quit = 0
 cur_input = ""
 cmd = {}
+cmd_lower = ""
 
 local modules = {"buffer","strings","stats",
                  "colors","gfx","menu",
@@ -108,7 +124,7 @@ local map = dofile("src/lib/keymap.lua")
 function memcount() 
   local kbmem = string.match(collectgarbage("count"),"%d+%.?%d*")
   local dbgmsg = "KB in RAM: "
-  local screensize = conc("h: ",HEIGHT," w: ",WIDTH," ")
+  local screensize = conc("h: ",HEIGHT," w: ",WIDTH," | ")
   mcu();mcr(WIDTH-(#screensize+#dbgmsg+#kbmem))
   io.write(conc(screensize,dbgmsg,kbmem))
   print()
@@ -173,9 +189,9 @@ function main()
     pcall(gc[collectgarbage("count") > MEMLIMIT])
     -- handle displaying stuff
     rgbreset()
-    gameprompt("What would you like to do?",
-      CLR.darkgray,
-      {200,180,180})
+    -- gameprompt("What would you like to do?",
+    --   CLR.darkgray,
+    --   {200,180,180})
     memcount()
     cur_input = io.read()
     for word in gmch(cur_input,"%S+") do

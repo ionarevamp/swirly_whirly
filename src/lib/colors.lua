@@ -83,28 +83,28 @@ end
 function gradientratio(rgb1,rgb2,iter,limit)
     return gradient(rgb1,rgb2,(iter*(1/limit)))
 end
-function hilitesep(string,sep,rgb,layer)
-    layer = layer or 3
-    if (layer ~= 3) and (layer ~= 4) then return ; end
-    local r,g,b = unpack(rgb)
-    local arr = {}
-    for token in gmch(string,sep) do
-        table.insert(arr,conc(token,sep))
-    end
-    for i=1,(#arr/2) do
-        arr[i*2]=conc(
-            "\27[",layer,"8;2;",r,";",g,";",b,"m",
-            arr[i*2],"\27[0m")
-    end
-    return conc(arr)
-end
+-- function hilitesep(string,sep,rgb,layer)
+--     layer = layer or 3
+--     if (layer ~= 3) and (layer ~= 4) then return ; end
+--     local r,g,b = unpack(rgb)
+--     local arr = {}
+--     for token in gmch(string,sep) do
+--         table.insert(arr,conc(token,sep))
+--     end
+--     for i=1,(#arr/2) do
+--         arr[i*2]=conc(
+--             "\027[",layer,"8;2;",r,";",g,";",b,"m",
+--             arr[i*2],"\027[0m")
+--     end
+--     return conc(arr)
+-- end
 function hilite(string,match,rgb,layer)
     local gsub = string.gsub
     layer = layer or 3
     if (layer ~= 3) and (layer ~= 4) then return ; end
     local r,g,b = unpack(rgb)
-    local changed = gsub(string,conc("()",match,"()"),
-            conc("\27[",layer,"8;2;",r,";",g,";",b,"m",
-            "%1\27[0m"))
+    local changed = gsub(string,match,
+            conc("\027[",layer,"8;2;",r,";",g,";",b,"m",
+            "%1\027[0m"))
     return changed
 end
