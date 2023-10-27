@@ -20,7 +20,7 @@ function border(height)
     for i=1,#selections do
         rgbset()
         mvalign(selections[i],2*i)
-        io.write(hilitesep(selections[i],"()'()",colors[i]))
+        rgbwr(selections[i],colors[i])
     end
     rgbreset()
     print()
