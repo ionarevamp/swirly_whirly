@@ -11,8 +11,8 @@ os.execute("if test -f /src/lib/bypass.dll; then rm src/lib/bypass.dll; fi")
 
 function flr(...) return math.floor(...) end
 function flrall(arr)
-	local tmp = arr
-  for i=1,#tmp do tmp[i] = flr(tmp[i]) end
+  local tmp = {}
+  for i=1,#tmp do tmp[i] = flr(arr[i]) end
   return tmp
 end
 function gmch(...) return string.gmatch(...) end
