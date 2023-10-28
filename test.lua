@@ -161,5 +161,4 @@ os.execute("tput civis")
 draw_circle()
 os.execute("tput cnorm")
 
-print("Press Enter to finish...");io.read()
 os.exit()
