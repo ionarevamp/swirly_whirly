@@ -34,10 +34,31 @@ function drawline(x1,y1,x2,y2,char)
     end
     io.flush()
 end
-function drawrect(topl,bottomr)
-    drawline(topl[1],topl[2],topl[1],bottomr[2])
-    drawline(topl[1],topl[2],bottomr[1],topl[2])
-    drawline(topl[1],bottomr[2],bottomr[1],bottomr[2])
-    drawline(bottomr[1],topl[2],bottomr[1],bottomr[2])
+function drawrect(left,top,right,bottom)
+    drawline(left,top,left,bottom)
+    drawline(left,top,right,top)
+    drawline(left,bottom,right,bottom)
+    drawline(right,top,right,bottom)
+    io.flush()
+end
+function draw_circle(cx,cy,size,char)
+    char = char or "*"
+    local HEIGHT = HEIGHT
+    local sqrt = math.sqrt
+    local flr = math.floor
+    local sin = math.sin
+    local cos = math.cos
+    size = size or 5
+    radius = size/2
+    local x,y = 0,0
+    local cx = cx or CENTER[2]
+    local cy = cy or CENTER[1]
+    local dir = 1
+    for i=0,360,ratio do
+        x = flr(radius*cos(i))
+        y = flr(radius*sin(i))/3
+        mvcursor(cx+x,cy+y)
+        io.write(char)
+    end
     io.flush()
 end

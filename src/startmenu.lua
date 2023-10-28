@@ -30,26 +30,24 @@ function border(height)
     local lines = flr(height+1)
     local WIDTH = WIDTH-1
     rgbset(CLR.blue)
-    drawrect({1,1},{WIDTH,lines})
+    drawrect(1,1,WIDTH,lines)
     -- for i=1,#selections do
     --     mvalign(selections[i],2*i)
     --     Cwrite(hilitesep(selections[i],colors[i]))
     -- end
-    
     rgbreset()
     print()
 end
 
-clr()
+drawline(1,1,WIDTH,HEIGHT)
 for i=1,HEIGHT do print() end
 totop()
 rgbreset()
-printf(hilitesep("  'funky' world of 'fun' and 'dreams'",CLR.gold))
 border(startmenu.optioncount * 2)
 print();print()
--- gameprompt("Make your choice... \n",
---             {12,12,12},
---             {150,150,150})
---mainchoice = io.read()
+gameprompt("Make your choice...",
+            {12,12,12},
+            {150,150,150})
+-- mainchoice = io.read()
 
 rgbreset()

@@ -124,41 +124,51 @@ for i=1,#modules do
   require("src/lib/"..modules[i])
 end
 local map = dofile("src/lib/keymap.lua")
-
-function draw_circle(cx,cy)
-    local HEIGHT = HEIGHT
-    local sqrt = math.sqrt
-    local flr = math.floor
-    local sin = math.sin
-    local cos = math.cos
-    local radius = HEIGHT*0.2
-    local x,y = 0,0
-    local cx = cx or CENTER[2]
-    local cy = cy or CENTER[1]
-    local dir = 1
-      for i=1,20 do
-	dir = dir* -1
-	for r=-4,4 do
-	    radius = HEIGHT*0.2+(r/2*dir)
-	    for i=0,360,ratio do
-	      x = (radius*cos(i))
-	      y = (radius*sin(i))/(WIDTH/HEIGHT)
-	      mvcursor(cx+flr(x),cy+flr(y))
-	      rgbwr("0",CLR.gold)
-	    end
-	    mvcursor(1,1)
-	    io.flush()
-	    clr()
-	    slp(0.3/8)
-	end
-      end
+function memcount() 
+  local kbmem = string.match(collectgarbage("count"),"%d+%.?%d*")
+  local dbgmsg = "KB in RAM: "
+  local screensize = conc("h: ",HEIGHT," w: ",WIDTH," | ")
+  mcu();mcr(WIDTH-(#screensize+#dbgmsg+#kbmem))
+  io.write(conc(screensize,dbgmsg,kbmem))
+  print()
 end
+
+function draw_circle(cx,cy,size)
+  local HEIGHT = HEIGHT
+  local sqrt = math.sqrt
+  local flr = math.floor
+  local sin = math.sin
+  local cos = math.cos
+  size = size or 5
+  radius = size/2
+  local x,y = 0,0
+  local cx = cx or CENTER[2]
+  local cy = cy or CENTER[1]
+  local dir = 1
+  for i=0,360,ratio do
+    x = flr(radius*cos(i))
+    y = flr(radius*sin(i))/3
+    mvcursor(cx+x,cy+y)
+    rgbwr("0",CLR.gold)
+  end
+  io.flush()
+end
+
 for i=0,HEIGHT do
   print()
 end
 
 os.execute("tput civis")
-draw_circle()
+local circle_size = 25
+local start_time = os.clock()
+local radius = (circle_size/2)
+for xpos=1,WIDTH-radius do
+  clr()
+  draw_circle(xpos,CENTER[1]-flr(radius),circle_size)
+end
+print()
+local end_time = os.clock()
+print("Time taken: ",end_time-start_time);slp(2)
 os.execute("tput cnorm")
 
 os.exit()

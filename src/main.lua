@@ -55,12 +55,13 @@ function rgbwr(text,rgb)
   -- (scalar-ize data?)
   dll.rgbwr(text,r,g,b)
 end
-function rgbset(rgb)
+function rgbset(rgb,BGrgb)
   FGCOLOR = rgb
+  BGrgb = BGrgb or BGCOLOR
   rgbwr("",FGCOLOR)
+  rgbbg(BGrgb)
 end
 function rgbbg(rgb)
-  BGCOLOR = rgb
   local r,g,b = unpack(rgb)
   dll.rgbbg(r,g,b)
 end
@@ -87,7 +88,6 @@ function gameprompt(string,bgrgb,fgrgb)
     io.write(" ")
   end
   clrline()
-  rgbreset()
   io.flush()
 end
 
@@ -123,6 +123,7 @@ local map = dofile("src/lib/keymap.lua")
 
 function memcount() 
   local kbmem = string.match(collectgarbage("count"),"%d+%.?%d*")
+  kbmem = tostring(flr((kbmem*1000))/1000)
   local dbgmsg = "KB in RAM: "
   local screensize = conc("h: ",HEIGHT," w: ",WIDTH," | ")
   mcu();mcr(WIDTH-(#screensize+#dbgmsg+#kbmem))
@@ -189,9 +190,9 @@ function main()
     pcall(gc[collectgarbage("count") > MEMLIMIT])
     -- handle displaying stuff
     rgbreset()
-    -- gameprompt("What would you like to do?",
-    --   CLR.darkgray,
-    --   {200,180,180})
+    gameprompt("What would you like to do?",
+      CLR.darkgray,
+      {200,180,180})
     memcount()
     cur_input = io.read()
     for word in gmch(cur_input,"%S+") do
