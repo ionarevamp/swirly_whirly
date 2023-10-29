@@ -12,3 +12,4 @@ src/lib/bypass.o
 src/build.spec
 LUAJIT/
 LibBF/
+luajit-gmp/
