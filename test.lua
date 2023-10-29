@@ -32,6 +32,7 @@ ffi.cdef[[
   void rgbreset(float Rr,float Rg,float Rb,float Br,float Bg,float Bb);
   char* input_buf();
   void Cwrite(const char* text);
+  int getms();
 ]]
 local prefixdir = tostring(io.popen("echo $PREFIX"):read())
 local dll = ffi.load("src/lib/bypass.dll")
@@ -93,6 +94,7 @@ function gameprompt(string,bgrgb,fgrgb)
   rgbreset()
   io.flush()
 end
+function getms() return dll.getms() end
 
 maxnum = 2^(53)-(2^8)
 math.randomseed(maxnum-os.time())
@@ -137,48 +139,87 @@ function draw_circle(cx,cy,size)
   local HEIGHT = HEIGHT
   local sqrt = math.sqrt
   local flr = math.floor
+  local ceil = math.ceil
   local sin = math.sin
   local cos = math.cos
+  local pi = math.pi
+  local degrange = 2*pi
   size = size or 5
+  size = size-1
   radius = size/2
   local x,y = 0,0
   cx = cx or CENTER[2]
   cy = cy or CENTER[1]
   local dir = 1
-  for i=0,360,radius/math.pi/2 do
-    x = flr((radius*cos(i)))-1
-    y = flr((radius*sin(i)/3))
+  for i=0,degrange,(degrange/360)+y do
+    x = ceil(radius*cos(i))
+    y = ceil(radius*sin(i)*0.35)
+    -- Y val adjusted for monospace dimensions (roughly)
     mvcursor(cx+x,cy+y)
     rgbwr("0",CLR.gold)
   end
   io.flush()
 end
 
+function pulse_fill(state,opacity,speed,rgb,background,dir)
+  background = background or CLR.black
+  state = state or 1
+  rgb = rgb or BGCOLOR
+  opacity = opacity or 100
+  local opacity = opacity/100
+  speed = speed or 1
+  dir = dir or 1
+  local HEIGHT = HEIGHT - 1
+  local sin = math.sin
+  local cos = math.cos
+  local color = gradient(rgb,background,opacity)
+  rgbbg(color)
+  local r,g,b = unpack(rgb)
+  for i=1,HEIGHT do
+    local wave = sin((speed*i/10)+state)*opacity
+    color = gradient(rgb,background,wave)
+    rgbbg(color)
+    for j=1,WIDTH do
+      io.write(" ")
+    end
+  io.flush()
+  end
+end
+
 for i=0,HEIGHT do
   print()
 end
 
-function pulse_fill(state,opacity,rgb,speed)
-  rgb = rgb or BGCOLOR
-  speed = speed or 1
-  --11:25pm Just realised this function will take a bit of figuring 
-end
-
 os.execute("tput civis")
-local circle_size = 25
+local circle_size = 1
 local start_time = os.clock()
 local radius = (circle_size/2)
-for xpos=1,WIDTH-radius do
+for xpos=12,19,0.1 do
   clr()
-  draw_circle(xpos,CENTER[1]-flr(radius),circle_size)
+  draw_circle(xpos,CENTER[1]-flr(radius/2),circle_size+xpos)
 end
-mvcursor(1,HEIGHT)
+mvcursor(1,HEIGHT-radius/2)
 print()
 local end_time = os.clock()
-print("Time taken: ",end_time-start_time);slp(1)
+print("Time taken: ",end_time-start_time,conc("H: ",HEIGHT," W: ",WIDTH));slp(1)
 
---pulse_fill()
+collectgarbage("stop")
+local interval = 300
+local loopstart = getms()
+for st=0,100,1 do
+  local deadline = (st*interval)
+  totop()
+  pulse_fill(st,50,2,CLR.royalblue,CLR.black)
+  memcount()
+  collectgarbage("collect")
+  for i=0,5000 do 
+    if getms() >= deadline+loopstart then
+      break;
+    end
+    slp(0.0001)
+  end
+end
+collectgarbage("collect");
 
 os.execute("tput cnorm")
-
 os.exit()

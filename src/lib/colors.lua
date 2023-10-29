@@ -61,7 +61,7 @@ CLRV = {} -- TODO:for each CLR, create RGB vector via:
     -- value * 100 / 255 = percentage
 function gradient(rgb,rgb2,percent) 
     -- MUST accept non-empty table
-    -- float values are ok if using rgbwr()
+    -- percentage as value from 0 to 1
     local rgb = rgb
     local rgb2 = rgb2
     local mathabs = math.abs

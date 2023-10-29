@@ -4,7 +4,8 @@
 
 #include <unistd.h>
 #include <stdio.h>
-//#include "libbf.c"
+#include <time.h>
+#include "libbf.c"
 
 // sleep for x milliseconds
 void sleep_s(float x) {
@@ -42,4 +43,16 @@ char input_buf() {
 }
 void Cwrite(const char* text) {
   printf(text);
+}
+int getms(){
+    long            ms; // Milliseconds
+    time_t          s;  // Seconds
+    struct timespec spec;
+
+    clock_gettime(CLOCK_REALTIME, &spec);
+
+    s  = spec.tv_sec;
+    ms = round(spec.tv_nsec / 1.0e6);
+
+    return ms;
 }
