@@ -142,8 +142,8 @@ function draw_circle(cx,cy,size)
   size = size or 5
   radius = size/2
   local x,y = 0,0
-  local cx = cx or CENTER[2]
-  local cy = cy or CENTER[1]
+  cx = cx or CENTER[2]
+  cy = cy or CENTER[1]
   local dir = 1
   for i=0,360,radius/math.pi/2 do
     x = flr((radius*cos(i)))-1
@@ -158,6 +158,12 @@ for i=0,HEIGHT do
   print()
 end
 
+function pulse_fill(state,opacity,rgb,speed)
+  rgb = rgb or BGCOLOR
+  speed = speed or 1
+  --11:25pm Just realised this function will take a bit of figuring 
+end
+
 os.execute("tput civis")
 local circle_size = 25
 local start_time = os.clock()
@@ -169,7 +175,10 @@ end
 mvcursor(1,HEIGHT)
 print()
 local end_time = os.clock()
-print("Time taken: ",end_time-start_time);slp(2)
+print("Time taken: ",end_time-start_time);slp(1)
+
+--pulse_fill()
+
 os.execute("tput cnorm")
 
 os.exit()
