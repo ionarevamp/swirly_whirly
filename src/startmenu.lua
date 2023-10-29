@@ -29,13 +29,14 @@ function border(height)
         -- same amount of colors as selections
     local lines = flr(height+1)
     local WIDTH = WIDTH-1
-    rgbset(CLR.blue)
+    local prev_color = FGCOLOR
+    rgbset(CLR.powderblue)
     drawrect(1,1,WIDTH,lines)
     -- for i=1,#selections do
     --     mvalign(selections[i],2*i)
     --     Cwrite(hilitesep(selections[i],colors[i]))
     -- end
-    rgbreset()
+    rgbset(prev_color)
     print()
 end
 

@@ -145,9 +145,9 @@ function draw_circle(cx,cy,size)
   local cx = cx or CENTER[2]
   local cy = cy or CENTER[1]
   local dir = 1
-  for i=0,360,ratio do
-    x = flr(radius*cos(i))
-    y = flr(radius*sin(i))/3
+  for i=0,360,radius/math.pi/2 do
+    x = flr((radius*cos(i)))-1
+    y = flr((radius*sin(i)/3))
     mvcursor(cx+x,cy+y)
     rgbwr("0",CLR.gold)
   end
@@ -166,6 +166,7 @@ for xpos=1,WIDTH-radius do
   clr()
   draw_circle(xpos,CENTER[1]-flr(radius),circle_size)
 end
+mvcursor(1,HEIGHT)
 print()
 local end_time = os.clock()
 print("Time taken: ",end_time-start_time);slp(2)

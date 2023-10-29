@@ -53,8 +53,8 @@ function draw_circle(cx,cy,size,char)
     local x,y = 0,0
     local cx = cx or CENTER[2]
     local cy = cy or CENTER[1]
-    local dir = 1
-    for i=0,360,ratio do
+    local limit = radius/math.pi/2
+    for i=0,360,limit do
         x = flr(radius*cos(i))
         y = flr(radius*sin(i))/3
         mvcursor(cx+x,cy+y)
