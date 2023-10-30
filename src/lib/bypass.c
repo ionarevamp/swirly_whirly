@@ -2,10 +2,12 @@
 // Main purpose of this file is to BYPASS
 //  the need for slow functions
 
+#include <inttypes.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <time.h>
-#include "libbf.c"
+#include <math.h>
+//#include "libbf.c"
 
 // sleep for x milliseconds
 void sleep_s(float x) {
@@ -42,16 +44,13 @@ char input_buf() {
   return *buffer;
 }
 void Cwrite(const char* text) {
-  printf(text);
+  printf("%s",text);
 }
-int getms(){
+long getms(){
     long            ms; // Milliseconds
-    time_t          s;  // Seconds
     struct timespec spec;
 
-    clock_gettime(CLOCK_REALTIME, &spec);
-
-    s  = spec.tv_sec;
+    clock_gettime(CLOCK_BOOTTIME, &spec);
     ms = round(spec.tv_nsec / 1.0e6);
 
     return ms;

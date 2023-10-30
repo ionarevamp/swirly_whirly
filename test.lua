@@ -19,8 +19,7 @@ function flrall(arr)
 end
 function gmch(...) return string.gmatch(...) end
 function conc(...) --table.concat for speed(?)
-  local args = {...}
-  return table.concat(args)
+  return table.concat({...})
 end;
 -- COMPILE/BUILD
 dofile("src/build.spec")
@@ -32,7 +31,7 @@ ffi.cdef[[
   void rgbreset(float Rr,float Rg,float Rb,float Br,float Bg,float Bb);
   char* input_buf();
   void Cwrite(const char* text);
-  int getms();
+  long getms();
 ]]
 local prefixdir = tostring(io.popen("echo $PREFIX"):read())
 local dll = ffi.load("src/lib/bypass.dll")
@@ -94,7 +93,7 @@ function gameprompt(string,bgrgb,fgrgb)
   rgbreset()
   io.flush()
 end
-function getms() return dll.getms() end
+function getms() return tonumber(dll.getms()) end
 
 maxnum = 2^(53)-(2^8)
 math.randomseed(maxnum-os.time())
@@ -130,8 +129,8 @@ function memcount()
   local kbmem = string.match(collectgarbage("count"),"%d+%.?%d*")
   local dbgmsg = "KB in RAM: "
   local screensize = conc("h: ",HEIGHT," w: ",WIDTH," | ")
-  mcu();mcr(WIDTH-(#screensize+#dbgmsg+#kbmem))
-  io.write(conc(screensize,dbgmsg,kbmem))
+  mcu();mcr(WIDTH-(#screensize+#dbgmsg+#kbmem+10))
+  io.write(conc(screensize,dbgmsg,kbmem," Seconds elapsed: ",os.clock()))
   print()
 end
 
@@ -189,7 +188,7 @@ end
 for i=0,HEIGHT do
   print()
 end
-
+slp(2)
 os.execute("tput civis")
 local circle_size = 1
 local start_time = os.clock()
@@ -204,22 +203,22 @@ local end_time = os.clock()
 print("Time taken: ",end_time-start_time,conc("H: ",HEIGHT," W: ",WIDTH));slp(1)
 
 collectgarbage("stop")
-local interval = 300
-local loopstart = getms()
-for st=0,100,1 do
+checkbreak={[true]=load("break;"),[false]=load("slp(1/interval)")}
+interval = 300
+loopstart = getms()
+for st=0,15,1 do
   local deadline = (st*interval)
   totop()
-  pulse_fill(st,50,2,CLR.royalblue,CLR.black)
+  pulse_fill(st/10,50,2,CLR.royalblue,CLR.black)
+  print()
+  print(getms());io.flush()
   memcount()
-  collectgarbage("collect")
-  for i=0,5000 do 
-    if getms() >= deadline+loopstart then
-      break;
-    end
-    slp(0.0001)
+--  collectgarbage("collect")
+  for i=0,interval do 
+    pcall(checkbreak[(getms() >= deadline+loopstart)])
   end
 end
-collectgarbage("collect");
+collectgarbage("collect");collectgarbage("collect")
 
 os.execute("tput cnorm")
 os.exit()

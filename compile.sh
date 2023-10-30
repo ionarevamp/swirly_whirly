@@ -1,6 +1,6 @@
 #!/bin/bash
 pushd .;
 cd src/lib;
-tcc -c bypass.c;
-tcc -shared -o bypass.dll bypass.o;
+gcc -c -fPIC bypass.c;
+gcc -shared -o bypass.dll bypass.o;
 popd;
