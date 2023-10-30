@@ -132,6 +132,7 @@ function memcount()
   io.write(conc(screensize,dbgmsg,kbmem))
   print()
 end
+function blankerr() print("((Feature not yet implemented.))") end
 function draw_x(size, location, angle, height, noise)
   -- NOISE: too much noise is bad, no noise is worse when using randchar()
   --TODO: fix this function to use all parameters properly

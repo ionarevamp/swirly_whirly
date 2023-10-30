@@ -17,7 +17,7 @@ startmenu = {
     load = "'Load' save",
     options = "'Options' and settings",
     exit = "'Quit' / exit",
-    optioncount = 4
+    optioncount = 4,
 }
 
 function startmenu:open()

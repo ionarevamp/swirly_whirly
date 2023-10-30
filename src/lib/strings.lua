@@ -32,27 +32,27 @@ function getbraced(text,sep)
     local max = math.max
     local ins = table.insert
     local arr = {}
-    local arrmatch = {}
+    -- local arrmatch = {}
     local arrnomatch = {}
-    local delim = conc(sep,"[^",sep,"]*",sep)
-    local antidelim = conc("[^",sep,"]*")
-    local count = 1
-    for match in gmch(text,delim) do
-        arrmatch[count] = match
-        count = count+1
-    end
+    -- local delim = conc(sep,"[^",sep,"]*",sep)
+    local antidelim = conc("[^",sep,"(^",sep,")",sep,"]+")
+    -- local count = 1
+    -- for match in gmch(text,delim) do
+    --     arrmatch[count] = match
+    --     count = count+1
+    -- end
     count = 1
     for nomatch in gmch(text,antidelim) do
         arrnomatch[count] = nomatch
         count = count+1
     end
-    local ordercheck = {[true]={arrmatch,arrnomatch},
-                  [false]={arrnomatch,arrmatch}}
-    local first,second = unpack(ordercheck[charat(text,1)==sep])
-    local higher = max(#first,#second)
-    for i=1,higher do
-        ins(arr,first[i])
-        ins(arr,second[i])
+    -- local ordercheck = {[true]={arrmatch,arrnomatch},
+                --   [false]={arrnomatch,arrmatch}}
+    -- local first,second = unpack(ordercheck[charat(text,1)==sep])
+    -- local higher = max(#first,#second)
+    for i=1,#arrnomatch do
+        --ins(arr,first[i])
+        ins(arr,arrnomatch[i])
     end
     return arr
 end

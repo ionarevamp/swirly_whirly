@@ -189,6 +189,11 @@ function mcv(distance) -- M.ove C.ursor V.ertical
   distance = flr(distance or 1)
   io.write(conc("\027[",distance,direction))
 end
+function mvhor(xpos)
+  xpos = xpos or 1
+  xpos = flr(xpos)+(1*bc[xpos<1]) --revert to 1 if 0
+  io.write(conc("\27[",xpos,"G]"))
+end
 function totop()
   mvcursor(1,1)
 end
@@ -198,6 +203,9 @@ function clr()
 end
 function clrline()
   io.write("\027[2K\027[1G")
+end
+function toleft()
+  mvhor(1)
 end
 
 -- RANDOMNESS

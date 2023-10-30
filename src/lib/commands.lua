@@ -6,7 +6,7 @@ CMDS = {
         local filename = table.remove(args,1);
         --refresh local data
     ]],
-    ["menu"] = "startmenu:open();",
+    ["menu"] = [[startmenu:open();]],
     ["showcmd"] = [[
         print("Showing commands");
         local cmds = CMDS;
