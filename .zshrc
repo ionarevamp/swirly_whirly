@@ -16,6 +16,7 @@ goband() {
     luajit src/main.lua
 }
 gotest() {
+    tput civis
     luajit test.lua
     tput cnorm
 }

@@ -31,7 +31,7 @@ ffi.cdef[[
   void rgbreset(float Rr,float Rg,float Rb,float Br,float Bg,float Bb);
   char* input_buf();
   void Cwrite(const char* text);
-  long getms();
+  long getns();
 ]]
 local prefixdir = tostring(io.popen("echo $PREFIX"):read())
 local dll = ffi.load("src/lib/bypass.dll")
@@ -93,7 +93,7 @@ function gameprompt(string,bgrgb,fgrgb)
   rgbreset()
   io.flush()
 end
-function getms() return tonumber(dll.getms()) end
+function getms() return tonumber(dll.getns()) end
 
 maxnum = 2^(53)-(2^8)
 math.randomseed(maxnum-os.time())
@@ -150,7 +150,7 @@ function draw_circle(cx,cy,size)
   cx = cx or CENTER[2]
   cy = cy or CENTER[1]
   local dir = 1
-  for i=0,degrange,(degrange/360)+y do
+  for i=0,degrange,(degrange/(360-y)) do
     x = ceil(radius*cos(i))
     y = ceil(radius*sin(i)*0.35)
     -- Y val adjusted for monospace dimensions (roughly)
@@ -188,7 +188,7 @@ end
 for i=0,HEIGHT do
   print()
 end
-slp(2)
+
 os.execute("tput civis")
 local circle_size = 1
 local start_time = os.clock()
@@ -202,23 +202,24 @@ print()
 local end_time = os.clock()
 print("Time taken: ",end_time-start_time,conc("H: ",HEIGHT," W: ",WIDTH));slp(1)
 
-collectgarbage("stop")
-checkbreak={[true]=load("break;"),[false]=load("slp(1/interval)")}
-interval = 300
-loopstart = getms()
-for st=0,15,1 do
-  local deadline = (st*interval)
+-- TODO: ADD THIS FEATURE AS "pulse_fill_vertical"
+checkpulsebreak={[true]=load("break ;"),[false]=load("local interval = interval;slp(interval/100)")}
+interval = 50 / 1000 
+pulselimit = 300
+for st=0,pulselimit,1 do
+  local loopstart = os.clock()
   totop()
-  pulse_fill(st/10,50,2,CLR.royalblue,CLR.black)
-  print()
-  print(getms());io.flush()
+  pulse_fill(st/pulselimit,80,2,CLR.royalblue,CLR.black)
+  print();mcu(2)
+  print(conc(os.clock()-loopstart,"                  "));io.flush()
   memcount()
---  collectgarbage("collect")
-  for i=0,interval do 
-    pcall(checkbreak[(getms() >= deadline+loopstart)])
+
+  for i=0,100 do 
+    pcall(checkpulsebreak[(
+      os.clock()-loopstart >= interval)])
   end
 end
 collectgarbage("collect");collectgarbage("collect")
 
-os.execute("tput cnorm")
+os.execute("tput cnorm && clear")
 os.exit()

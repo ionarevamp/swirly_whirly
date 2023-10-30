@@ -3,18 +3,26 @@ dofile("src/lib/gfx.lua")
 --  to return to the previous screen, such as
 --  displaying from the pre-existing buffer
  --some value plus one
- function hilitepos(text,rgb,sep,layer)
-    -- broken function and my brain is tired...
+ function hilitesep(text,rgb,sep,layer)
+    -- REMOVES SEPARATOR FROM TEXT
     sep = sep or "'"
     layer = layer or 3
-    if (layer ~= 3) and (layer ~= 4) then return ; end
+    local charcheck = {[true]=sep,[false]=""}
     local r,g,b = unpack(rgb)
-    local arr = stringsplit(text,sep)
-    for i=1,#arr-1 do
-        arr[i] = conc(arr[i])
+    local prevr,prevg,prevb = unpack(FGCOLOR)
+    -- TODO: FIX getbraced() FUNCTION
+    local arr = getbraced(text,sep)
+    local check = 0
+    for i=(1+bc[charat(text,1)~=sep]),#arr,2 do
+        -- local i = i-bc[i>(#arr-1) and charat(text,#text)~=sep]
+        arr[i] = table.concat({
+        "\27[",layer,"8;2;",
+        r,";",g,";",b,"m",arr[i],
+        "\27[",layer,"8;2;",
+        prevr,";",prevg,";",prevb,"m"}
+        )
     end
-    print(table.concat(arr))
-    return ;
+    return table.concat(arr);
 end
 function border(height)
     height = height or 20
@@ -45,7 +53,7 @@ for i=1,HEIGHT do print() end
 totop()
 rgbreset()
 border(startmenu.optioncount * 2)
-print();print()
+print(hilitesep("'funny' world of 'fun' and 'dreams' a'a'",CLR.red,"'"))
 gameprompt("Make your choice...",
             {12,12,12},
             {150,150,150})

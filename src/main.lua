@@ -30,6 +30,7 @@ ffi.cdef[[
   void rgbreset(float Rr,float Rg,float Rb,float Br,float Bg,float Bb);
   char* input_buf();
   void Cwrite(const char* text);
+  long getns();
 ]]
 local dll = ffi.load("src/lib/bypass.dll")
 
@@ -90,6 +91,7 @@ function gameprompt(string,bgrgb,fgrgb)
   clrline()
   io.flush()
 end
+function getms() return tonumber(dll.getns()) end
 
 maxnum = 2^(53)-(2^8)
 math.randomseed(maxnum-os.time())

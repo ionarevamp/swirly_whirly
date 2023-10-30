@@ -6,7 +6,7 @@ function swapflags(flagtable)
     local swaptable = flagtable
     for i=1,#swaptable do
         local flag = swaptable[i]
-        if charin(swaptable[i],1) == "-" then
+        if charat(swaptable[i],1) == "-" then
             swaptable[i] = string.sub(flag,2,#flag)
         else
             swaptable[i] = conc("-",flag)
@@ -16,7 +16,7 @@ function swapflags(flagtable)
 end
 function destring(skillname) --converts skill name into variable name
     for i=1,#skillname do
-        if charin(skillname,i) == SPACE then
+        if charat(skillname,i) == SPACE then
             return conc(
                 string.lower(string.sub(skillname,1,i-1)),
                 "_",
@@ -25,18 +25,34 @@ function destring(skillname) --converts skill name into variable name
         elseif i == #skillname then
             return string.lower(skillname)
         end
-
     end
-
 end
-function stringsplit(text,sep)
+function getbraced(text,sep)
+    -- TODO: FIX FUNCTION
+    local max = math.max
+    local ins = table.insert
     local arr = {}
-    local delim = conc("[^",sep,"]*")
+    local arrmatch = {}
+    local arrnomatch = {}
+    local delim = conc(sep,"[^",sep,"]*",sep)
+    local antidelim = conc("[^",sep,"]*")
     local count = 1
     for match in gmch(text,delim) do
-        arr[count] = match
+        arrmatch[count] = match
         count = count+1
     end
-    print(arr)
+    count = 1
+    for nomatch in gmch(text,antidelim) do
+        arrnomatch[count] = nomatch
+        count = count+1
+    end
+    local ordercheck = {[true]={arrmatch,arrnomatch},
+                  [false]={arrnomatch,arrmatch}}
+    local first,second = unpack(ordercheck[charat(text,1)==sep])
+    local higher = max(#first,#second)
+    for i=1,higher do
+        ins(arr,first[i])
+        ins(arr,second[i])
+    end
     return arr
 end
