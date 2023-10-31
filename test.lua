@@ -2,7 +2,7 @@ function testcodes() --KEEP THIS FUNCTION FOR LATER TESTING
   local limit = 80
   for i=1,limit do
     for j=i,limit do
-      io.write("\27["..37+i..";2;"..math.floor(255/j)..";100;100mX \27[0m")
+      io.write("\027["..37+i..";2;"..math.floor(255/j)..";100;100mX \027[0m")
     end
     print()
   end
@@ -215,8 +215,8 @@ for st=0,pulselimit,1 do
   memcount()
 
   for i=0,100 do 
-    pcall(checkpulsebreak[(
-      os.clock()-loopstart >= interval)])
+    pcall(checkpulsebreak[
+      os.clock()-loopstart >= interval])
   end
 end
 collectgarbage("collect");collectgarbage("collect")

@@ -1,7 +1,7 @@
 -- NOTE: this sequence assumes that there is a way
 --  to return to the previous screen, such as
 --  displaying from the pre-existing buffer
- function hilitesep(text,rgb,sep,layer)
+function hilitesep(text,rgb,sep,layer)
     sep = sep or "'"
     layer = layer or 3
     local charcheck = {[true]=sep,[false]=""}
@@ -11,12 +11,11 @@
     local check = 0
     for i=(1+bc[charat(text,1)~=sep]),#arr,2 do
         -- local i = i-bc[i>(#arr-1) and charat(text,#text)~=sep]
-        arr[i] = table.concat({sep,
-        "\27[",layer,"8;2;",
+        arr[i] = conc(sep,
+        "\027[",layer,"8;2;",
         r,";",g,";",b,"m",arr[i],
-        "\27[",layer,"8;2;",
-        prevr,";",prevg,";",prevb,"m",sep}
-        )
+        "\027[",layer,"8;2;",
+        prevr,";",prevg,";",prevb,"m",sep)
     end
     return table.concat(arr);
 end
@@ -46,7 +45,8 @@ end
 
 for i=1,HEIGHT do print() end
 ::select_option::
-totop();mcu(2)
+loadcursor()
+clr()
 rgbreset()
 border(startmenu.optioncount * 2)
 -- print(hilitesep("'funny' world of 'fun' and 'dreams' a'a'",CLR.red,"'"))

@@ -14,7 +14,7 @@ function splash_intro(noise,duration,mode)
                             bc[j>center]*(12*mode)*(center/j))
             if j == flr(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or
             j == flr(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
-                rgbwr("X",{101+(25*mode)+colordiff,colordiff,colordiff})
+                rgbwr(randchar(),{101+(25*mode)+colordiff,colordiff,colordiff})
             else
                 mcr()
             end
@@ -27,9 +27,9 @@ end
 clr();
 print(conc("h: ",HEIGHT,", w: ",WIDTH))
 -- INTRO SCREEN
-splash_intro(0.40,0.3,1.2) -- Good noise value, but may be shifted by < 0.1
+splash_intro(0.40,0.6,1.2) -- Good noise value, but may be shifted by < 0.1
 mvcursor(2,4)
-splash_intro(0.30,1.8,2)
+splash_intro(0.30,0.7,2)
 slp(0.6)
   -- TRANSITION
 print();rgbreset();
@@ -59,13 +59,44 @@ for r = 1,3 do
     slp(0.3/r)
 end
 -- TITLE CARD
-local splash_text = "BANDING"
+splash_text = "BANDING"
+checkdeadline={[true]=load("break ;"),
+    [false]=load("slp(interval/100)")}
 c_align(splash_text)
-for j = 1,#splash_text do
-    rgbwr(charat(splash_text,j),gradientratio(--
-        CLR.goldmetal,CLR.gold,j,#splash_text))
-    io.flush()
-    slp(1.21/j)
+interval = 0;
+loopstart = 0;
+for i = 1,#splash_text do
+    blendlimit = 1000
+    interval = (1.21/i)/(blendlimit*4)
+    for st=100,0,-100/blendlimit do
+        loopstart = os.clock()
+        rgbbg(gradientratio(
+            BGCOLOR,CLR.red,st,-100))
+        rgbwr(charat(splash_text,i),gradientratio(--
+            CLR.goldmetal,CLR.gold,i,#splash_text))
+        for j=0,100 do
+            pcall(checkdeadline[
+            os.clock()-loopstart >= interval])
+        end
+        rgbreset()
+        io.flush()
+        mcl()
+    end
+    mcr()
 end
+
+
+--- test area
+
+
+  
+  
+
+--- test area
+
+
+
+
+
 rgbreset()
 print()

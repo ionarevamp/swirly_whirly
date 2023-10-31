@@ -146,6 +146,10 @@ end
 
 
 -- CURSOR CONTROL
+--[[refer to
+https://notes.burke.libbey.me/ansi-escape-codes/
+or similar
+]]
 
 function savecursor() io.write("\027[s") end
 function loadcursor() io.write("\027[u") end

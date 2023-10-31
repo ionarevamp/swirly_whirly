@@ -133,6 +133,7 @@ function memcount()
   print()
 end
 function blankerr()
+  clrline()
   print("((Feature not yet implemented.))")
 end
 function draw_x(size, location, angle, height, noise)
@@ -163,8 +164,9 @@ rgbwr("FUNCTIONS LOADED\n",{140,120,100})
 memcount();slp(0.5)
 function main()
   for i=0,HEIGHT do io.write() end
-  clr()  
-  --dofile("src/intro.lua")
+  clr()
+  savecursor()
+  dofile("src/intro.lua")
   c_print("Press Enter key to start",CENTER[2])
   memcount()
   mcr(CENTER[2]);io.flush();  
@@ -173,18 +175,7 @@ function main()
   slp()
   
   -- START MENU
-  -- startmenu:open()
-  -- while startmenu.state ~= 0 do
-  --     print("Start menu reached.")
-  --     for i=1,1000 do
-  --       rgbwr("X",{i*(255/1000),0,0})
-  --       io.flush()
-  --     end
-  --     slp();startmenu:close()
-  -- end
-  -- local monsterload = "rat"
-  -- buffer_file(conc("src/mons/",monsterload,".txt"))
-  -- update()
+  -- dofile("src/startmenu.lua")
 
   -- MAIN LOOP --  --  -- MAIN LOOP --
   local input_buf = {}
@@ -195,6 +186,8 @@ function main()
     pcall(gc[collectgarbage("count") > MEMLIMIT])
     -- handle displaying stuff
     rgbreset()
+    loadcursor()
+    clr()
     gameprompt("What would you like to do?",
       CLR.darkgray,
       {200,180,180})
@@ -203,14 +196,19 @@ function main()
     for word in gmch(cur_input,"%S+") do
       table.insert(cmd,word)
     end
+    loadcursor()
+    clr()
     cmd[1] = checkcmd(cmd[1])
     pcall(load(CMDS[cmd[1]])) -- refers to CMDS table, commands.lua
     cmd = {}
   end
 end
+
+loadcursor()
+clr()
 main()
 memcount()
 --print("Reached end. Reverse flag table: "..reverse_flags);
 --print(conc(startmenu.state,charskills.state,itemui.state))
 --os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
-
+os.exit()
