@@ -1,8 +1,6 @@
-dofile("src/lib/gfx.lua")
 -- NOTE: this sequence assumes that there is a way
 --  to return to the previous screen, such as
 --  displaying from the pre-existing buffer
- --some value plus one
  function hilitesep(text,rgb,sep,layer)
     sep = sep or "'"
     layer = layer or 3
@@ -46,28 +44,32 @@ function border(height)
     print();print()
 end
 
-drawline(1,1,WIDTH,HEIGHT)
 for i=1,HEIGHT do print() end
 ::select_option::
-totop()
+totop();mcu(2)
 rgbreset()
 border(startmenu.optioncount * 2)
 -- print(hilitesep("'funny' world of 'fun' and 'dreams' a'a'",CLR.red,"'"))
 gameprompt("Make your choice...",
             {12,12,12},
             {150,150,150})
-mainchoice = lower(io.read())
-if mainchoice == "begin" then goto exit_menu
-elseif mainchoice == "load" then
+rgbwr("(case insensitive)",{80,80,80})
+rgbreset()
+toleft()
+mainchoice = io.read()
+if mainchoice == "begin" then goto exit_menu end
+if mainchoice == "load" then
     --[[load game files]]
     blankerr()
-elseif mainchoice == "options" then
+end
+if mainchoice == "options" then
     --[[display options menu]]
     blankerr()
-elseif mainchoice == "quit" then
-     quit = 1
-     goto exit_menu
 end
-rgbreset()
+if mainchoice == "quit" then
+    quit = 1
+    goto exit_menu
+end
+print("Please type an appropriate selection.")
 goto select_option
 ::exit_menu::

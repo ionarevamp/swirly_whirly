@@ -147,6 +147,9 @@ end
 
 -- CURSOR CONTROL
 
+function savecursor() io.write("\027[s") end
+function loadcursor() io.write("\027[u") end
+
 --uses table indexing to avoid (slow) branching
 local determine_break = {[true]="",[false]="io.write('');"}
 local determine_horizontal = {[true]="C",[false]="D"}
@@ -191,8 +194,8 @@ function mcv(distance) -- M.ove C.ursor V.ertical
 end
 function mvhor(xpos)
   xpos = xpos or 1
-  xpos = flr(xpos)+(1*bc[xpos<1]) --revert to 1 if 0
-  io.write(conc("\27[",xpos,"G]"))
+  xpos = flr(xpos)+bc[flr(xpos)<1] --revert to 1 if 0
+  io.write(conc("\027[",xpos,"G"))
 end
 function totop()
   mvcursor(1,1)
