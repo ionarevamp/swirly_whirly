@@ -57,16 +57,14 @@ rgbwr("(case insensitive)",{80,80,80})
 rgbreset()
 toleft()
 mainchoice = io.read()
-if mainchoice == "begin" then goto exit_menu end
-if mainchoice == "load" then
+if mainchoice == "begin" then goto exit_menu
+elseif mainchoice == "load" then
     --[[load game files]]
     blankerr()
-end
-if mainchoice == "options" then
+elseif mainchoice == "options" then
     --[[display options menu]]
     blankerr()
-end
-if mainchoice == "quit" then
+elseif mainchoice == "quit" then
     quit = 1
     goto exit_menu
 end

@@ -167,6 +167,10 @@ function main()
   clr()
   savecursor()
   dofile("src/intro.lua")
+  dofile("src/intro.lua")
+  dofile("src/intro.lua")
+  dofile("src/intro.lua")
+  goto game_end
   c_print("Press Enter key to start",CENTER[2])
   memcount()
   mcr(CENTER[2]);io.flush();  
@@ -202,6 +206,7 @@ function main()
     pcall(load(CMDS[cmd[1]])) -- refers to CMDS table, commands.lua
     cmd = {}
   end
+  ::game_end::
 end
 
 loadcursor()

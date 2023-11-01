@@ -46,13 +46,13 @@ for r = 1,3 do
     for ri = 1,(WIDTH-startpos) do
         local dir = bc[(r % 2) == 0]
         local wavedir = bc[(ri % 2) == 0]
-        local poscheck = bc[ri>=startpos and ri<=(WIDTH-startpos)]+1
+        local poscheck = ri>=startpos and ri<=(WIDTH-startpos)
         local curcolor = gradientratio(
             introcolors[1],introcolors[2],
             m_abs(startpos-ri),WIDTH)
-        rgbwr(stamp[poscheck][wavedir+1],curcolor)
+        rgbwr(stamp[bc[poscheck]+1][wavedir+1],curcolor)
         pcall(load(decidedir[dir+1]))
-        io.flush();slp(1/WIDTH);
+        io.flush();slp((1/WIDTH)*bc[poscheck]);
     end
     print()
     io.flush()
@@ -60,31 +60,45 @@ for r = 1,3 do
 end
 -- TITLE CARD
 splash_text = "BANDING"
-checkdeadline={[true]=load("break ;"),
-    [false]=load("slp(interval/100)")}
+checkdeadline={[true]=load("breakwait = true;"),
+    [false]=load("return ;")}
 c_align(splash_text)
-interval = 0;
-loopstart = 0;
+interval = 0
+loopstart = 0
+writestart = os.clock()
+breakwait = false
+duration = 3.03 
+
+-- NEEDS TWEAKING !!
+-- loop does not calculate the correct amount of time,
+--  presumably due to rounding errors
 for i = 1,#splash_text do
-    blendlimit = 1000
-    interval = (1.21/i)/(blendlimit*4)
-    for st=100,0,-100/blendlimit do
-        loopstart = os.clock()
+    blendlimit = 50
+    increment = 100/blendlimit
+    loopstart = os.clock()
+    for st=1,100,increment do
+        deadline = (st*duration/(#splash_text))/100
+                    +loopstart
         rgbbg(gradientratio(
-            BGCOLOR,CLR.red,st,-100))
+            CLR.red,BGCOLOR,st,100,-1))
         rgbwr(charat(splash_text,i),gradientratio(--
             CLR.goldmetal,CLR.gold,i,#splash_text))
-        for j=0,100 do
-            pcall(checkdeadline[
-            os.clock()-loopstart >= interval])
-        end
-        rgbreset()
+        
         io.flush()
+        rgbreset()
+        breakwait = false
+        while breakwait==false do
+            pcall(checkdeadline[
+            os.clock() >= (deadline)])
+        end
+        
         mcl()
     end
+    rgbreset()
     mcr()
 end
-
+print("\n","Finished in",os.clock()-writestart)
+slp(0.7)
 
 --- test area
 

@@ -59,29 +59,23 @@ CLR = {
 }
 CLRV = {} -- TODO:for each CLR, create RGB vector via:
     -- value * 100 / 255 = percentage
-function gradient(rgb,rgb2,percent) 
+function gradient(rgb,rgb2,percent,dir) 
     -- MUST accept non-empty table
     -- percentage as value from 0 to 1
+    dir = dir or 1 --takes 1 or -1
     local rgb = rgb
     local rgb2 = rgb2
     local mathabs = math.abs
-    local direction = -1*bc[percent<0]+bc[percent>=0]
-    local percent = ((100*(bc[mathabs(percent)>=100]))+
-                    (percent*bc[mathabs(percent)<100]))
     local gradient = {}
     local diffs = {}
     for i=1,3 do
         diffs[i] = mathabs(rgb2[i]-rgb[i])
-        if direction < 0 then 
-            gradient[i] = rgb[i]-(diffs[i]*percent)
-        else
-            gradient[i] = rgb[i]+(diffs[i]*percent)
-        end
+        gradient[i] = rgb[i]+(dir*(diffs[i]*percent))
     end
     return gradient
 end
-function gradientratio(rgb1,rgb2,iter,limit)
-    return gradient(rgb1,rgb2,(iter*(1/limit)))
+function gradientratio(rgb1,rgb2,iter,limit,dir)
+    return gradient(rgb1,rgb2,(iter*(1/limit)),dir)
 end
 -- function hilitesep(string,sep,rgb,layer)
 --     layer = layer or 3
