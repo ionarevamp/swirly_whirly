@@ -4,7 +4,7 @@ gitclone() {
     echo entering directory \'$2\'
     cd $2
 }
-alias ls="ls -a"
+alias ls="ls -A"
 lss(){
     ls
     echo "dir src/:" && ls src/
