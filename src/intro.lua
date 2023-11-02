@@ -28,9 +28,11 @@ end
 clr();
 print(conc("h: ",HEIGHT,", w: ",WIDTH))
 -- INTRO SCREEN
+setcursor(0)
 splash_intro(0.40,3,1.2) -- Good noise value, but may be shifted by < 0.1
 mvcursor(2,4)
 splash_intro(0.30,3,2)
+setcursor(1)
 slp(0.6)
   -- TRANSITION
 print();rgbreset();

@@ -14,6 +14,7 @@ alias cmake="$HOME/workspace/cmake/usr/local/bin/cmake"
 alias rm="rm -v"
 goband() {
     luajit src/main.lua
+    tput cnorm
 }
 gotest() {
     tput civis

@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
-#include <ncurses.h>
+#include <curses.h>
 //#include "libbf.c"
 
 // sleep for x milliseconds

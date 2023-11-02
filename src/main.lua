@@ -31,6 +31,7 @@ ffi.cdef[[
   char* input_buf();
   void Cwrite(const char* text);
   long getns();
+  int curs_set(int mode);
 ]]
 local dll = ffi.load("src/lib/bypass.dll")
 
@@ -92,6 +93,13 @@ function gameprompt(string,bgrgb,fgrgb)
   io.flush()
 end
 function getms() return tonumber(dll.getns()) end
+function setcursor(mode)
+  -- takes 0 (hidden), 1 (visible), or 2 ("extra visible")
+  -- https://invisible-island.net/ncurses/man/curs_kernel.3x.html
+  -- refer to part about the curs_set routine
+  mode = mode or dll.curs_set(1)
+  return dll.curs_set(mode)
+end
 
 maxnum = 2^(53)-(2^8)
 math.randomseed(maxnum-os.time())

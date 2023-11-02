@@ -160,6 +160,22 @@ function draw_circle(cx,cy,size)
   io.flush()
 end
 
+script = io.open("foo.txt")
+lines = script:lines()
+local newlines = {}
+for line in lines do
+  table.insert(newlines,conc(line,'\n'))
+end
+checkcharacter={
+  [true]=load([[io.write(charat(lines[i],j))]]),
+  [false]=load([[io.write(" ")]])
+}
+checknewline={
+  [true]=load([[io.write("")]]),
+  [false]=load([[]])
+}
+lines = newlines
+io.close(script)
 function pulse_fill(state,opacity,speed,rgb,background,dir)
   background = background or CLR.black
   state = state or 1
@@ -177,11 +193,12 @@ function pulse_fill(state,opacity,speed,rgb,background,dir)
   for i=1,HEIGHT do
     local wave = sin((speed*i/10)+state)*opacity
     color = gradient(rgb,background,wave)
+    linelength = #(lines[i] or "") or 0
     rgbbg(color)
     for j=1,WIDTH do
-      io.write(" ")
+      letter = charat
+      pcall(checknewline[j>linelength])
     end
-  io.flush()
   end
 end
 
@@ -202,22 +219,31 @@ print()
 local end_time = os.clock()
 print("Time taken: ",end_time-start_time,conc("H: ",HEIGHT," W: ",WIDTH));slp(1)
 
--- TODO: ADD THIS FEATURE AS "pulse_fill_vertical"
-checkpulsebreak={[true]=load("break ;"),[false]=load("local interval = interval;slp(interval/100)")}
-interval = 50 / 1000 
-pulselimit = 300
-for st=0,pulselimit,1 do
-  local loopstart = os.clock()
+-- TODO: ADD THIS FEATURE AS "pulse_fill_vertical" or something
+checkpulsebreak={[true]=load("breakwait = true"),
+                [false]=load("return ;")}
+pulserate = 45
+duration = 12
+pulselimit = pulserate*duration
+deadline = 0
+breakwait = false;
+pulsestart = os.clock()
+for st=1,pulselimit do
+  local pow = math.pow
+  deadline = st*((duration)/(pulselimit))
+             +pulsestart
+  os.execute("tput civis")
   totop()
-  pulse_fill(st/pulselimit,80,2,CLR.royalblue,CLR.black)
-  print();mcu(2)
-  print(conc(os.clock()-loopstart,"                  "));io.flush()
-  memcount()
-
-  for i=0,100 do 
+  pulse_fill(4*st/pulselimit,80,0.8,CLR.royalblue,CLR.black)
+  print()
+  gameprompt(conc("TEST PROMPT -- ",os.clock()-pulsestart),
+                  CLR.olive,CLR.beige)
+  while breakwait==false do 
     pcall(checkpulsebreak[
-      os.clock()-loopstart >= interval])
+      os.clock() >= deadline])
   end
+  os.execute("tput cnorm")
+  breakwait = false
 end
 collectgarbage("collect");collectgarbage("collect")
 
