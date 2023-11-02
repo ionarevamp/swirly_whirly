@@ -1,5 +1,5 @@
 require("src/lib/magic") -- outlines technicalities of magic
-bc={ [true]=1, [false]=0 }
+btoi={ [true]=1, [false]=0 }
 
 default = 5000; --default value of genetic stats b4 mods
 --PERFECT sl/fst/sl FORMULA, meets (0,0),(0.5,1),(1,0):

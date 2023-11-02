@@ -10,8 +10,8 @@ function splash_intro(noise,duration,mode)
         for i = 1, WIDTH do
             local ratio = HEIGHT/WIDTH
             local rando = (math.random()-0.5)*noise
-            local colordiff = (bc[j<center]*(12*mode)*(j/center))+(
-                            bc[j>center]*(12*mode)*(center/j))
+            local colordiff = (btoi[j<center]*(12*mode)*(j/center))+(
+                            btoi[j>center]*(12*mode)*(center/j))
             if j == flr(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or
             j == flr(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
                 rgbwr(randchar(),{101+(25*mode)+colordiff,colordiff,colordiff})
@@ -44,15 +44,15 @@ for r = 1,3 do
     local startpos = CENTER[2]-(limit/2)
     local m_abs = math.abs
     for ri = 1,(WIDTH-startpos) do
-        local dir = bc[(r % 2) == 0]
-        local wavedir = bc[(ri % 2) == 0]
+        local dir = btoi[(r % 2) == 0]
+        local wavedir = btoi[(ri % 2) == 0]
         local poscheck = ri>=startpos and ri<=(WIDTH-startpos)
         local curcolor = gradientratio(
             introcolors[1],introcolors[2],
             m_abs(startpos-ri),WIDTH)
-        rgbwr(stamp[bc[poscheck]+1][wavedir+1],curcolor)
+        rgbwr(stamp[btoi[poscheck]+1][wavedir+1],curcolor)
         pcall(load(decidedir[dir+1]))
-        io.flush();slp((1/WIDTH)*bc[poscheck]);
+        io.flush();slp((1/WIDTH)*btoi[poscheck]);
     end
     print()
     io.flush()

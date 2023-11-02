@@ -198,7 +198,7 @@ function mcv(distance) -- M.ove C.ursor V.ertical
 end
 function mvhor(xpos)
   xpos = xpos or 1
-  xpos = flr(xpos)+bc[flr(xpos)<1] --revert to 1 if 0
+  xpos = flr(xpos)+btoi[flr(xpos)<1] --revert to 1 if 0
   io.write(conc("\027[",xpos,"G"))
 end
 function totop()

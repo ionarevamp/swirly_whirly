@@ -95,7 +95,7 @@ function getms() return tonumber(dll.getns()) end
 
 maxnum = 2^(53)-(2^8)
 math.randomseed(maxnum-os.time())
-bc={[true]=1,[false]=0}; -- stands for 'b.ool c.heck'
+toi={[true]=1,[false]=0}; -- stands for 'b.ool c.heck'
 gc={[true]=load([[collectgarbage("collect");
     collectgarbage("collect")]]),
       [false]=load("return ;")} -- stands for 'g.arbage c.ollect'
@@ -103,7 +103,7 @@ SPACE = " "
 BLOCK = {"▄","▀","█"} --alt codes 220,223,219 resp.
 debug = 1
 mobile_irl = 0 -- really should just get rid of this...
-mobile_scale = (0.8*(bc[not mobile_irl==0]))+1*bc[mobile_irl==0] --placeholder estimate
+mobile_scale = (0.8*(btoi[not mobile_irl==0]))+1*btoi[mobile_irl==0] --placeholder estimate
 HEIGHT = (io.popen('tput lines'):read() or 24) - 1
 WIDTH = tonumber(io.popen('tput cols'):read() or 80)
 CENTER = {flr(HEIGHT/2),flr(WIDTH/2)}

@@ -9,8 +9,8 @@ function hilitesep(text,rgb,sep,layer)
     local prevr,prevg,prevb = unpack(FGCOLOR)
     local arr = getbraced(text,sep)
     local check = 0
-    for i=(1+bc[charat(text,1)~=sep]),#arr,2 do
-        -- local i = i-bc[i>(#arr-1) and charat(text,#text)~=sep]
+    for i=(1+btoi[charat(text,1)~=sep]),#arr,2 do
+        -- local i = i-btoi[i>(#arr-1) and charat(text,#text)~=sep]
         arr[i] = conc(sep,
         "\027[",layer,"8;2;",
         r,";",g,";",b,"m",arr[i],

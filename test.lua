@@ -97,7 +97,7 @@ function getms() return tonumber(dll.getns()) end
 
 maxnum = 2^(53)-(2^8)
 math.randomseed(maxnum-os.time())
-bc={[true]=1,[false]=0}; -- stands for 'b.ool c.heck'
+btoi={[true]=1,[false]=0}; -- stands for 'b.ool c.heck'
 gc={[true]=load([[collectgarbage("collect");
     collectgarbage("collect")]]),
       [false]=load("return ;")} -- stands for 'g.arbage c.ollect'
