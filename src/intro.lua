@@ -5,6 +5,7 @@ function splash_intro(noise,duration,mode)
     local center = HEIGHT/2
     local ratio = HEIGHT/WIDTH
     local exit = false
+    local starttime = os.clock()
 
     for j = 1, HEIGHT do
         for i = 1, WIDTH do
@@ -21,21 +22,21 @@ function splash_intro(noise,duration,mode)
         end
         if exit then break end
         io.flush();io.write("\n");
-        slp(delay)
+        busywait(starttime,delay*j)
     end
 end
 clr();
 print(conc("h: ",HEIGHT,", w: ",WIDTH))
 -- INTRO SCREEN
-splash_intro(0.40,0.6,1.2) -- Good noise value, but may be shifted by < 0.1
+splash_intro(0.40,3,1.2) -- Good noise value, but may be shifted by < 0.1
 mvcursor(2,4)
-splash_intro(0.30,0.7,2)
+splash_intro(0.30,3,2)
 slp(0.6)
   -- TRANSITION
 print();rgbreset();
 
 local decidedir = {";","mcl(2)"}
-local squiggleportion = 2*flr(WIDTH/5)
+local squiggleportion = (2*flr(WIDTH/5))
 local introcolors = {CLR.slategray,CLR.brightsilver}
 local stamp = {{" "," "},{BLOCK[1],BLOCK[2]}}
 for r = 1,3 do
@@ -63,27 +64,27 @@ splash_text = "BANDING"
 checkdeadline={[true]=load("breakwait = true;"),
     [false]=load("return ;")}
 c_align(splash_text)
-interval = 0
-loopstart = 0
-writestart = os.clock()
-breakwait = false
-duration = 3.03 
+
 
 -- NEEDS TWEAKING !!
 -- loop does not calculate the correct amount of time,
 --  presumably due to rounding errors
+interval = 0
+loopstart = 0
+breakwait = false
+duration = 3.0000000
+writestart = os.clock()
 for i = 1,#splash_text do
     blendlimit = 50
     increment = 100/blendlimit
     loopstart = os.clock()
     for st=1,100,increment do
-        deadline = (st*duration/(#splash_text))/100
-                    +loopstart
+        deadline = ((st*i)*duration/(100*#splash_text))
+                    +writestart
         rgbbg(gradientratio(
             CLR.red,BGCOLOR,st,100,-1))
         rgbwr(charat(splash_text,i),gradientratio(--
             CLR.goldmetal,CLR.gold,i,#splash_text))
-        
         io.flush()
         rgbreset()
         breakwait = false

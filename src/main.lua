@@ -136,6 +136,17 @@ function blankerr()
   clrline()
   print("((Feature not yet implemented.))")
 end
+checkdeadline={[true]=load("breakwait = true;"),
+    [false]=load("return ;")}
+breakwait = false
+function busywait(starttime,duration)
+  local deadline = starttime+duration
+  while breakwait==false do
+      pcall(checkdeadline[
+      os.clock() >= (deadline)])
+  end
+  breakwait = false
+end
 function draw_x(size, location, angle, height, noise)
   -- NOISE: too much noise is bad, no noise is worse when using randchar()
   --TODO: fix this function to use all parameters properly
@@ -167,14 +178,10 @@ function main()
   clr()
   savecursor()
   dofile("src/intro.lua")
-  dofile("src/intro.lua")
-  dofile("src/intro.lua")
-  dofile("src/intro.lua")
-  goto game_end
   c_print("Press Enter key to start",CENTER[2])
   memcount()
   mcr(CENTER[2]);io.flush();  
-  local foo = io.read()
+  io.read()
   io.write(conc("\027[2J\027[1;1H","Debug msg: Preparing...\n"))
   slp()
   
