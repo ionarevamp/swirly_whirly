@@ -160,22 +160,26 @@ function draw_circle(cx,cy,size)
   io.flush()
 end
 
-script = io.open("foo.txt")
-lines = script:lines()
-local newlines = {}
-for line in lines do
-  table.insert(newlines,conc(line,'\n'))
+chars = {}
+lines = {}
+for line in io.lines("foo.txt") do
+  table.insert(lines,conc(line,"\n"))
+  for char in gmch(line,"(.)") do
+    table.insert(chars,char)
+  end
+  table.insert(chars,"\n")
 end
+io.write(table.concat(chars));io.flush()
+slp(2)
 checkcharacter={
-  [true]=load([[io.write(charat(lines[i],j))]]),
-  [false]=load([[io.write(" ")]])
+  [true]=load([[io.write(chars[j]);]]),
+  [false]=load([[io.write(" ");]])
 }
 checknewline={
-  [true]=load([[io.write("")]]),
-  [false]=load([[]])
+  [true]=load([[io.write(" ")]]),
+  [false]=load([[return ;]])
 }
 lines = newlines
-io.close(script)
 function pulse_fill(state,opacity,speed,rgb,background,dir)
   background = background or CLR.black
   state = state or 1
@@ -193,12 +197,16 @@ function pulse_fill(state,opacity,speed,rgb,background,dir)
   for i=1,HEIGHT do
     local wave = sin((speed*i/10)+state)*opacity
     color = gradient(rgb,background,wave)
-    linelength = #(lines[i] or "") or 0
+    linelength = #lines[i]
     rgbbg(color)
     for j=1,WIDTH do
-      letter = charat
-      pcall(checknewline[j>linelength])
+      local checkcharacter={
+        [true]=chars[j],
+        [false]=" "
+      }
+      io.write(checkcharacter[chars[j] ~= nil])
     end
+    print()
   end
 end
 
@@ -247,5 +255,5 @@ for st=1,pulselimit do
 end
 collectgarbage("collect");collectgarbage("collect")
 
-os.execute("tput cnorm && clear")
-os.exit()
+-- os.execute("tput cnorm && clear")
+-- os.exit()

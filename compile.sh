@@ -1,4 +1,4 @@
-#!/bin/bash
+#!\bin\bash\
 pushd .;
 cd src/lib;
 gcc -c -fPIC bypass.c;
