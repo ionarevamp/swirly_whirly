@@ -11,3 +11,4 @@
 - Implement single-key input ( recommended steps not working, path unclear )
 - How to use magic.lua? ( should contain rules for magic, but necessary structure is unclear )
 - CREATE MORE MONSTERRRS
+
