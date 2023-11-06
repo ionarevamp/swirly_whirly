@@ -7,7 +7,7 @@
 - Figure out how to use libbf for more accurate floats ( might help wait accuracy, although not crucial )
     > libbf would likely aid in stat calculation
 - Implement more commands, like "cast", "status", "inv"/"item"
-- Synonym database?
+    > Synonym database?
 - Implement single-key input ( recommended steps not working, path unclear )
 - How to use magic.lua? ( should contain rules for magic, but necessary structure is unclear )
 - CREATE MORE MONSTERRRS
