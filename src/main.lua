@@ -1,9 +1,3 @@
---[[
-flags = {"icanon","-tostop"}
-reverse_flags = table.concat(swapflags(flags)," ");
-flags = table.concat(flags," ")
-os.execute("stty "..flags) -- put TTY in raw mode
-]] -- legacy. not sure if it will really even be needed.
 
 -- make sure dll is 'fresh'
 os.execute("if test -f /src/lib/bypass.dll; then rm src/lib/bypass.dll; fi")
@@ -93,13 +87,13 @@ function gameprompt(string,bgrgb,fgrgb)
   io.flush()
 end
 function getms() return tonumber(dll.getns()) end
-function setcursor(mode)
-  -- takes 0 (hidden), 1 (visible), or 2 ("extra visible")
-  -- https://invisible-island.net/ncurses/man/curs_kernel.3x.html
-  -- refer to part about the curs_set routine
-  mode = mode or dll.curs_set(1)
-  return dll.curs_set(mode)
-end
+-- function setcursor(mode)
+--   -- takes 0 (hidden), 1 (visible), or 2 ("extra visible")
+--   -- https://invisible-island.net/ncurses/man/curs_kernel.3x.html
+--   -- refer to part about the curs_set routine
+--   mode = mode or dll.curs_set(1)
+--   return dll.curs_set(mode)
+-- end
 
 maxnum = 2^(53)-(2^8)
 math.randomseed(maxnum-os.time())
@@ -118,6 +112,7 @@ CENTER = {flr(HEIGHT/2),flr(WIDTH/2)}
 MEMLIMIT = (262144*0.9) - tonumber(
   string.match(io.popen('grep MemTotal /proc/meminfo'):read(),
   "%d+"))
+
 quit = 0
 cur_input = ""
 cmd = {}
@@ -129,7 +124,13 @@ local modules = {"buffer","strings","stats",
 for i=1,#modules do
   require("src/lib/"..modules[i])
 end
-local map = dofile("src/lib/keymap.lua")
+
+flags = {"-tostop"}
+reverse_flags = table.concat(swapflags(flags)," ");
+flags = table.concat(flags," ")
+os.execute("stty "..flags) -- put TTY in raw mode
+
+keymaps = dofile("src/lib/keymap.lua")
 
 function memcount() 
   local kbmem = string.match(collectgarbage("count"),"%d+%.?%d*")
@@ -150,8 +151,7 @@ breakwait = false
 function busywait(starttime,duration)
   local deadline = starttime+duration
   while breakwait==false do
-      pcall(checkdeadline[
-      os.clock() >= (deadline)])
+      checkdeadline[os.clock() >= (deadline)]()
   end
   breakwait = false
 end
@@ -202,7 +202,7 @@ function main()
   rgbreset()
   
   while (quit == 0) do
-    pcall(gc[collectgarbage("count") > MEMLIMIT])
+    gc[collectgarbage("count") > MEMLIMIT]()
     -- handle displaying stuff
     rgbreset()
     loadcursor()
@@ -217,9 +217,9 @@ function main()
     end
     loadcursor()
     clr()
-    cmd[1] = checkcmd(cmd[1])
-    pcall(load(CMDS[cmd[1]])) -- refers to CMDS table, commands.lua
-    cmd = {}
+    cmd[1] = checkcmd(cmd[1]) -- (check if command exists)
+    load( CMDS[cmd[1]] )() -- (execute command) -- refers to CMDS table, commands.lua
+    cmd = {} -- (ensure input array is empty)
   end
   ::game_end::
 end
@@ -228,7 +228,7 @@ loadcursor()
 clr()
 main()
 memcount()
---print("Reached end. Reverse flag table: "..reverse_flags);
---print(conc(startmenu.state,charskills.state,itemui.state))
---os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
+print("Reached end. Reverse flag table: "..reverse_flags);
+print(conc(startmenu.state,charskills.state,itemui.state))
+os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
 os.exit()

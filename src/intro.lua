@@ -28,16 +28,16 @@ end
 clr();
 print(conc("h: ",HEIGHT,", w: ",WIDTH))
 -- INTRO SCREEN
-setcursor(0)
+os.execute("tput civis")-- setcursor(0)
 splash_intro(0.40,3,1.2) -- Good noise value, but may be shifted by < 0.1
 mvcursor(2,4)
 splash_intro(0.30,3,2)
-setcursor(1)
+os.execute("tput cnorm")-- setcursor(1)
 slp(0.6)
   -- TRANSITION
 print();rgbreset();
 
-local decidedir = {";","mcl(2)"}
+local decidedir = {"return ;","mcl(2)"}
 local squiggleportion = (2*flr(WIDTH/5))
 local introcolors = {CLR.slategray,CLR.brightsilver}
 local stamp = {{" "," "},{BLOCK[1],BLOCK[2]}}
@@ -54,7 +54,7 @@ for r = 1,3 do
             introcolors[1],introcolors[2],
             m_abs(startpos-ri),WIDTH)
         rgbwr(stamp[btoi[poscheck]+1][wavedir+1],curcolor)
-        pcall(load(decidedir[dir+1]))
+        load(decidedir[dir+1])()
         io.flush();slp((1/WIDTH)*btoi[poscheck]);
     end
     print()
@@ -74,7 +74,8 @@ c_align(splash_text)
 interval = 0
 loopstart = 0
 breakwait = false
-duration = 3.0000000
+duration = 3
+duration = duration*1.00000000000000000
 writestart = os.clock()
 for i = 1,#splash_text do
     blendlimit = 50
@@ -91,8 +92,7 @@ for i = 1,#splash_text do
         rgbreset()
         breakwait = false
         while breakwait==false do
-            pcall(checkdeadline[
-            os.clock() >= (deadline)])
+            checkdeadline[os.clock() >= (deadline)]()
         end
         
         mcl()

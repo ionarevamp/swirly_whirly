@@ -247,8 +247,7 @@ for st=1,pulselimit do
   gameprompt(conc("TEST PROMPT -- ",os.clock()-pulsestart),
                   CLR.olive,CLR.beige)
   while breakwait==false do 
-    pcall(checkpulsebreak[
-      os.clock() >= deadline])
+    checkpulsebreak[os.clock() >= deadline]()
   end
   os.execute("tput cnorm")
   breakwait = false

@@ -1,3 +1,12 @@
+typeset -g "POWERLEVEL9K_INSTANT_PROMPT=quiet"
+clear
+export term_cols=$(tput cols)
+export __blankspace=" "
+for (( i=1; i<=$(($term_cols/4)); i++ )); do
+    export __blankspace="$__blankspace "
+done
+echo "$__blankspace~ To-do list: ~"
+cat TODO.txt
 alias luajit="$HOME/workspace/LUAJIT/usr/local/bin/luajit"
 gitclone() {
     git clone https://github.com/$1/$2
@@ -13,12 +22,13 @@ lss(){
 alias cmake="$HOME/workspace/cmake/usr/local/bin/cmake"
 alias rm="rm -v"
 goband() {
+    ttyctl -u
     luajit src/main.lua
     tput cnorm
 }
 gotest() {
     tput civis
-    luajit test.lua
+    luajit "test$@.lua"
     tput cnorm
 }
 alias gocomp="pushd . && cd $HOME/workspace/src/lib && gcc -c bypass.c && gcc -shared -o bypass.dll bypass.o && popd"

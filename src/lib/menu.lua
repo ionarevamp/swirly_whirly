@@ -19,6 +19,10 @@ startmenu = {
     exit = "'Quit' / exit",
     optioncount = 4,
 }
+playerstatus = {
+    {"Health","Stamina","Mana","Heat","Null","Space","Motion","Force"},
+    {Player.hp,Player.ep,Player.sp,Player.heat,Player.null,Player.space,Player.motion,Player.force}
+}
 
 function startmenu:open()
     self.state = 1
@@ -38,9 +42,13 @@ charskills = {
 }
 
 --populate skill data
-local skilldata = io.open("skills.list")
+-- local skilldata = io.lines("src/lib/skills.list")
 for i=1,#(charskills.skillnames) do 
-    load(conc("charskills.skills[i] = {",destring(charskills.skillnames[i]),"=",charskills.skillnames[i],"}"))
+    load(
+        conc( "charskills.skills[i] = {",
+        destring(charskills.skillnames[i]),
+        "= ",charskills.skillnames[i],"}" )
+    )()
 end
 --^^ should result in `skills = {{skill_name = false}, ...}` 
 function sname(skill)
@@ -48,10 +56,10 @@ function sname(skill)
 end
 
 function learnskill(skill) 
-    player.skills[skill] = true;
+    Player.skills[skill] = true;
 end
 function forgetskill(skill)
-    player.skills[skill] = false;
+    Player.skills[skill] = false;
 end
 itemui = {
     state = 0,

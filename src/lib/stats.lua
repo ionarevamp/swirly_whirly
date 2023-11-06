@@ -35,8 +35,8 @@ creature = {
             null = default,
             space = default,
             motion = default,
-            force = default,
-        }
+            force = default
+        },
     },
     genes = {
         powermod = 1,
@@ -58,15 +58,17 @@ creature = {
             null = 1,
             space = 1,
             motion = 1,
-            force = 1,
+            force = 1
         }
         -- NO INTEL GENE (knowledge is complex and situational)
     },
     skills = {}
 }
 
-function creature:new (o)
-    o = o or {}   -- create object if user does not provide one
+
+-- COULD do this procedurally, but would be unnecessarily complex
+function creature:new(o)
+    o = o or {}
     setmetatable(o, self)
     self.__index = self
     o.stats.power = o.stats.power*(1+(((3*o.age)-((4*o.age)^2+o.age))/2))*o.genes.powermod
@@ -90,7 +92,8 @@ end
 
 Player = creature:new()
 
-function advanceAge()
+function advanceAge() -- the idea here is that you age faster the older you are, bodily age
+                        -- being different than how old you are in time
     if math.floor(Player.age) > currentage then
         Player.age = math.floor(Player.age)
         Player.power = Player.power*(1+(((3*Player.age)-((4*Player.age)^2+Player.age))/2))
@@ -100,3 +103,4 @@ function toggle(boolval)
     local opposite = {[true]=false,[false]=true}
     return opposite[boolval];
 end
+
