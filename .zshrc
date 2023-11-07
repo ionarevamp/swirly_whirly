@@ -1,19 +1,33 @@
 typeset -g "POWERLEVEL9K_INSTANT_PROMPT=quiet"
 clear
-export term_cols=$(tput cols)
-export __blankspace=" "
+local term_cols=$(tput cols)
+local __blankspace=" "
 for (( i=1; i<=$(($term_cols/4)); i++ )); do
-    export __blankspace="$__blankspace "
+    __blankspace="$__blankspace "
 done
 echo "$__blankspace~ To-do list: ~"
-cat TODO.txt
+cat "$HOME/workspace/TODO.txt"
+
 alias luajit="$HOME/workspace/LUAJIT/usr/local/bin/luajit"
+alias vim="$HOME/workspace/VIM/bin/vim"
+alias ls="ls -A"
+alias cdd="cd $HOME/workspace; dirs -c"
+
+if ! [ -f "$HOME/.oh-my-zsh/custom/custom.zsh" ] ; then
+    ln -s "$HOME/workspace/.zshrc" "$HOME/.oh-my-zsh/custom/custom.zsh";
+fi
+
+installp10k() {
+    git clone "https://github.com/romkatv/powerlevel10k.git" "$ZSH_CUSTOM/themes/powerlevel10k";
+    sed --follow-symlinks 's/^ZSH_THEME=".*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' "$HOME/.zshrc" > /tmp/sed.tmp;
+    mv /tmp/sed.tmp $HOME/.zshrc;
+    zsh
+}
 gitclone() {
     git clone https://github.com/$1/$2
     echo entering directory \'$2\'
     cd $2
 }
-alias ls="ls -A"
 lss(){
     ls
     echo "dir src/:" && ls src/
@@ -32,18 +46,3 @@ gotest() {
     tput cnorm
 }
 alias gocomp="pushd . && cd $HOME/workspace/src/lib && gcc -c bypass.c && gcc -shared -o bypass.dll bypass.o && popd"
-truecolor-test() {
-    awk -v term_cols="${width:-$(tput cols || echo 80)}" 'BEGIN{
-        s="/\\";
-        for (colnum = 0; colnum<term_cols; colnum++) {
-            r = 255-(colnum*255/term_cols);
-            g = (colnum*510/term_cols);
-            b = (colnum*255/term_cols);
-            if (g>255) g = 510-g;
-            printf "\033[48;2;%d;%d;%dm", r,g,b;
-            printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
-            printf "%s\033[0m", substr(s,colnum%2+1,1);
-        }
-        printf "\n";
-    }'
-}

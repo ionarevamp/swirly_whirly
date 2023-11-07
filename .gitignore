@@ -13,3 +13,5 @@ src/build.spec
 LUAJIT/
 LibBF/
 luajit-gmp/
+vim/
+VIM/
