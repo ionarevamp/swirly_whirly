@@ -6,7 +6,6 @@ function splash_intro(noise,duration,mode)
     local ratio = HEIGHT/WIDTH
     local exit = false
     local starttime = os.clock()
-
     for j = 1, HEIGHT do
         for i = 1, WIDTH do
             local ratio = HEIGHT/WIDTH
@@ -15,15 +14,16 @@ function splash_intro(noise,duration,mode)
                             btoi[j>center]*(12*mode)*(center/j))
             if j == flr(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or
             j == flr(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
-                rgbwr(randchar(),{101+(25*mode)+colordiff,colordiff,colordiff})
-            else
-                mcr()
-            end
+                tobuffer(j,i,randchar,
+                {101+(25*mode)+colordiff,colordiff,colordiff},
+                CLR.black)
         end
-        if exit then break end
+        printlinebuf(j)
+        --if exit then break end
         io.flush();io.write("\n");
         busywait(starttime,delay*j)
     end
+
 end
 clr();
 print(conc("h: ",HEIGHT,", w: ",WIDTH))
