@@ -11,4 +11,7 @@
 - Implement single-key input ( recommended steps not working, path unclear )
 - How to use magic.lua? ( should contain rules for magic, but necessary structure is unclear )
 - CREATE MORE MONSTERRRS
-
+- Figure out how memorytest.lua works, and gain insight
+- ! Reduce memory leakage.
+    > Garbage collection is fine for now, but main loop should not be accumulating variables in memory without input.
+- {Maybe use ncurses to shift into Unicode and back again}

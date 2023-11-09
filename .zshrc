@@ -1,4 +1,3 @@
-typeset -g "POWERLEVEL9K_INSTANT_PROMPT=quiet"
 clear
 local term_cols=$(tput cols)
 local __blankspace=" "
@@ -45,4 +44,13 @@ gotest() {
     luajit "test$@.lua"
     tput cnorm
 }
-alias gocomp="pushd . && cd $HOME/workspace/src/lib && gcc -c bypass.c && gcc -shared -o bypass.dll bypass.o && popd"
+alias gocomp="bash compile.zsh"
+refresh() {
+    if [ $# -gt 0 ]; then
+        tset "$@";
+        echo '(Press enter to continue.)';
+        read;
+    else reset;
+    fi;
+    zsh;
+}

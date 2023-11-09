@@ -40,8 +40,8 @@ end
 function printf(text) return dll.Cwrite(text) end
 function input_buf() return dll.input_buf() end
 function rgbreset()
-  Rr,Rg,Rb = unpack(FGCOLOR)
-  Br,Bg,Bb = unpack(BGCOLOR)
+  local Rr,Rg,Rb = unpack(FGCOLOR)
+  local Br,Bg,Bb = unpack(BGCOLOR)
   dll.rgbreset(Rr,Rg,Rb,Br,Bg,Bb);
   io.flush()
 end
@@ -53,7 +53,7 @@ function rgbwr(text,rgb)
 end
 function rgbset(rgb,BGrgb)
   FGCOLOR = rgb
-  BGrgb = BGrgb or BGCOLOR
+  local BGrgb = BGrgb or BGCOLOR
   rgbwr("",FGCOLOR)
   rgbbg(BGrgb)
 end
@@ -103,7 +103,6 @@ gc={[true]=load([[collectgarbage("collect");
       [false]=load("return ;")} -- stands for 'g.arbage c.ollect'
 SPACE = " "
 BLOCK = {"▄","▀","█"} --alt codes 220,223,219 resp.
-debug = 1
 mobile_irl = 0 -- really should just get rid of this...
 mobile_scale = (0.8*(btoi[not mobile_irl==0]))+1*btoi[mobile_irl==0] --placeholder estimate
 HEIGHT = (io.popen('tput lines'):read() or 24) - 1
@@ -125,7 +124,7 @@ for i=1,#modules do
   require("src/lib/"..modules[i])
 end
 
-flags = {"-tostop"}
+flags = {"-sane"}
 reverse_flags = table.concat(swapflags(flags)," ");
 flags = table.concat(flags," ")
 os.execute("stty "..flags) -- put TTY in raw mode
@@ -185,7 +184,7 @@ function main()
   for i=0,HEIGHT do io.write() end
   clr()
   savecursor()
-  dofile("src/intro.lua")
+  -- dofile("src/intro.lua")
   c_print("Press Enter key to start",CENTER[2])
   memcount()
   mcr(CENTER[2]);io.flush();  
@@ -202,6 +201,7 @@ function main()
   rgbreset()
   
   while (quit == 0) do
+    local tinsert = table.insert
     gc[collectgarbage("count") > MEMLIMIT]()
     -- handle displaying stuff
     rgbreset()
@@ -211,15 +211,20 @@ function main()
       CLR.darkgray,
       {200,180,180})
     memcount()
-    cur_input = io.read()
+    -- cur_input = io.read()
     for word in gmch(cur_input,"%S+") do
-      table.insert(cmd,word)
+      tinsert(cmd,word)
     end
     loadcursor()
     clr()
+    dofile("memorytest.lua")
+    dofile("memorytest.lua")
+    mcu()
+    slp()
     cmd[1] = checkcmd(cmd[1]) -- (check if command exists)
-    load( CMDS[cmd[1]] )() -- (execute command) -- refers to CMDS table, commands.lua
-    cmd = {} -- (ensure input array is empty)
+    local executecmd = load( CMDS[cmd[1]], "User Command" ) -- (execute command) -- refers to CMDS table, commands.lua
+    executecmd()
+    for i=1,#cmd do cmd[i] = nil end  -- (ensure input array is empty)
   end
   ::game_end::
 end
@@ -231,4 +236,4 @@ memcount()
 print("Reached end. Reverse flag table: "..reverse_flags);
 print(conc(startmenu.state,charskills.state,itemui.state))
 os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
-os.exit()
+
