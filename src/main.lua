@@ -51,15 +51,15 @@ function rgbwr(text,rgb)
   -- (scalar-ize data?)
   dll.rgbwr(text,r,g,b)
 end
+function rgbbg(rgb)
+  local r,g,b = unpack(rgb)
+  dll.rgbbg(r,g,b)
+end
 function rgbset(rgb,BGrgb)
   FGCOLOR = rgb
   local BGrgb = BGrgb or BGCOLOR
   rgbwr("",FGCOLOR)
   rgbbg(BGrgb)
-end
-function rgbbg(rgb)
-  local r,g,b = unpack(rgb)
-  dll.rgbbg(r,g,b)
 end
 function rgbprint(text,bgrgb,fgrgb)
   rgbbg(bgrgb) -- set background
@@ -97,7 +97,7 @@ function getms() return tonumber(dll.getns()) end
 
 maxnum = 2^(53)-(2^8)
 math.randomseed(maxnum-os.time())
-btoi={[true]=1,[false]=0}; -- stands for 'b.ool c.heck'
+btoi={[true]=1,[false]=0}; -- boolean to integer
 gc={[true]=load([[collectgarbage("collect");
     collectgarbage("collect")]]),
       [false]=load("return ;")} -- stands for 'g.arbage c.ollect'
@@ -130,6 +130,11 @@ flags = table.concat(flags," ")
 os.execute("stty "..flags) -- put TTY in raw mode
 
 keymaps = dofile("src/lib/keymap.lua")
+SCREEN = {}
+SCREEN[1] = initscreen(WIDTH,HEIGHT)
+mainbuf = SCREEN[1]
+-- statsbuf = ... ; (etc.)
+
 
 function memcount() 
   local kbmem = string.match(collectgarbage("count"),"%d+%.?%d*")
@@ -184,7 +189,14 @@ function main()
   for i=0,HEIGHT do io.write() end
   clr()
   savecursor()
-  -- dofile("src/intro.lua")
+  slp()
+  tobuffer(40,10,"Print test 1",CLR.red)
+  print("Print test 2")
+  printscreenbuf()
+  tobuffer(40,11,"Print test 2",CLR.blue)
+  printlinebuf(11)
+  slp()
+  dofile("src/intro.lua")
   c_print("Press Enter key to start",CENTER[2])
   memcount()
   mcr(CENTER[2]);io.flush();  

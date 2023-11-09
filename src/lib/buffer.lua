@@ -8,6 +8,52 @@ mvdirs = { -- mvdirs.r can be used to represent a space
   u = "\027[1A",
   d = "\027[1B"
 }
+
+function initscreen(width,height)
+  local screen = {}
+  for y = 1, height do
+      screen[y] = {}
+      for x = 1, width do
+          screen[y][x] = {
+              text = "",
+              fgcolor = FGCOLOR,
+              bgcolor = BGCOLOR
+          }
+      end
+  end
+  return screen
+end
+function tobuffer(x, y, str, fgcolor, bgcolor, screen)
+  screen = screen or SCREEN[1]
+  fgcolor = fgcolor or FGCOLOR
+  bgcolor = bgcolor or BGCOLOR
+  for i = 1, #str-(btoi[#str+x>#screen[1]]*(#str+x-#screen[1])) do
+    local str = str:sub(i, i) or str
+    screen[y][x+i] = {
+      text = str,
+      fgcolor = fgcolor,
+      bgcolor = bgcolor
+      }
+  end
+end
+function clearbuffline(y,screen) -- y coordinate is equivalent to row from top
+  screen = screen or SCREEN[1]
+  for x = 1, #screen[y] do
+    screen[y][x].text = ""
+    screen[y][x].fgcolor = FGCOLOR
+    screen[y][x].bgcolor = BGCOLOR
+  end
+end
+function clearbuff(screen)
+  screen = screen or SCREEN[1]
+  for y = 1, #screen do
+    clearbuffline(y,screen)
+  end
+end
+function clearbuffer(...)
+  clearbuff(...)
+end
+
 -- DEBUG
 function showcmd(t)
   local lines = {}

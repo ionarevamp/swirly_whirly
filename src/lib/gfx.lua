@@ -1,3 +1,34 @@
+checkflush = {"return ;",
+"io.flush();"}
+;
+
+function printscreenbuf(screen,fgcolor,bgcolor,mode,btoi)
+    screen = screen or SCREEN[1]
+    mode = mode or "all";
+    btoi = btoi or {[true]=2,[false]=1}
+    for y = 1, #screen do
+        for x = 1, #screen[y] do
+            mvcursor(x,y)
+            rgbbg(screen[y][x].bgcolor)
+            rgbwr(screen[y][x].text,screen[y][x].fgcolor)
+            load(checkflush[(btoi[mode == "char"])])()
+        end
+        load(checkflush[(btoi[mode == "line"])])()
+    end
+    local checkflush = checkflush
+    load(checkflush[(btoi[mode == "all"])])()
+end
+function printlinebuf(y,screen)
+    screen = screen or SCREEN[1]
+    y = y or #screen
+    for x = 1, #screen[y] do
+        mvcursor(x,y)
+        rgbbg(screen[y][x].bgcolor)
+        rgbwr(screen[y][x].text, screen[y][x].fgcolor)
+    end
+    io.flush()
+end
+
 function drawline(x1,y1,x2,y2,char)
     local char = char or "*"
     local ceil = math.ceil
