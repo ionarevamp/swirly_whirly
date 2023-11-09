@@ -9,6 +9,7 @@ cat "$HOME/workspace/TODO.txt"
 
 alias luajit="$HOME/workspace/LUAJIT/usr/local/bin/luajit"
 alias vim="$HOME/workspace/VIM/bin/vim"
+alias showdir="ls --ignore='.*'"
 alias ls="ls -A"
 alias cdd="cd $HOME/workspace; dirs -c"
 

@@ -14,24 +14,29 @@ function splash_intro(noise,duration,mode)
                             btoi[j>center]*(12*mode)*(center/j))
             if j == flr(ratio*i+((noise*(mode-1))+rando*(HEIGHT-j*2))) or
             j == flr(HEIGHT-(ratio*i+rando*(HEIGHT-j*2))) then
-                tobuffer(j,i,randchar,
+                tobuffer(i,j,randchar(),
                 {101+(25*mode)+colordiff,colordiff,colordiff},
-                CLR.black)
+                BGCOLOR)
+            else tobuffer(i,j,"",FGCOLOR,BGCOLOR)
+            end
         end
         printlinebuf(j)
         --if exit then break end
         io.flush();io.write("\n");
-        busywait(starttime,delay*j)
+        busywait(starttime,delay*(j+math.sin(j)))
     end
 
 end
 clr();
+clearbuff();
 print(conc("h: ",HEIGHT,", w: ",WIDTH))
 -- INTRO SCREEN
 os.execute("tput civis")-- setcursor(0)
-splash_intro(0.40,3,1.2) -- Good noise value, but may be shifted by < 0.1
+print("intro print test 1")
+splash_intro(0.40,1.5,1.2) -- Good noise value, but may be shifted by < 0.1
+print("intro print test 2")
 mvcursor(2,4)
-splash_intro(0.30,3,2)
+splash_intro(0.30,1.5,2)
 os.execute("tput cnorm")-- setcursor(1)
 slp(0.6)
   -- TRANSITION

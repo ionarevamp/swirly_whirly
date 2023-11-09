@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ionarevamp/swirly_whirly#readme",
   "dependencies": {
+    "@suldashi/ogg": "^1.2.9",
     "@xpack-dev-tools/gcc": "^13.2.0-1.1",
     "banner": "^0.0.5",
     "gcc": "^1.0.2",
