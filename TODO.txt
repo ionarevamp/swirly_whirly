@@ -3,7 +3,6 @@
 - Consider reducing code bloat from busywait. ( slp() and busywait() are incompatible )
 - Proper skill/spell/stat tableing ( data is also incomplete )
 - Make better attempt at building files platform-independently ( windows sux tho:/ )
-- Consider whether GMP is REALLY needed.
 - Figure out how to use libbf for more accurate floats ( might help wait accuracy, although not crucial )
     > libbf would likely aid in stat calculation
 - Implement more commands, like "cast", "status", "inv"/"item"
@@ -15,3 +14,4 @@
 - ! Reduce memory leakage.
     > Garbage collection is fine for now, but main loop should not be accumulating variables in memory without input.
 - {Maybe use ncurses to shift into Unicode and back again}
+- ! Implement screen buffer akin to code in testnova.lua
