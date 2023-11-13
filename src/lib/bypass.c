@@ -1,6 +1,7 @@
 // BYPASS
 // Main purpose of this file is to BYPASS
-//  the need for slow functions
+//  the need for slow functions in Lua
+//  (either by avoiding syscalls or ensuring efficiency)
 
 #include <inttypes.h>
 #include <unistd.h>

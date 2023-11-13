@@ -1,20 +1,42 @@
 checkflush = {"return ;",
 "io.flush();"}
-;
 
-function printscreenbuf(screen,fgcolor,bgcolor,mode,btoi)
+
+function printscreenbuf(screen,mode,btoi)
     screen = screen or SCREEN[1]
     mode = mode or "all";
     btoi = btoi or {[true]=2,[false]=1}
+    local line = ""
+    local lines = ""
+    -- loadcursor()
+    mvcursor(1,2)
     for y = 1, #screen do
+        line = ""
         for x = 1, #screen[y] do
-            mvcursor(x,y)
-            rgbbg(screen[y][x].bgcolor)
-            rgbwr(screen[y][x].text,screen[y][x].fgcolor)
+            local len = string.len
+            local r,g,b = screen[y][x].fgcolor[1],  -- this way does not reallocate array, vs using unpack()
+                          screen[y][x].fgcolor[2],
+                          screen[y][x].fgcolor[3]
+            local br,bg,bb = screen[y][x].bgcolor[1],
+                             screen[y][x].bgcolor[2],
+                             screen[y][x].bgcolor[3]
+            local text = screen[y][x].text
+            local checkchar = {[false]=text,
+             [true]=" "}
+            text = checkchar[len(text) == 0]
+            line=conc(line,
+                "\027[48;2;",
+                br,";",bg,";",bb,"m", --background color
+                "\027[38;2;",
+                r,";",g,";",b,"m", --foreground color
+                text);
             load(checkflush[(btoi[mode == "char"])])()
         end
+        --line = string.sub(line,1,#screen[1]) or line
+        lines = conc(lines,line,"\n")
         load(checkflush[(btoi[mode == "line"])])()
     end
+    print(lines)
     local checkflush = checkflush
     load(checkflush[(btoi[mode == "all"])])()
 end
@@ -26,6 +48,7 @@ function printlinebuf(y,screen)
         rgbbg(screen[y][x].bgcolor)
         rgbwr(screen[y][x].text, screen[y][x].fgcolor)
     end
+    print()
     io.flush()
 end
 

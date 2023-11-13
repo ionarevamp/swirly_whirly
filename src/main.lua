@@ -196,7 +196,7 @@ function main()
   tobuffer(40,11,"Print test 2",CLR.blue)
   printlinebuf(11)
   slp()
-  dofile("src/intro.lua")
+  -- dofile("src/intro.lua")
   c_print("Press Enter key to start",CENTER[2])
   memcount()
   mcr(CENTER[2]);io.flush();  

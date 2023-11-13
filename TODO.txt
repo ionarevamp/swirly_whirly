@@ -15,3 +15,7 @@
     > Garbage collection is fine for now, but main loop should not be accumulating variables in memory without input.
 - {Maybe use ncurses to shift into Unicode and back again}
 - ! Implement screen buffer akin to code in testnova.lua
+- ! Lua/LuaJIT has faster I/O buffer calls than C, so writing functions should be handled by Lua
+    > port functions from C, as well as creating buffer-equivalent funcs 
+    > ! create method for concatenating all buffer characters into single string to minimize write steps
+- ! have method that stores previous coordinate separate from built-in "save cursor" escape code

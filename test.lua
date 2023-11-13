@@ -47,8 +47,8 @@ function testcodes() --KEEP THIS FUNCTION FOR LATER TESTING
   function printf(text) return dll.Cwrite(text) end
   function input_buf() return dll.input_buf() end
   function rgbreset()
-    Rr,Rg,Rb = unpack(FGCOLOR)
-    Br,Bg,Bb = unpack(BGCOLOR)
+    Rr,Rg,Rb = FGCOLOR[1],FGCOLOR[2],FGCOLOR[3]
+    Br,Bg,Bb = BGCOLOR[1],BGCOLOR[2],BGCOLOR[3]
     dll.rgbreset(Rr,Rg,Rb,Br,Bg,Bb);
     io.flush()
   end
