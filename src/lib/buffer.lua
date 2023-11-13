@@ -1,8 +1,6 @@
 require("src/lib/strings")
 
-mvdirs = { -- mvdirs.r can be used to represent a space
-           -- in the OVERLAY buffer as it does not
-           -- write over output
+mvdirs = {
   r = "\027[1C",
   l = "\027[1D",
   u = "\027[1A",
@@ -29,7 +27,7 @@ function tobuffer(x, y, str, fgcolor, bgcolor, screen)
   bgcolor = bgcolor or BGCOLOR
   for i = 1, #str-(btoi[#str+x>#screen[1]]*(#str+x-#screen[1])) do
     local str = str:sub(i, i) or str
-    screen[y][x+i] = {
+    screen[y][x+(i-1)] = {
       text = str,
       fgcolor = fgcolor,
       bgcolor = bgcolor

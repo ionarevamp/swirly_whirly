@@ -22,6 +22,9 @@ CLR = {
     teal = {0, 128, 128},
     navy = {0, 0, 128},
     orange = {255, 165, 0},
+    darkorange = {255, 140, 0},
+    litorange = {255, 100, 50},
+    burntorange = {205, 85, 0},
     pink = {255, 192, 203},
     brown = {165, 42, 42},
     coral = {255, 127, 80},
@@ -46,7 +49,6 @@ CLR = {
     powderblue = {176, 224, 230},
     skyblue = {135, 206, 235},
     mediumvioletred = {199, 21, 133},
-    darkorange = {255, 140, 0},
     firebrick = {178, 34, 34},
     burlywood = {222, 184, 135},
     sandybrown = {244, 164, 96},
@@ -92,13 +94,17 @@ end
 --     end
 --     return conc(arr)
 -- end
+decidelayer = {[3]=FGCOLOR,[4]=BGCOLOR}
 function hilite(string,match,rgb,layer)
     local gsub = string.gsub
     layer = layer or 3
+    local prevcolor = decidelayer[layer]
     if (layer ~= 3) and (layer ~= 4) then return ; end
-    local r,g,b = unpack(rgb)
-    local changed = gsub(string,match,
-            conc("\027[",layer,"8;2;",r,";",g,";",b,"m",
-            "%1\027[0m"))
-    return changed
+    local r,g,b = rgb[1],rgb[2],rgb[3]
+    local pr,pg,pb = prevcolor[1],prevcolor[2],prevcolor[3]
+    return gsub(string,match,
+            conc( "\027[",layer,"8;2;",r,";",g,";",b,"m",
+            "%1", -- text to highlight
+            "\027[",layer,"8;2",pr,";",pg,";",pb,"m" )
+        );
 end

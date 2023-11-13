@@ -5,8 +5,8 @@ function hilitesep(text,rgb,sep,layer)
     sep = sep or "'"
     layer = layer or 3
     local charcheck = {[true]=sep,[false]=""}
-    local r,g,b = unpack(rgb)
-    local prevr,prevg,prevb = unpack(FGCOLOR)
+    r,g,b = rgb[1],rgb[2],rgb[3]
+    local prevr,prevg,prevb = FGCOLOR[1],FGCOLOR[2],FGCOLOR[3]
     local arr = getbraced(text,sep)
     local check = 0
     for i=(1+btoi[charat(text,1)~=sep]),#arr,2 do

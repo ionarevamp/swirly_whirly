@@ -14,10 +14,10 @@ function printscreenbuf(screen,mode,btoi)
         line = ""
         for x = 1, #screen[y] do
             local len = string.len
-            local r,g,b = screen[y][x].fgcolor[1],  -- this way does not reallocate array, vs using unpack()
+            fr,fg,fb = screen[y][x].fgcolor[1],  -- this way does not reallocate array, vs using unpack()
                           screen[y][x].fgcolor[2],
                           screen[y][x].fgcolor[3]
-            local br,bg,bb = screen[y][x].bgcolor[1],
+            br,bg,bb = screen[y][x].bgcolor[1],
                              screen[y][x].bgcolor[2],
                              screen[y][x].bgcolor[3]
             local text = screen[y][x].text
@@ -28,11 +28,10 @@ function printscreenbuf(screen,mode,btoi)
                 "\027[48;2;",
                 br,";",bg,";",bb,"m", --background color
                 "\027[38;2;",
-                r,";",g,";",b,"m", --foreground color
+                fr,";",fg,";",fb,"m", --foreground color
                 text);
             load(checkflush[(btoi[mode == "char"])])()
         end
-        --line = string.sub(line,1,#screen[1]) or line
         lines = conc(lines,line,"\n")
         load(checkflush[(btoi[mode == "line"])])()
     end

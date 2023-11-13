@@ -5,17 +5,21 @@
 - Make better attempt at building files platform-independently ( windows sux tho:/ )
 - Figure out how to use libbf for more accurate floats ( might help wait accuracy, although not crucial )
     > libbf would likely aid in stat calculation
+    > src/lib/gmp.lua ?
 - Implement more commands, like "cast", "status", "inv"/"item(s)"
     > Synonym database?
 - Implement single-key input ( recommended steps not working, path unclear )
-- How to use magic.lua? ( should contain rules for magic, but necessary structure is unclear )
+    > link ncurses when compiling. Also, refer to ncurses_examples/ for help.
+- How to use magic.lua ? ( should contain rules for magic, but necessary structure is unclear )
 - CREATE MORE MONSTERRRS
-- Figure out how memorytest.lua works, and gain insight
-- ! Reduce memory leakage.
+- Figure out how memorytest.lua works, and gain insight <-- in progress
+- ! Reduce memory leakage. <-- reduced calls to unpack(), as it copies rather than referencing
     > Garbage collection is fine for now, but main loop should not be accumulating variables in memory without input.
 - {Maybe use ncurses to shift into Unicode and back again}
-- ! Implement screen buffer akin to code in testnova.lua
-- ! Lua/LuaJIT has faster I/O buffer calls than C, so writing functions should be handled by Lua
-    > port functions from C, as well as creating buffer-equivalent funcs 
+- Regarding animations, "dirty rect" erasing+drawing technique should be utilized where possible
+- ! Lua/LuaJIT has faster I/O buffer calls than C, so terminal writing functions should be handled by Lua
+    > ((port functions from C, done)), as well as creating buffer-equivalent funcs 
     > ! create method for concatenating all buffer characters into single string to minimize write steps
+    >> at some point, reduce reduntant color code writing to minimize writebuffer
 - ! have method that stores previous coordinate separate from built-in "save cursor" escape code
+- ! port first part of main.lua to src/lib/init.lua to reduce bloat in main and improve navigability

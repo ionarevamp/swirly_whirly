@@ -1,6 +1,6 @@
 
 -- make sure dll is 'fresh'
-os.execute("if test -f /src/lib/bypass.dll; then rm src/lib/bypass.dll; fi")
+--os.execute("if test -f /src/lib/bypass.dll; then rm src/lib/bypass.dll; fi")
 -- declare universal structs before mass require-ing
 
 function flr(...) return math.floor(...) end
@@ -19,47 +19,50 @@ dofile("src/build.spec")
 local ffi=require("ffi")
 ffi.cdef[[
   void sleep_s(float duration);
-  void rgbwr(const char* text,float r,float g,float b);
-  void rgbbg(float r,float g,float b);
-  void rgbreset(float Rr,float Rg,float Rb,float Br,float Bg,float Bb);
   char* input_buf();
-  void Cwrite(const char* text);
   long getns();
   int curs_set(int mode);
+  int testmath();
 ]]
 local dll = ffi.load("src/lib/bypass.dll")
+print(dll.testmath())
 
 FGCOLOR = {255,255,255}
 BGCOLOR = {0,0,0}
+fr,fg,fb = unpack(FGCOLOR) -- mutable global variables to reduce memory usage in functions
+br,bg,bb = unpack(BGCOLOR)
 function slp(duration)
   --os.execute(conc("tcc -run src/lib/sleep.c ","\"",duration,"\""))
   duration = duration or 0.5
   dll.sleep_s(duration)
   --(os.execute can have significant overhead)
 end
-function printf(text) return dll.Cwrite(text) end
 function input_buf() return dll.input_buf() end
-function rgbreset()
-  local Rr,Rg,Rb = unpack(FGCOLOR)
-  local Br,Bg,Bb = unpack(BGCOLOR)
-  dll.rgbreset(Rr,Rg,Rb,Br,Bg,Bb);
-  io.flush()
-end
 function rgbwr(text,rgb)
-  local r,g,b = unpack(rgb)
-  --^^cannot simply pass a list to C
-  -- (scalar-ize data?)
-  dll.rgbwr(text,r,g,b)
+  fr = flr((255*btoi[rgb[1]>255])+(0*btoi[rgb[1]<0])+(rgb[1]*btoi[256 > rgb[1] and rgb[1] >= 0]))
+  fg = flr((255*btoi[rgb[2]>255])+(0*btoi[rgb[2]<0])+(rgb[2]*btoi[256 > rgb[2] and rgb[2] >= 0]))
+  fb = flr((255*btoi[rgb[3]>255])+(0*btoi[rgb[3]<0])+(rgb[3]*btoi[256 > rgb[3] and rgb[3] >= 0]))
+  io.write(
+    conc("\027[38;2;",fr,";",fg,";",fb,"m",text)
+  )
 end
 function rgbbg(rgb)
-  local r,g,b = unpack(rgb)
-  dll.rgbbg(r,g,b)
+  br = flr((255*btoi[rgb[1]>255])+(0*btoi[rgb[1]<0])+(rgb[1]*btoi[256 > rgb[1] and rgb[1] >= 0]))
+  bg = flr((255*btoi[rgb[2]>255])+(0*btoi[rgb[2]<0])+(rgb[2]*btoi[256 > rgb[2] and rgb[2] >= 0]))
+  bb = flr((255*btoi[rgb[3]>255])+(0*btoi[rgb[3]<0])+(rgb[3]*btoi[256 > rgb[3] and rgb[3] >= 0]))
+  io.write(
+    conc("\027[48;2;",br,";",bg,";",bb,"m")
+  )
 end
 function rgbset(rgb,BGrgb)
   FGCOLOR = rgb
-  local BGrgb = BGrgb or BGCOLOR
-  rgbwr("",FGCOLOR)
+  BGCOLOR = BGrgb or BGCOLOR
+  rgbwr("",rgb)
   rgbbg(BGrgb)
+end
+function rgbreset()
+  rgbwr("",FGCOLOR)
+  rgbbg(BGCOLOR)
 end
 function rgbprint(text,bgrgb,fgrgb)
   rgbbg(bgrgb) -- set background
@@ -127,7 +130,7 @@ end
 flags = {"-sane"}
 reverse_flags = table.concat(swapflags(flags)," ");
 flags = table.concat(flags," ")
-os.execute("stty "..flags) -- put TTY in raw mode
+-- os.execute("stty "..flags) -- put TTY in raw mode
 
 keymaps = dofile("src/lib/keymap.lua")
 SCREEN = {}
@@ -182,7 +185,7 @@ function draw_x(size, location, angle, height, noise)
 end
 
 rgbwr("FUNCTIONS LOADED\n",{140,120,100})
---Reminder: use unpack on rgb table call from color list
+-- rgb functions take colors as tables
 
 memcount();slp(0.5)
 function main()
@@ -190,10 +193,10 @@ function main()
   clr()
   savecursor()
   slp()
-  tobuffer(40,10,"Print test 1",CLR.red)
+  tobuffer(WIDTH-5,10,"Print test 1",CLR.red)
   print("Print test 2")
   printscreenbuf()
-  tobuffer(40,11,"Print test 2",CLR.blue)
+  tobuffer(30,11,"Print test 2",CLR.blue)
   printlinebuf(11)
   slp()
   -- dofile("src/intro.lua")
@@ -212,6 +215,7 @@ function main()
   clr()
   rgbreset()
   
+  quit = 0
   while (quit == 0) do
     local tinsert = table.insert
     gc[collectgarbage("count") > MEMLIMIT]()
@@ -221,7 +225,8 @@ function main()
     clr()
     gameprompt("What would you like to do?",
       CLR.darkgray,
-      {200,180,180})
+      {200,180,180}
+    )
     memcount()
     -- cur_input = io.read()
     for word in gmch(cur_input,"%S+") do
@@ -229,13 +234,12 @@ function main()
     end
     loadcursor()
     clr()
-    dofile("memorytest.lua")
-    dofile("memorytest.lua")
+    -- dofile("memorytest.lua")
+    -- dofile("memorytest.lua")
     mcu()
     slp()
     cmd[1] = checkcmd(cmd[1]) -- (check if command exists)
-    local executecmd = load( CMDS[cmd[1]], "User Command" ) -- (execute command) -- refers to CMDS table, commands.lua
-    executecmd()
+    load( CMDS[cmd[1]], "User Command" )() -- (execute command) -- refers to CMDS table, commands.lua
     for i=1,#cmd do cmd[i] = nil end  -- (ensure input array is empty)
   end
   ::game_end::
@@ -247,5 +251,5 @@ main()
 memcount()
 print("Reached end. Reverse flag table: "..reverse_flags);
 print(conc(startmenu.state,charskills.state,itemui.state))
-os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
+-- os.execute("stty "..reverse_flags) -- at end of program, put TTY back to normal mode
 

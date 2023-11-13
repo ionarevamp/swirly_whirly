@@ -31,11 +31,11 @@ CMDS = {
     ["alias"] = [[
         local args = getargs(cmd);
         local alias = table.remove(args, 1);
-        addalias(alias, unpack(args));
+        addalias(alias, args);
     ]],
     ["cast"] = [[
         local args = getargs(cmd);
-        castspell(unpack(args));
+        castspell(args);
     ]]
 }
 
@@ -58,3 +58,4 @@ end
 function cmderror(text) 
     rgbprint(text,{102,102,51},{150,20,20})
 end
+function castspell() end
