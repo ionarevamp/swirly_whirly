@@ -51,12 +51,13 @@ function rgbbg(rgb)
   bg = flr((255*btoi[rgb[2]>255])+(0*btoi[rgb[2]<0])+(rgb[2]*btoi[256 > rgb[2] and rgb[2] >= 0]))
   bb = flr((255*btoi[rgb[3]>255])+(0*btoi[rgb[3]<0])+(rgb[3]*btoi[256 > rgb[3] and rgb[3] >= 0]))
   io.write(
-    conc("\027[48;2;",br,";",bg,";",bb,"m")
+    conc("\027[48;2;",br,";",bg,";",bb,"m","")
   )
 end
 function rgbset(rgb,BGrgb)
   FGCOLOR = rgb
-  BGCOLOR = BGrgb or BGCOLOR
+  BGrgb = BGrgb or BGCOLOR
+  BGCOLOR = BGrgb
   rgbwr("",rgb)
   rgbbg(BGrgb)
 end
@@ -84,7 +85,7 @@ end
 function gameprompt(string,bgrgb,fgrgb)
   rgbline(string,bgrgb,fgrgb)
   for i=1,WIDTH-#string do
-    io.write(" ")
+    io.write(SPACE)
   end
   clrline()
   io.flush()
@@ -111,21 +112,21 @@ mobile_scale = (0.8*(btoi[not mobile_irl==0]))+1*btoi[mobile_irl==0] --placehold
 HEIGHT = (io.popen('tput lines'):read() or 24) - 1
 WIDTH = tonumber(io.popen('tput cols'):read() or 80)
 CENTER = {flr(HEIGHT/2),flr(WIDTH/2)}
-MEMLIMIT = (262144*0.9) - tonumber(
+MEMLIMIT = flr(1048576*0.7) - tonumber(
   string.match(io.popen('grep MemTotal /proc/meminfo'):read(),
   "%d+"))
-
+CURMEM = 0
 quit = 0
 cur_input = ""
 cmd = {}
 cmd_lower = ""
 
-local modules = {"buffer","strings","stats",
+MODULES = {"buffer","strings","stats",
                  "colors","gfx","menu",
-                 "commands"}
-for i=1,#modules do
-  require("src/lib/"..modules[i])
-end
+                 "commands","spells","spellgfx"}
+for i=1,#MODULES do
+  require("src/lib/"..MODULES[i])
+end --normal concatenation is fine when not in-game
 
 flags = {"-sane"}
 reverse_flags = table.concat(swapflags(flags)," ");
@@ -140,12 +141,12 @@ mainbuf = SCREEN[1]
 
 
 function memcount() 
-  local kbmem = string.match(collectgarbage("count"),"%d+%.?%d*")
-  kbmem = tostring(flr((kbmem*1000))/1000)
+  CURMEM = string.match(collectgarbage("count"),"%d+%.?%d*")
+  CURMEM = tostring(flr((CURMEM*1000))/1000)
   local dbgmsg = "KB in RAM: "
   local screensize = conc("h: ",HEIGHT," w: ",WIDTH," | ")
-  mcu();mcr(WIDTH-(#screensize+#dbgmsg+#kbmem))
-  io.write(conc(screensize,dbgmsg,kbmem))
+  mcu();mcr(WIDTH-(#screensize+#dbgmsg+#CURMEM))
+  io.write(conc(screensize,dbgmsg,CURMEM))
   print()
 end
 function blankerr()

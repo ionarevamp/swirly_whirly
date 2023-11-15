@@ -94,7 +94,7 @@ function drawrect(left,top,right,bottom)
     drawline(right,top,right,bottom)
     io.flush()
 end
-function draw_circle(cx,cy,size,char)
+function drawcircle(cx,cy,size,char)
     char = char or "*"
     local HEIGHT = HEIGHT
     local sqrt = math.sqrt
@@ -107,7 +107,7 @@ function draw_circle(cx,cy,size,char)
     local cx = cx or CENTER[2]
     local cy = cy or CENTER[1]
     local limit = radius/math.pi/2
-    for i=0,360,limit do
+    for i=0,math.pi*2,(math.pi*2)/(360-y) do
         x = flr(radius*cos(i))
         y = flr(radius*sin(i))/3
         mvcursor(cx+x,cy+y)

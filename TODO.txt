@@ -20,6 +20,5 @@
 - ! Lua/LuaJIT has faster I/O buffer calls than C, so terminal writing functions should be handled by Lua
     > ((port functions from C, done)), as well as creating buffer-equivalent funcs 
     > ! create method for concatenating all buffer characters into single string to minimize write steps
-    >> at some point, reduce reduntant color code writing to minimize writebuffer
+    >> at some point, reduce redundant color code writing to minimize writebuffer
 - ! have method that stores previous coordinate separate from built-in "save cursor" escape code
-- ! port first part of main.lua to src/lib/init.lua to reduce bloat in main and improve navigability

@@ -1,4 +1,3 @@
-
 require("src/lib/init")
 rgbwr("FUNCTIONS LOADED\n",{140,120,100})
 -- rgb functions take colors as tables
@@ -16,10 +15,10 @@ function main()
   printlinebuf(11)
   slp()
   -- dofile("src/intro.lua")
-  c_print("Press Enter key to start",CENTER[2])
+  -- c_print("Press Enter key to start",CENTER[2])
   memcount()
   mcr(CENTER[2]);io.flush();  
-  io.read()
+  -- io.read()
   io.write(conc("\027[2J\027[1;1H","Debug msg: Preparing...\n"))
   slp()
   
@@ -30,21 +29,25 @@ function main()
   local input_buf = {}
   clr()
   rgbreset()
-  
   quit = 0
+  last_cmd = {}
+  local defaultBG = {200,180,180}
   while (quit == 0) do
     local tinsert = table.insert
     gc[collectgarbage("count") > MEMLIMIT]()
-    -- handle displaying stuff
     rgbreset()
     loadcursor()
     clr()
+    --TODO: playable version should automatically enter
+    --  startmenu
     gameprompt("What would you like to do?",
       CLR.darkgray,
-      {200,180,180}
+      defaultBG
     )
     memcount()
-    -- cur_input = io.read()
+    
+    cmd = {}
+    cur_input = io.read()
     for word in gmch(cur_input,"%S+") do
       tinsert(cmd,word)
     end
@@ -53,10 +56,11 @@ function main()
     -- dofile("memorytest.lua")
     -- dofile("memorytest.lua")
     mcu()
-    slp()
     cmd[1] = checkcmd(cmd[1]) -- (check if command exists)
-    load( CMDS[cmd[1]], "User Command" )() -- (execute command) -- refers to CMDS table, commands.lua
-    for i=1,#cmd do cmd[i] = nil end  -- (ensure input array is empty)
+    returnval = docommand(cmd) -- (execute command) -- refers to CMDS table, commands.lua
+    if (cmd[1] ~= "last") then
+      last_cmd = cmd
+    end
   end
   ::game_end::
 end

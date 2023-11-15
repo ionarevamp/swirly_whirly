@@ -203,9 +203,7 @@ local determine_break = {[true]="",[false]="io.write('');"}
 local determine_horizontal = {[true]="C",[false]="D"}
 local determine_vertical = {[true]="B",[false]="A"}
 function mvcursor(x,y) -- Non-relative, starts at 1,1
-  x = flr(x)
-  y = flr(y)
-  io.write(conc("\027[",y,";",x,"H"))
+  io.write(conc("\027[",flr(y),";",flr(x),"H"))
   -- LINE, then COLUMN
 end
 function mvalign(string,ypos)

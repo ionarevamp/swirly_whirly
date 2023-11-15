@@ -5,7 +5,7 @@ function hilitesep(text,rgb,sep,layer)
     sep = sep or "'"
     layer = layer or 3
     local charcheck = {[true]=sep,[false]=""}
-    r,g,b = rgb[1],rgb[2],rgb[3]
+    fr,fg,fb = rgb[1],rgb[2],rgb[3]
     local prevr,prevg,prevb = FGCOLOR[1],FGCOLOR[2],FGCOLOR[3]
     local arr = getbraced(text,sep)
     local check = 0
@@ -13,7 +13,7 @@ function hilitesep(text,rgb,sep,layer)
         -- local i = i-btoi[i>(#arr-1) and charat(text,#text)~=sep]
         arr[i] = conc(sep,
         "\027[",layer,"8;2;",
-        r,";",g,";",b,"m",arr[i],
+        fr,";",fg,";",fb,"m",arr[i],
         "\027[",layer,"8;2;",
         prevr,";",prevg,";",prevb,"m",sep)
     end
@@ -49,7 +49,6 @@ loadcursor()
 clr()
 rgbreset()
 border(startmenu.optioncount * 2)
--- print(hilitesep("'funny' world of 'fun' and 'dreams' a'a'",CLR.red,"'"))
 gameprompt("Make your choice...",
             {12,12,12},
             {150,150,150})

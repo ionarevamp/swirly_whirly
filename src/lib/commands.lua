@@ -2,9 +2,10 @@ CMDS = {
     [" "] = "print('(please enter a valid command)');",
     ["quit"] = "quit = true;",
     ["refresh"] = [[
+        blankerr();
         local args = getargs(cmd);
         local filename = table.remove(args,1);
-        --refresh local data
+        --TODO: refresh local data by reloading libraries and userdata
     ]],
     ["menu"] = [[startmenu:open();]],
     ["showcmd"] = [[
@@ -36,9 +37,16 @@ CMDS = {
     ["cast"] = [[
         local args = getargs(cmd);
         castspell(args);
+    ]],
+    ["last"] = [[
+        if (last_cmd ~= cmd) then cmd = last_cmd end;
+        docommand(cmd);
     ]]
 }
 
+function docommand(cmdtable)
+    return load( CMDS[cmd[1]], "User Command" )() or "none"
+end
 function addcommand(commandstring, codestring)
     CMDS[commandstring] = codestring;
 end
@@ -46,8 +54,8 @@ end
 function addalias(alias, target)
     CMDS[alias] = CMDS[target];
 end
-function getargs(list)
-    local args = list
+function getargs(input)
+    local args = input
     table.remove(args,1)
     return args
 end
@@ -58,4 +66,10 @@ end
 function cmderror(text) 
     rgbprint(text,{102,102,51},{150,20,20})
 end
-function castspell() end
+function castspell(args)
+    local name = args[1]
+    if name == "fireball" then
+        draw_fireball()
+        slp()
+    end
+end

@@ -65,14 +65,13 @@ function gradient(rgb,rgb2,percent,dir)
     -- MUST accept non-empty table
     -- percentage as value from 0 to 1
     dir = dir or 1 --takes 1 or -1
-    local rgb = rgb
-    local rgb2 = rgb2
     local mathabs = math.abs
     local gradient = {}
     local diffs = {}
     for i=1,3 do
-        diffs[i] = mathabs(rgb2[i]-rgb[i])
-        gradient[i] = rgb[i]+(dir*(diffs[i]*percent))
+        local ins = table.insert
+        ins(diffs,mathabs(rgb2[i]-rgb[i]))
+        ins(gradient,rgb[i]+(dir*(diffs[i]*percent)))
     end
     return gradient
 end
@@ -100,11 +99,13 @@ function hilite(string,match,rgb,layer)
     layer = layer or 3
     local prevcolor = decidelayer[layer]
     if (layer ~= 3) and (layer ~= 4) then return ; end
-    local r,g,b = rgb[1],rgb[2],rgb[3]
+    fr,fg,fb = rgb[1],rgb[2],rgb[3]
     local pr,pg,pb = prevcolor[1],prevcolor[2],prevcolor[3]
-    return gsub(string,match,
-            conc( "\027[",layer,"8;2;",r,";",g,";",b,"m",
+    local hilighted = gsub(string,match,
+            conc( "\027[",layer,"8;2;",fr,";",fg,";",fb,"m",
             "%1", -- text to highlight
             "\027[",layer,"8;2",pr,";",pg,";",pb,"m" )
         );
+    fr,fg,fb = pr,pg,pb
+    return hilighted
 end
