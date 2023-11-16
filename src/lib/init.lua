@@ -23,6 +23,8 @@ ffi.cdef[[
   long getns();
   int curs_set(int mode);
   int testmath();
+  double sin(double x);
+  double cos(double x);
 ]]
 local dll = ffi.load("src/lib/bypass.dll")
 print(dll.testmath())
@@ -31,6 +33,12 @@ FGCOLOR = {255,255,255}
 BGCOLOR = {0,0,0}
 fr,fg,fb = unpack(FGCOLOR) -- mutable global variables to reduce memory usage in functions
 br,bg,bb = unpack(BGCOLOR)
+function sin(...)
+  return ffi.C.sin(...)
+end
+function cos(...)
+  return ffi.C.cos(...)
+end
 function slp(duration)
   --os.execute(conc("tcc -run src/lib/sleep.c ","\"",duration,"\""))
   duration = duration or 0.5

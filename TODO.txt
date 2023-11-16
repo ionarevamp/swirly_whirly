@@ -22,3 +22,4 @@
     > ! create method for concatenating all buffer characters into single string to minimize write steps
     >> at some point, reduce redundant color code writing to minimize writebuffer
 - ! have method that stores previous coordinate separate from built-in "save cursor" escape code
+- Circle drawing using sine calculations seems slow ( sqrt function? )

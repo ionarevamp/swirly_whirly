@@ -11,10 +11,6 @@ function draw_fireball(posx,posy,size,intensity)
         mvcursor(1,1)
         print(curgradient[1],curgradient[2],curgradient[3])
         local sqrt = math.sqrt
-        local flr = math.floor
-        local sin = math.sin
-        local cos = math.cos
-       
         local x,y = 0,0
         radius = i/2
         for j=0,(math.pi*2),(math.pi*2)/(360-y) do

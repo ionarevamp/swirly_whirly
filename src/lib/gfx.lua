@@ -98,9 +98,6 @@ function drawcircle(cx,cy,size,char)
     char = char or "*"
     local HEIGHT = HEIGHT
     local sqrt = math.sqrt
-    local flr = math.floor
-    local sin = math.sin
-    local cos = math.cos
     size = size or 5
     radius = size/2
     local x,y = 0,0
