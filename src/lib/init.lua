@@ -34,10 +34,10 @@ BGCOLOR = {0,0,0}
 fr,fg,fb = unpack(FGCOLOR) -- mutable global variables to reduce memory usage in functions
 br,bg,bb = unpack(BGCOLOR)
 function sin(...)
-  return ffi.C.sin(...)
+  return math.sin(...)
 end
 function cos(...)
-  return ffi.C.cos(...)
+  return math.cos(...)
 end
 function slp(duration)
   --os.execute(conc("tcc -run src/lib/sleep.c ","\"",duration,"\""))

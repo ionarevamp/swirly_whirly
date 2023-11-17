@@ -1,5 +1,5 @@
 x = 1
-local sin = math.sin
+function sin(...) return math.sin(...) end
 os.execute("sleep 1")
 for i=1,50000 do
     x = x+sin(i)
