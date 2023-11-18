@@ -1,25 +1,20 @@
+- ! Swap CENTER indices to have X value first. Not SUPER crucial, but can get confusing
 - Inventory menu needs to have a good UI, perhaps reminiscent of band-likes.
-    > On that note, finish the menu templates ( menutemplate.txt )
+    > ! On that note, finish the menu templates ( menutemplate.txt )
 - Consider reducing code bloat from busywait. ( slp() and busywait() are incompatible )
-- Proper skill/spell/stat tableing ( data is also incomplete )
+- Create standard order for listing & reading monster info from files
 - Make better attempt at building files platform-independently ( windows sux tho:/ )
-- Figure out how to use libbf for more accurate floats ( might help wait accuracy, although not crucial )
-    > libbf would likely aid in stat calculation
-    > src/lib/gmp.lua ?
-- Implement more commands, like "cast", "status", "inv"/"item(s)"
-    > Synonym database?
+- Figure out how to use src/lib/gmp.lua ...
+- Synonym database for commands?
 - Implement single-key input ( recommended steps not working, path unclear )
     > link ncurses when compiling. Also, refer to ncurses_examples/ for help.
 - How to use magic.lua ? ( should contain rules for magic, but necessary structure is unclear )
 - CREATE MORE MONSTERRRS
 - Figure out how memorytest.lua works, and gain insight <-- in progress
-- ! Reduce memory leakage. <-- reduced calls to unpack(), as it copies rather than referencing
+- ! Reduce memory leakage.
     > Garbage collection is fine for now, but main loop should not be accumulating variables in memory without input.
 - {Maybe use ncurses to shift into Unicode and back again}
 - Regarding animations, "dirty rect" erasing+drawing technique should be utilized where possible
-- ! Lua/LuaJIT has faster I/O buffer calls than C, so terminal writing functions should be handled by Lua
-    > ((port functions from C, done)), as well as creating buffer-equivalent funcs 
-    > ! create method for concatenating all buffer characters into single string to minimize write steps
-    >> at some point, reduce redundant color code writing to minimize writebuffer
+- at some point, reduce redundant color code writing to minimize writebuffer
 - ! have method that stores previous coordinate separate from built-in "save cursor" escape code
 - Circle drawing using sine calculations seems slow ( sqrt function? )

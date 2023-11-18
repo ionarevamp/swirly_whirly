@@ -19,7 +19,7 @@ function hilitesep(text,rgb,sep,layer)
     end
     return table.concat(arr);
 end
-function border(height)
+function showstartmenu(height)
     height = height or 20
     local selections = {startmenu.begin,
                         startmenu.load,
@@ -44,19 +44,29 @@ function border(height)
 end
 
 for i=1,HEIGHT do print() end
+
+validoption = true
 ::select_option::
 loadcursor()
 clr()
 rgbreset()
-border(startmenu.optioncount * 2)
+
+showstartmenu(startmenu.optioncount * 2)
+mvcursor(1,HEIGHT-2)
 gameprompt("Make your choice...",
             {12,12,12},
             {150,150,150})
 rgbwr("(case insensitive)",{80,80,80})
 rgbreset()
 toleft()
-mainchoice = io.read()
-if mainchoice == "begin" then goto exit_menu
+if not validoption then
+    print("\nPlease type an appropriate selection.")
+    mcu()
+end
+
+mainchoice = string.lower(io.read())
+if mainchoice == "begin" then
+    goto creation_menu
 elseif mainchoice == "load" then
     --[[load game files]]
     blankerr()
@@ -67,6 +77,47 @@ elseif mainchoice == "quit" then
     quit = 1
     goto exit_menu
 end
-print("Please type an appropriate selection.")
+validoption = false
 goto select_option
+
+-- CHARACTER CREATION
+::creation_menu::
+Player = nil;
+function createPlayer()
+    loadcursor()
+    clr()
+    rgbline("Races: ",CLR.darkgray,CLR.gold)
+    for i=1,#racenames do
+        print(capitalizesentence(racenames[i]))
+    end
+    mvcursor(1,HEIGHT-2)
+    gameprompt("Make your choice...",
+            {12,12,12},
+            {150,150,150})
+    rgbwr("(case insensitive)",{80,80,80})
+    rgbreset()
+    toleft()
+    local racechoice = string.lower(io.read())
+    mvcursor(1,#racenames+2)
+    rgbline("Backgrounds: ",CLR.darkgray,
+        gradient(CLR.brown,CLR.slategray,.5))
+    for i=1,#backgroundnames do
+        print(capitalizesentence(backgroundnames[i]))
+    end
+    mvcursor(1,HEIGHT-2)
+    gameprompt("Make your choice...",
+            {12,12,12},
+            {150,150,150})
+    rgbwr("(case insensitive)",{80,80,80})
+    rgbreset()
+    toleft()
+    local backgroundchoice = string.lower(io.read())
+
+end
+USERSAVE = io.open("user/save.file","r")
+if USERSAVE == nil then
+    print("No save file detected. Entering character creation...")
+    createPlayer()
+else goto exit_menu
+end
 ::exit_menu::

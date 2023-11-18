@@ -64,14 +64,19 @@ CLRV = {} -- TODO:for each CLR, create RGB vector via:
 function gradient(rgb,rgb2,percent,dir) 
     -- MUST accept non-empty table
     -- percentage as value from 0 to 1
+    percent = percent or 0.50
+    percent = math.abs(percent*btoi[percent<1.00])+
+              1.00*btoi[percent>1.00]
     dir = dir or 1 --takes 1 or -1
     local mathabs = math.abs
     local gradient = {}
     local diffs = {}
     for i=1,3 do
         local ins = table.insert
-        ins(diffs,mathabs(rgb2[i]-rgb[i]))
-        ins(gradient,rgb[i]+(dir*(diffs[i]*percent)))
+        ins(diffs,rgb2[i]-rgb[i])
+        ins(gradient,
+            rgb[i]+(dir*(diffs[i]*percent))
+        )
     end
     return gradient
 end

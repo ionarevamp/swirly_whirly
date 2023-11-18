@@ -1,6 +1,17 @@
-
 function charat(text,index)
     return string.sub(text,index,index)
+end
+function capitalize(text)
+    return conc( string.upper(charat(text,1)), string.sub(text,2,#text) )
+end
+function capitalizesentence(text)
+    local arr = {}
+    for word in gmch(text,"%S+") do
+        table.insert(arr,
+            conc(string.upper(charat(word,1)), string.sub(word,2,#text))
+        )
+    end
+    return table.concat(arr," ")
 end
 function swapflags(flagtable)
     local swaptable = flagtable

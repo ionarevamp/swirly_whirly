@@ -19,9 +19,19 @@ startmenu = {
     exit = "'Quit' / exit",
     optioncount = 4,
 }
+racenames = {
+    "human","wild elf","luminant","dwarf"
+}
+racedata = {}
+backgroundnames = {
+    "((Feature not yet implemented))"
+}
 playerstatus = {
-    {"Health","Stamina","Mana","Heat","Null","Space","Motion","Force"},
-    {Player.hp,Player.ep,Player.sp,Player.heat,Player.null,Player.space,Player.motion,Player.force}
+    {"Health","Stamina","Mana",
+    "Heat","Null","Space","Motion","Force"},
+    {Player.hp,Player.ep,Player.sp,
+    Player.stats.affinity.heat,Player.stats.affinity.null,
+    Player.stats.affinity.space,Player.stats.affinity.motion,Player.stats.affinity.force}
 }
 
 function startmenu:open()

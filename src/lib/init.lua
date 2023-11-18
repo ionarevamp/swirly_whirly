@@ -9,10 +9,18 @@ function flrall(arr)
   for i=1,#tmp do tmp[i] = flr(arr[i]) end
   return tmp
 end
+function newline(count)
+  for i=1,count do
+    io.write("\n")
+  end
+end
+function toggle(boolval)
+  local opposite = {[true]=false,[false]=true}
+  return opposite[boolval];
+end
 function gmch(...) return string.gmatch(...) end
-function conc(...) --table.concat for speed(?)
-  local args = {...}
-  return table.concat(args)
+function conc(...) --table.concat for speed(?) 
+  return table.concat({...})
 end;
 -- COMPILE/BUILD
 dofile("src/build.spec")
@@ -33,12 +41,8 @@ FGCOLOR = {255,255,255}
 BGCOLOR = {0,0,0}
 fr,fg,fb = unpack(FGCOLOR) -- mutable global variables to reduce memory usage in functions
 br,bg,bb = unpack(BGCOLOR)
-function sin(...)
-  return math.sin(...)
-end
-function cos(...)
-  return math.cos(...)
-end
+function sin(...) return math.sin(...) end
+function cos(...) return math.cos(...) end
 function slp(duration)
   --os.execute(conc("tcc -run src/lib/sleep.c ","\"",duration,"\""))
   duration = duration or 0.5
@@ -47,6 +51,8 @@ function slp(duration)
 end
 function input_buf() return dll.input_buf() end
 function rgbwr(text,rgb)
+  -- merely limits inputs to valid format and range,
+  --  WITHOUT `if` statements.
   fr = flr((255*btoi[rgb[1]>255])+(0*btoi[rgb[1]<0])+(rgb[1]*btoi[256 > rgb[1] and rgb[1] >= 0]))
   fg = flr((255*btoi[rgb[2]>255])+(0*btoi[rgb[2]<0])+(rgb[2]*btoi[256 > rgb[2] and rgb[2] >= 0]))
   fb = flr((255*btoi[rgb[3]>255])+(0*btoi[rgb[3]<0])+(rgb[3]*btoi[256 > rgb[3] and rgb[3] >= 0]))

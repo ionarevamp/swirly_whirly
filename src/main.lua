@@ -14,11 +14,11 @@ function main()
   tobuffer(30,11,"Print test 2",CLR.blue)
   printlinebuf(11)
   slp()
-  -- dofile("src/intro.lua")
-  -- c_print("Press Enter key to start",CENTER[2])
+  dofile("src/intro.lua")
+  c_print("Press Enter key to start",CENTER[2])
   memcount()
   mcr(CENTER[2]);io.flush();  
-  -- io.read()
+  io.read()
   io.write(conc("\027[2J\027[1;1H","Debug msg: Preparing...\n"))
   slp()
   
@@ -44,6 +44,8 @@ function main()
       CLR.darkgray,
       defaultBG
     )
+    dofile("src/lib/spellgfx.lua")
+    dofile("src/lib/commands.lua")
     memcount()
     
     cmd = {}

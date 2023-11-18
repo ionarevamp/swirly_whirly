@@ -14,6 +14,7 @@ end
 creature = {
     x = 1,
     y = 1,
+    maxhp = 100,
     age = 1,
     stats = {
         power = 1, --all life is born with power = 1 * powermod
@@ -36,7 +37,7 @@ creature = {
             space = default,
             motion = default,
             force = default
-        },
+        }
     },
     genes = {
         powermod = 1,
@@ -67,11 +68,13 @@ creature = {
 
 
 -- COULD do this procedurally, but would be unnecessarily complex
-function creature:new(o)
-    o = o or {}
+function creature:new(type,statstable)
+    local o = statstable or {}
     setmetatable(o, self)
     self.__index = self
+    o.name = tostring(type)
     o.stats.power = o.stats.power*(1+(((3*o.age)-((4*o.age)^2+o.age))/2))*o.genes.powermod
+    o.stats.power = math.abs(o.stats.power*btoi[o.stats.power >= 0])
     o.stats.iq = o.stats.iq*o.genes.iq
     o.stats.sight = o.stats.sight*o.genes.sight
     o.stats.smell = o.stats.smell*o.genes.smell
@@ -81,8 +84,10 @@ function creature:new(o)
     o.stats.size = o.stats.size*o.genes.size
     o.stats.leverage = (default/o.stats.size)*o.stats.leverage*o.genes.leverage
     o.stats.flex = (o.stats.flex*o.genes.flex)-(o.stats.flex/o.stats.size)
-    o.stats.intel = ((o.stats.iq/default)*((o.stats.sight+(o.stats.smell/20)+(o.stats.hearing/2)+(o.stats.taste/2)+(o.stats.touch*0.7)+math.floor(o.stats.iq/2000)+(o.stats.mana/10))/default))
+    o.stats.intel = ((o.stats.iq/default)*((o.stats.sight+(o.stats.smell/20)+(o.stats.hearing/2)+(o.stats.taste/2)+(o.stats.touch*0.7)+flr(o.stats.iq/2000)+(o.stats.mana/10))/default))
     o.stats.esp = math.floor(o.stats.iq/2000)+math.floor(o.stats.intel)*o.genes.esp
+    o.maxhp = (o.maxhp-(o.stats.flex/3))*o.stats.power
+    o.hp = o.maxhp
     for i=1,#o.stats.affinity do
         o.stats.affinity = o.stats.affinity*o.genes.affinity
     end
@@ -92,15 +97,13 @@ end
 
 Player = creature:new()
 
-function advanceAge() -- the idea here is that you age faster the older you are, bodily age
+function advanceAge(creature) -- the idea here is that you age faster the older you are, bodily age
                         -- being different than how old you are in time
     if math.floor(Player.age) > currentage then
         Player.age = math.floor(Player.age)
-        Player.power = Player.power*(1+(((3*Player.age)-((4*Player.age)^2+Player.age))/2))
+        Player.stats.power = Player.stats.power*(1+(((3*Player.age)-((4*Player.age)^2+Player.age))/2))
+        Player.stats.intel = Player.stats.intel+( (Player.stats.iq/10)*(Player.stats.intel/(age*10)) )
     end
 end
-function toggle(boolval)
-    local opposite = {[true]=false,[false]=true}
-    return opposite[boolval];
-end
+
 

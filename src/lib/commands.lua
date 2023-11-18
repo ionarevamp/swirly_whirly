@@ -69,7 +69,9 @@ end
 function castspell(args)
     local name = args[1]
     if name == "fireball" then
-        draw_fireball()
+        local size = tonumber(args[2]) or 6
+        local target; -- set default target
+        draw_fireball(CENTER[2],CENTER[1],size)
         slp()
     end
 end

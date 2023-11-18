@@ -1,3 +1,6 @@
+-- Contains data and functions regarding program
+--  and screen/terminal buffer manipulation
+
 require("src/lib/strings")
 
 mvdirs = {
@@ -202,7 +205,11 @@ function loadcursor() io.write("\027[u") end
 local determine_break = {[true]="",[false]="io.write('');"}
 local determine_horizontal = {[true]="C",[false]="D"}
 local determine_vertical = {[true]="B",[false]="A"}
-function mvcursor(x,y) -- Non-relative, starts at 1,1
+function mvcursor(x,y,wrap) -- Non-relative, starts at 1,1
+  wrap = wrap or false
+  if (wrap == false and (flr(x)>WIDTH or flr(y)>HEIGHT)) then
+    return
+  end
   io.write(conc("\027[",flr(y),";",flr(x),"H"))
   -- LINE, then COLUMN
 end

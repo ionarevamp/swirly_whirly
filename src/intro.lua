@@ -90,7 +90,7 @@ for i = 1,#splash_text do
         deadline = ((st*i)*duration/(100*#splash_text))
                     +writestart
         rgbbg(gradientratio(
-            CLR.red,BGCOLOR,st,100,-1))
+            CLR.red,BGCOLOR,st,100))
         rgbwr(charat(splash_text,i),gradientratio(--
             CLR.goldmetal,CLR.gold,i,#splash_text))
         io.flush()
