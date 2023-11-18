@@ -44,7 +44,7 @@ end
 
 charskills = {
     state = 0,
-    -- Come up with more/better skill names...
+    -- Come up with skill names...
     skillnames = {
     },
     skills = {
