@@ -37,15 +37,11 @@ CMDS = {
     ["cast"] = [[
         local args = getargs(cmd);
         castspell(args);
-    ]],
-    ["last"] = [[
-        if (last_cmd ~= cmd) then cmd = last_cmd end;
-        docommand(cmd);
     ]]
 }
 
 function docommand(cmdtable)
-    return load( CMDS[cmd[1]], "User Command" )() or "none"
+    return load( CMDS[cmdtable[1]], "User Command" )() or "none"
 end
 function addcommand(commandstring, codestring)
     CMDS[commandstring] = codestring;
@@ -55,8 +51,10 @@ function addalias(alias, target)
     CMDS[alias] = CMDS[target];
 end
 function getargs(input)
-    local args = input
-    table.remove(args,1)
+    local args = {}
+    for i=2,#input do
+        args[i-1] = input[i] 
+    end
     return args
 end
 function checkcmd(command)
