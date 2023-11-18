@@ -61,14 +61,14 @@ CLR = {
 }
 CLRV = {} -- TODO:for each CLR, create RGB vector via:
     -- value * 100 / 255 = percentage
+local mathabs = math.abs
 function gradient(rgb,rgb2,percent,dir) 
     -- MUST accept non-empty table
     -- percentage as value from 0 to 1
     percent = percent or 0.50
-    percent = math.abs(percent*btoi[percent<1.00])+
-              1.00*btoi[percent>1.00]
+    percent = mathabs(percent*btoi[percent<1.00])+
+              1.00*btoi[percent>=1.00]
     dir = dir or 1 --takes 1 or -1
-    local mathabs = math.abs
     local gradient = {}
     local diffs = {}
     for i=1,3 do

@@ -53,17 +53,17 @@ function input_buf() return dll.input_buf() end
 function rgbwr(text,rgb)
   -- merely limits inputs to valid format and range,
   --  WITHOUT `if` statements.
-  fr = flr((255*btoi[rgb[1]>255])+(0*btoi[rgb[1]<0])+(rgb[1]*btoi[256 > rgb[1] and rgb[1] >= 0]))
-  fg = flr((255*btoi[rgb[2]>255])+(0*btoi[rgb[2]<0])+(rgb[2]*btoi[256 > rgb[2] and rgb[2] >= 0]))
-  fb = flr((255*btoi[rgb[3]>255])+(0*btoi[rgb[3]<0])+(rgb[3]*btoi[256 > rgb[3] and rgb[3] >= 0]))
+  fr = flr((255*btoi[rgb[1]>255])+(0*btoi[rgb[1]<0])+(rgb[1]*btoi[255 >= rgb[1] and rgb[1] >= 0]))
+  fg = flr((255*btoi[rgb[2]>255])+(0*btoi[rgb[2]<0])+(rgb[2]*btoi[255 >= rgb[2] and rgb[2] >= 0]))
+  fb = flr((255*btoi[rgb[3]>255])+(0*btoi[rgb[3]<0])+(rgb[3]*btoi[255 >= rgb[3] and rgb[3] >= 0]))
   io.write(
     conc("\027[38;2;",fr,";",fg,";",fb,"m",text)
   )
 end
 function rgbbg(rgb)
-  br = flr((255*btoi[rgb[1]>255])+(0*btoi[rgb[1]<0])+(rgb[1]*btoi[256 > rgb[1] and rgb[1] >= 0]))
-  bg = flr((255*btoi[rgb[2]>255])+(0*btoi[rgb[2]<0])+(rgb[2]*btoi[256 > rgb[2] and rgb[2] >= 0]))
-  bb = flr((255*btoi[rgb[3]>255])+(0*btoi[rgb[3]<0])+(rgb[3]*btoi[256 > rgb[3] and rgb[3] >= 0]))
+  br = flr((255*btoi[rgb[1]>255])+(0*btoi[rgb[1]<0])+(rgb[1]*btoi[255 >= rgb[1] and rgb[1] >= 0]))
+  bg = flr((255*btoi[rgb[2]>255])+(0*btoi[rgb[2]<0])+(rgb[2]*btoi[255 >= rgb[2] and rgb[2] >= 0]))
+  bb = flr((255*btoi[rgb[3]>255])+(0*btoi[rgb[3]<0])+(rgb[3]*btoi[255 >= rgb[3] and rgb[3] >= 0]))
   io.write(
     conc("\027[48;2;",br,";",bg,";",bb,"m","")
   )

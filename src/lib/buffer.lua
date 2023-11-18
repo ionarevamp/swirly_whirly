@@ -57,25 +57,24 @@ end
 
 -- DEBUG
 function showcmd(t)
-  local lines = {}
-  for val in gmch(CMDS[t], "[^;]+") do
-    table.insert(lines,val)
-  end
-  for i=1,#lines do
-    if i==1 then print(t,lines[i]) else
-      print(" ",lines[i])
+  print("Available commands:")
+  for key,val in pairs(t) do
+    if (key ~= " ") then 
+      print('    ["'..key..'"]')
     end
   end
 end
 function showtable(t)
   local lines = {}
-  for key,val in pairs(t) do
-    for val in gmch(vals, "[^;]+") do
+  for key,vals in pairs(t) do
+    for val in gmch(vals, "[^*;]+") do
       table.insert(lines,val)
     end
     for i=1,#lines do
-      if i==1 then print(key,lines[i]) else
-        print(" ",lines[i])
+      if i==1 then
+        io.write('["'..key..'"]',lines[i])
+      else
+        io.write(" ",lines[i])
       end
     end
   end

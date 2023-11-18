@@ -10,8 +10,9 @@ CMDS = {
     ["menu"] = [[startmenu:open();]],
     ["showcmd"] = [[
         print("Showing commands");
-        local cmds = CMDS;
-        showtable(CMDS);
+        showcmd(CMDS);
+        print("Press enter to continue...");
+        io.read();
     ]],
     ["addcmd"] = [[
         local args = getargs(cmd);
@@ -37,6 +38,9 @@ CMDS = {
     ["cast"] = [[
         local args = getargs(cmd);
         castspell(args);
+    ]],
+    ["test"] = [[
+        dofile("test.lua");
     ]]
 }
 

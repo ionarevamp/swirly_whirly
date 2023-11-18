@@ -1,6 +1,7 @@
 - ! Swap CENTER indices to have X value first. Not SUPER crucial, but can get confusing
 - Inventory menu needs to have a good UI, perhaps reminiscent of band-likes.
     > ! On that note, finish the menu templates ( menutemplate.txt )
+- Add support for save file
 - Consider reducing code bloat from busywait. ( slp() and busywait() are incompatible )
 - Create standard order for listing & reading monster info from files
 - Make better attempt at building files platform-independently ( windows sux tho:/ )

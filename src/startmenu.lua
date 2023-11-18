@@ -100,7 +100,7 @@ function createPlayer()
     local racechoice = string.lower(io.read())
     mvcursor(1,#racenames+2)
     rgbline("Backgrounds: ",CLR.darkgray,
-        gradient(CLR.brown,CLR.slategray,.5))
+        gradient(CLR.brown,CLR.slategray,0.5))
     for i=1,#backgroundnames do
         print(capitalizesentence(backgroundnames[i]))
     end
